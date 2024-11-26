@@ -1,0 +1,34 @@
+[package]
+name = "aoc"
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+incremental = true
+debug = true
+
+[profile.release]
+incremental = true
+codegen-units = 1
+opt-level = 3
+strip = true
+lto = true
+
+# For profiling during dev
+[profile.prof]
+inherits = "release"
+strip = false
+debug = true
+
+# Benchmarks via criterion
+[[bench]]
+name = "days"
+harness = false
+
+[dependencies]
+# Used in the main file to give users a way to interact with the application via the CLI
+clap = { version = "4.5.21", features = ["derive"] }
+glob-match = "0.2.1"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }

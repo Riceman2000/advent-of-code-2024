@@ -6,39 +6,44 @@ This framework is meant to be easy to expand and iterate on. I hope to foster a 
 
 ## Notes
 
-- You will have to install the nightly toolchain if prompted to run the latest Rust has to offer
-  - That is done via `rustup toolchain add [toolchain-name-from-error-message]`
 - When adding a day you must:
-  - Copy an existing day 
-  - Edit the new days `Cargo.toml` so that the crate name matches the name of the day file
-  - Uncomment lines in the `runner` crate
-    - in `runner/Cargo.toml`
-    - in `runner/src/lib.rs`
-  - Check success with the `./checks -b` command
+  - Copy an existing day file into the `src` directory
+    - Ensure the numbering scheme is followed
+  - Uncomment the newly added day file in the following places
+    - `src/main.rs` -> to allow you to run the day using `cargo run`
+    - `src/lib.rs` -> to include the new code in the binary
+    - `benches/days.rs` -> to allow for benchmarking using `cargo criterion`
+
+When developing solutions you will likely want to run using `cargo run` without the `--release` flag. For benchmarking however you should use the `--release` flag to get the highest level of optimization. 
 
 ## Usage
-### Run benchmarks
+### Run benchmarks with graphics and stats
 ``` bash
-./checks -b
+cargo install cargo-criterion
+cargo criterion
 ```
 
-### Use the `checks` script to do various useful things
+### See the CLI help menu
 ``` bash
-./checks -h
+cargo run -- --help
 ```
 
 ### Run individual days
 ``` bash
-cd day01_0
-cargo +nightly run --release
+cargo run -- --target-day day01_0
 ```
 
-### Run all days in parallel
+### Run days based on a glob
 ``` bash
-cd runner
-cargo +nightly run --release --bin runner-par
+cargo run -- --target-day "day01_*"
 ```
 
-## Credit
-- This video from [ThePrimegan](https://youtu.be/U16RnpV48KQ)
-- Benchmarking code/inspiration from [timvisee](https://github.com/timvisee/advent-of-code-2022)
+### Run all days with their outputs hidden
+``` bash
+cargo run --release -- -o
+```
+
+### Run all days without running benchmarks
+``` bash
+cargo run --release -- -b
+```

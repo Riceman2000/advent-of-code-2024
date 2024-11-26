@@ -1,20 +1,15 @@
-fn day() -> u32 {
-    // Pull this file's contents into the binary as a string literal
-    let input = include_str!("../input.txt");
+// Pull this file's contents into the binary as a string literal
+const INPUT: &str = include_str!("../input/day01.txt");
 
-    return input
+#[must_use]
+pub fn day() -> u32 {
+    return INPUT
         .lines()
         .map(|l| {
             let line_vec: Vec<u32> = l.chars().filter_map(|c| c.to_digit(10)).collect();
             line_vec[0] * 10 + line_vec[line_vec.len() - 1]
         })
         .sum();
-}
-
-pub fn main() {
-    // This format is important because the benchmark strips out all lines starting with "o: "
-    // Do not print anything else out from within the `day` function
-    println!("o: {}", day());
 }
 
 #[cfg(test)]
