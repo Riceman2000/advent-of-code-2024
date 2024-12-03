@@ -10,7 +10,7 @@ lazy_static! {
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
+pub fn day() -> u32 {
     let mut sum = 0;
     let mut enabled = true;
     for cap in RE.captures_iter(INPUT) {
@@ -18,8 +18,8 @@ pub fn day() -> usize {
             "don't()" => enabled = false,
             "do()" => enabled = true,
             _ if enabled => {
-                let l: usize = cap.get(1).unwrap().as_str().parse().unwrap();
-                let r: usize = cap.get(2).unwrap().as_str().parse().unwrap();
+                let l: u32 = cap.get(1).unwrap().as_str().parse().unwrap();
+                let r: u32 = cap.get(2).unwrap().as_str().parse().unwrap();
                 sum += l * r;
             }
             _ => (),

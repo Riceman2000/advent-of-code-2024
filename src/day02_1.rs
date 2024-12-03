@@ -5,13 +5,13 @@ const INPUT: &str = include_str!("../input/day02.txt");
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let reports: Vec<Vec<isize>> = INPUT
+pub fn day() -> u32 {
+    let reports: Vec<Vec<i32>> = INPUT
         .lines()
         .map(|l| {
             l.split(' ')
-                .map(|n| n.parse::<isize>().unwrap())
-                .collect::<Vec<isize>>()
+                .map(|n| n.parse::<i32>().unwrap())
+                .collect::<Vec<i32>>()
         })
         .collect();
 
@@ -35,7 +35,7 @@ pub fn day() -> usize {
 }
 
 #[inline]
-fn is_report_safe(report: &[isize]) -> Result<(), usize> {
+fn is_report_safe(report: &[i32]) -> Result<(), usize> {
     let mut diffs = report
         .iter()
         .copied()
@@ -55,15 +55,15 @@ fn is_report_safe(report: &[isize]) -> Result<(), usize> {
 }
 
 #[inline]
-fn is_report_safe_skip(report: &[isize], skip: usize) -> bool {
+fn is_report_safe_skip(report: &[i32], skip: usize) -> bool {
     let diffs = report
         .iter()
         .copied()
         .enumerate()
         .filter_map(|(i, n)| (i != skip).then_some(n))
         .map_windows::<_, _, 2>(|&[l, r]| r - l);
-    diffs.clone().map(isize::signum).all_equal()
-        && diffs.map(isize::abs).all(|n| (1..=3).contains(&n))
+
+    diffs.clone().map(i32::signum).all_equal() && diffs.map(i32::abs).all(|n| (1..=3).contains(&n))
 }
 
 #[cfg(test)]
