@@ -4,6 +4,18 @@
 
 This framework is meant to be easy to expand and iterate on. I hope to foster a collaborative atmosphere for solving these problems and make this a public repository for basic Rust.
 
+## Current benchmarks
+
+These benchmarks were done without any true care for accuracy or attempting to control external variables so take them with a grain of salt:
+
+|   Day   | Average time per iteration | Number of iterations | Total time |
+| day01_0 |                     23.8us |                 1000 |   0.00238s |
+| day01_1 |                   61.353us |                 1000 | 0.0061353s |
+| day02_0 |                  100.918us |                 1000 | 0.0100918s |
+| day02_1 |                  112.445us |                 1000 | 0.0112445s |
+| day03_0 |                  216.274us |                 1000 | 0.0216274s |
+| day03_1 |                  279.689us |                 1000 | 0.0279689s |
+
 ## Notes
 
 - When adding a day you must:
