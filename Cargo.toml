@@ -32,6 +32,7 @@ glob-match = "0.2.1"
 
 # Helpful utilities
 itertools = "0.13.0"
+regex = "1.11.1"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
