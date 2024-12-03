@@ -27,12 +27,12 @@ struct Args {
     bench_table: bool,
 
     /// Maximum number of benchmark trials to run
-    #[arg(short, long, default_value_t = 10_000)]
-    iterations: usize,
+    #[arg(short = 'i', long, default_value_t = 100_000)]
+    max_bench_iters: usize,
 
     /// Max ms to benchmark before canceling
-    #[arg(short, long, default_value_t = 1_000)]
-    max_benchmark_ms: u128,
+    #[arg(short = 'm', long, default_value_t = 1_000)]
+    max_bench_ms: u128,
 }
 
 fn main() {
@@ -43,8 +43,12 @@ fn main() {
         return;
     }
     if args.bench_table {
-        println!("|   Day   | Average time per iteration | Number of iterations | Total time |");
-        println!("| ------- | -------------------------- | -------------------- | ---------- |");
+        println!(
+            "|   Day   | Average time per iteration | Number of iterations | Execution time |"
+        );
+        println!(
+            "| ------- | -------------------------- | -------------------- | -------------- |"
+        );
     }
 
     let mut total_proc = 0;
@@ -125,7 +129,7 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
     if !args.bench_disable {
         let mut total_us = 0;
         let mut actual_iterations = 0;
-        for i in 0..args.iterations {
+        for i in 0..args.max_bench_iters {
             let start = Instant::now();
             // `black_box` -> Do not optimize out this function
             let _ = std::hint::black_box(function());
@@ -133,7 +137,7 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
 
             // Limit total execution time
             actual_iterations = i + 1;
-            if total_us > args.max_benchmark_ms * 1_000 {
+            if total_us > args.max_bench_ms * 1_000 {
                 break;
             }
         }
@@ -144,7 +148,7 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
 
         if args.bench_table {
             println!(
-                "| {day} | {average_us:>24.3}us | {actual_iterations:>20} | {total_secs:>9.3}s |"
+                "| {day} | {average_us:>24.3}us | {actual_iterations:>20} | {total_secs:>13.3}s |"
             );
         } else {
             println!("{day} -> {average_us:0.2}us per iteration {total_secs:0.3}s total");
