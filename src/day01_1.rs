@@ -16,8 +16,8 @@ pub fn day() -> u32 {
 
     col1.iter()
         .map(|n| {
-            let occurances = col2.iter().filter(|n1| n == *n1).count() as u32;
-            occurances * n
+            let occurrences = col2.iter().filter(|n1| n == *n1).count() as u32;
+            occurrences * n
         })
         .sum()
 }
