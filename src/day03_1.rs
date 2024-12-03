@@ -1,16 +1,19 @@
+use lazy_static::lazy_static;
 use regex::Regex;
 
 // Pull this file's contents into the binary as a string literal
 const INPUT: &str = include_str!("../input/day03.txt");
 
+lazy_static! {
+    static ref RE: Regex = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|don't\(\)|do\(\)").unwrap();
+}
+
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 pub fn day() -> usize {
-    let reg = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|don't\(\)|do\(\)").unwrap();
-
     let mut sum = 0;
     let mut enabled = true;
-    for cap in reg.captures_iter(INPUT) {
+    for cap in RE.captures_iter(INPUT) {
         match cap.get(0).unwrap().as_str() {
             "don't()" => enabled = false,
             "do()" => enabled = true,

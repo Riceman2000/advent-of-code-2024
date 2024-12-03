@@ -1,15 +1,18 @@
+use lazy_static::lazy_static;
 use regex::Regex;
 
 // Pull this file's contents into the binary as a string literal
 const INPUT: &str = include_str!("../input/day03.txt");
 
+lazy_static! {
+    static ref RE: Regex = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();
+}
+
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 pub fn day() -> usize {
-    let reg = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();
-
     let mut sum = 0;
-    for cap in reg.captures_iter(INPUT) {
+    for cap in RE.captures_iter(INPUT) {
         let l: usize = cap.get(1).unwrap().as_str().parse().unwrap();
         let r: usize = cap.get(2).unwrap().as_str().parse().unwrap();
         sum += l * r;
