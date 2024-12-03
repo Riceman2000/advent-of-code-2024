@@ -22,6 +22,10 @@ struct Args {
     #[arg(short, long)]
     bench_disable: bool,
 
+    /// Print out a table of benchmark results, disables everything else
+    #[arg(short = 'B', long)]
+    bench_table: bool,
+
     /// Number of benchmark trials to run
     #[arg(short, long, default_value_t = 1_000)]
     iterations: usize,
@@ -33,6 +37,9 @@ fn main() {
     if args.output_disable && args.bench_disable {
         eprintln!("No output mode selected, nothing to do");
         return;
+    }
+    if args.bench_table {
+        println!("|   Day   | Average time per iteration | Number of iterations | Total time |");
     }
 
     let mut total_proc = 0;
@@ -91,8 +98,6 @@ fn main() {
 
     if total_proc == 0 {
         eprintln!("Target day did not match anything, nothing was done");
-    } else {
-        println!("Processed {total_proc} days");
     }
 }
 
@@ -108,12 +113,11 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
         return 0;
     }
 
-    if !args.output_disable {
+    if !args.output_disable && !args.bench_table {
         println!("Output of {day} -> {}", function());
     }
 
     if !args.bench_disable {
-        print!("Timing {day}... ");
         let start = Instant::now();
         for _ in 0..args.iterations {
             // `black_box` -> Do not optimize out this function
@@ -125,7 +129,14 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
         let average_us = total_us as f64 / args.iterations as f64;
         let total_secs: f64 = total_us as f64 / 10e6;
 
-        println!("{average_us:0.2}us per iteration {total_secs:0.3}s total");
+        if args.bench_table {
+            println!(
+                "| {day} | {average_us:>24}us | {:>20} | {total_secs:>9}s |",
+                args.iterations
+            );
+        } else {
+            println!("{day} -> {average_us:0.2}us per iteration {total_secs:0.3}s total");
+        }
     }
 
     1
