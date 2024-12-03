@@ -26,9 +26,13 @@ struct Args {
     #[arg(short = 'B', long)]
     bench_table: bool,
 
-    /// Number of benchmark trials to run
-    #[arg(short, long, default_value_t = 1_000)]
+    /// Maximum number of benchmark trials to run
+    #[arg(short, long, default_value_t = 10_000)]
     iterations: usize,
+
+    /// Max ms to benchmark before canceling
+    #[arg(short, long, default_value_t = 1_000)]
+    max_benchmark_ms: u128,
 }
 
 fn main() {
@@ -119,21 +123,28 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
     }
 
     if !args.bench_disable {
-        let start = Instant::now();
-        for _ in 0..args.iterations {
+        let mut total_us = 0;
+        let mut actual_iterations = 0;
+        for i in 0..args.iterations {
+            let start = Instant::now();
             // `black_box` -> Do not optimize out this function
             let _ = std::hint::black_box(function());
+            total_us += start.elapsed().as_micros();
+
+            // Limit total execution time
+            actual_iterations = i + 1;
+            if total_us > args.max_benchmark_ms * 1_000 {
+                break;
+            }
         }
-        let total_us: u128 = start.elapsed().as_micros();
 
         // We shouldn't overflow these unless one of the days is very very slow
-        let average_us = total_us as f64 / args.iterations as f64;
-        let total_secs: f64 = total_us as f64 / 10e6;
+        let average_us = total_us as f64 / actual_iterations as f64;
+        let total_secs: f64 = total_us as f64 / 1e6;
 
         if args.bench_table {
             println!(
-                "| {day} | {average_us:>24}us | {:>20} | {total_secs:>9}s |",
-                args.iterations
+                "| {day} | {average_us:>24.3}us | {actual_iterations:>20} | {total_secs:>9.3}s |"
             );
         } else {
             println!("{day} -> {average_us:0.2}us per iteration {total_secs:0.3}s total");
