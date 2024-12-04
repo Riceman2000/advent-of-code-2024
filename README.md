@@ -10,12 +10,14 @@ These benchmarks were done without any true care for accuracy or attempting to c
 
 |   Day   | Average time per iteration | Number of iterations | Execution time |
 | ------- | -------------------------- | -------------------- | -------------- |
-| day01_0 |                   26.537us |               100000 |         2.654s |
-| day01_1 |                   50.314us |                99376 |         5.000s |
-| day02_0 |                  107.664us |                46441 |         5.000s |
-| day02_1 |                  119.864us |                41714 |         5.000s |
-| day03_0 |                   74.035us |                67536 |         5.000s |
-| day03_1 |                  129.519us |                38605 |         5.000s |
+| day01_0 |                   24.735us |                20214 |         0.500s |
+| day01_1 |                   49.777us |                10045 |         0.500s |
+| day02_0 |                  101.104us |                 4946 |         0.500s |
+| day02_1 |                  116.392us |                 4296 |         0.500s |
+| day03_0 |                   80.781us |                 6190 |         0.500s |
+| day03_1 |                  132.280us |                 3780 |         0.500s |
+| day04_0 |                  351.965us |                 1421 |         0.500s |
+| day04_1 |                   89.426us |                 5592 |         0.500s |
 
 ## Notes
 
@@ -60,4 +62,9 @@ cargo run --release -- -o
 ### Run all days without running benchmarks
 ``` bash
 cargo run --release -- -b
+```
+
+### Generate the benchmark results table
+``` bash
+cargo run --release -- -B
 ```
