@@ -6,7 +6,7 @@ const INPUT: &[u8] = include_bytes!("../input/day04.txt");
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_sign_loss)]
 pub fn day() -> u32 {
-    let lines: Vec<&[u8]> = INPUT.split(|c| *c == b'\n').collect();
+    let lines: Vec<&[u8]> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
     let mut seen = 0;
 
     let offset_vectors = [
@@ -29,7 +29,7 @@ pub fn day() -> u32 {
                     let x_pos = (x + ox * off_mag) as usize;
                     let y_pos = (y + oy * off_mag) as usize;
                     // Relying on short circuit
-                    if y_pos >= lines.len() || x_pos >= lines[y_pos].len() {
+                    if y_pos >= lines.len() || x_pos >= lines[0].len() {
                         continue 'offset;
                     }
                     let test_char = lines[y_pos][x_pos];
