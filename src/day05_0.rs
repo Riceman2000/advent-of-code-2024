@@ -8,15 +8,12 @@ const INPUT: &[u8] = include_bytes!("../input/day05.txt");
 pub fn day() -> u32 {
     let lines: Vec<_> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
     let section_split = lines.iter().position(|l| l.is_empty()).unwrap();
-    let orders: Vec<_> = lines[0..section_split]
-        .iter()
-        .map(|r| unsafe {
-            (
-                atoi::<u8>(&r[0..2]).unwrap_unchecked(),
-                atoi::<u8>(&r[3..]).unwrap_unchecked(),
-            )
-        })
-        .collect();
+    let mut orders = [const { Vec::new() }; 100]; // Indexes 0-99
+    for order_line in &lines[0..section_split] {
+        let index = atoi::<usize>(&order_line[0..2]).unwrap();
+        let page = atoi::<u8>(&order_line[3..]).unwrap();
+        orders[index].push(page);
+    }
     let reports: Vec<_> = lines[section_split + 1..]
         .iter()
         .map(|r| {
@@ -30,7 +27,7 @@ pub fn day() -> u32 {
     for report in reports {
         let is_good = report
             .array_windows()
-            .all(|&[a, b]| orders.contains(&(a, b)));
+            .all(|&[a, b]| orders[a as usize].contains(&b));
 
         if is_good {
             sum += u32::from(report[report.len() / 2]);
