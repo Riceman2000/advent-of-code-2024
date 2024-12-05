@@ -27,33 +27,23 @@ pub fn day() -> u32 {
         })
         .collect();
 
-    let mut bad_reports = Vec::new();
-    'report: for (report_idx, report) in reports.iter().enumerate() {
-        for (num_idx, num) in report.iter().enumerate() {
-            for order_rule in orders.iter().filter(|o| o.0 == *num) {
-                for test_num in report.iter().take(num_idx) {
-                    if *test_num == order_rule.1 {
-                        bad_reports.push(report_idx);
-                        continue 'report;
-                    }
-                }
-            }
-        }
-    }
-
     let mut sum: u32 = 0;
-    for i in bad_reports {
-        let sorted: Vec<_> = reports[i]
+    for report in reports {
+        let mut is_bad = false;
+        let sorted: Vec<_> = report
             .iter()
             .sorted_by(|a, b| {
                 if orders.contains(&(**a, **b)) {
+                    is_bad = true;
                     Ordering::Less
                 } else {
                     Ordering::Greater
                 }
             })
             .collect();
-        sum += u32::from(*sorted[sorted.len() / 2]);
+        if is_bad {
+            sum += u32::from(*sorted[sorted.len() / 2]);
+        }
     }
 
     sum
