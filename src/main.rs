@@ -144,14 +144,25 @@ fn process_day<F: Fn() -> R, R: std::fmt::Display>(day: &str, function: F, args:
 
         // We shouldn't overflow these unless one of the days is very very slow
         let average_us = total_us as f64 / actual_iterations as f64;
-        let total_secs: f64 = total_us as f64 / 1e6;
+        let total_us = total_us as f64;
 
+        // Metric prefixes
+        let average_time = match average_us {
+            ..1e3 => format!("{average_us:0.3}us"),
+            1e3..1e6 => format!("{:0.3}ms", average_us / 1e3),
+            _ => format!("{:0.3}s", average_us / 1e6),
+        };
+        let total_time = match total_us {
+            ..1e3 => format!("{total_us:0.3}us"),
+            1e3..1e6 => format!("{:0.3}ms", total_us / 1e3),
+            _ => format!("{:0.3}s", total_us / 1e6),
+        };
+
+        // Print results
         if args.bench_table {
-            println!(
-                "| {day} | {average_us:>24.3}us | {actual_iterations:>20} | {total_secs:>13.3}s |"
-            );
+            println!("| {day} | {average_time:>26} | {actual_iterations:>20} | {total_time:>14} |");
         } else {
-            println!("{day} -> {average_us:0.2}us per iteration {total_secs:0.3}s total");
+            println!("{day} -> {average_time} per iteration {total_time} total");
         }
     }
 
