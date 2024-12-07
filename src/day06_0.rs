@@ -2,9 +2,7 @@
 const INPUT: &[u8] = include_bytes!("../input/day06.txt");
 
 #[must_use]
-#[allow(clippy::cast_possible_wrap)]
-#[allow(clippy::cast_possible_truncation)]
-#[allow(clippy::cast_sign_loss)]
+#[allow(clippy::missing_panics_doc)]
 pub fn day() -> usize {
     let lines: Vec<&[u8]> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
     let mut current_pos = (0, 0);
