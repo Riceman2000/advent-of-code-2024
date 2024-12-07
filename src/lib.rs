@@ -15,7 +15,7 @@ pub mod day05_1;
 pub mod day06_0;
 pub mod day06_1;
 pub mod day07_0;
-// pub mod day07_1;
+pub mod day07_1;
 // pub mod day08_0;
 // pub mod day08_1;
 // pub mod day09_0;
