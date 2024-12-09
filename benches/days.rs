@@ -26,7 +26,7 @@ fn day_benches(c: &mut Criterion) {
     c.bench_function("day06_1", |b| b.iter(&mut day06_1::day));
     c.bench_function("day07_0", |b| b.iter(&mut day07_0::day));
     c.bench_function("day07_1", |b| b.iter(&mut day07_1::day));
-    // c.bench_function("day08_0", |b| b.iter(&mut day08_0::day));
+    c.bench_function("day08_0", |b| b.iter(&mut day08_0::day));
     // c.bench_function("day08_1", |b| b.iter(&mut day08_1::day));
     // c.bench_function("day09_0", |b| b.iter(&mut day09_0::day));
     // c.bench_function("day09_1", |b| b.iter(&mut day09_1::day));
