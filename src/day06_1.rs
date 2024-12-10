@@ -107,13 +107,35 @@ fn gets_stuck(obstacle_coords: (usize, usize), lines: &[&[u8]], start_pos: (usiz
     false
 }
 
+/// Used to allow for the verfication of results at runtime without a panic
+#[must_use]
+pub fn verify_day(print_output: bool) -> bool {
+    // Correct value can be put here once it is known
+    let expected = 1_753;
+
+    let actual = day();
+    if actual == expected {
+        return true;
+    }
+
+    if print_output {
+        // To help handle unsigned subtraction
+        let sign = if actual > expected { '+' } else { '-' };
+        eprintln!(
+            "Got {actual} expected {expected}, diff {sign}{}",
+            expected.abs_diff(actual)
+        );
+    }
+    false
+}
+
 #[cfg(test)]
 mod tests {
-    use super::day;
+    use super::*;
 
+    /// Test that is automatically run by `cargo test`
     #[test]
     fn test_day() {
-        // Correct value can be put here once it is known
-        assert_eq!(1_753, day());
+        assert!(verify_day(true));
     }
 }
