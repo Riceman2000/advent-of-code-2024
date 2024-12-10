@@ -2,38 +2,38 @@
 const INPUT: &[u8] = include_bytes!("../input/day09.txt");
 
 #[must_use]
-#[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
-#[allow(clippy::cast_possible_wrap)]
-pub fn day() -> usize {
-    let mut disk: Vec<_> = INPUT
-        .trim_ascii()
-        .chunks(2)
-        .enumerate()
-        .flat_map(|(id, data)| {
-            let used = data[0] as usize - 48;
+#[allow(clippy::cast_lossless)]
+pub fn day() -> u64 {
+    let mut disk = [None; 100_000];
+    let mut cursor = 0;
+    for (id, entry) in INPUT.trim_ascii().chunks(2).enumerate() {
+        let used = entry[0] as usize - 48;
 
-            // Last number is a file that has no free space
-            let free = if data.len() == 2 {
-                data[1] as usize - 48
-            } else {
-                0
-            };
-            let mut file = vec![Some(id); used];
-            file.extend(vec![None::<usize>; free]);
-            file
-        })
-        .collect();
+        // Last number is a file that has no free space
+        let free = if entry.len() == 2 {
+            entry[1] as usize - 48
+        } else {
+            0
+        };
+
+        disk[cursor..cursor + used].fill(Some(id as u16));
+        cursor += used + free; // Free stays None
+    }
 
     let mut l_search = 0;
     let mut r_search = disk.len() - 1;
     loop {
-        let l_pos = disk
-            .iter()
-            .skip(l_search)
-            .position(Option::is_none)
-            .unwrap()
-            + l_search;
+        // Search for empty space from left
+        let mut l_pos = l_search;
+        loop {
+            if disk[l_pos].is_none() {
+                break;
+            }
+            l_pos += 1;
+        }
+
+        // Search for a used space from right
         let mut r_pos = r_search;
         loop {
             if disk[r_pos].is_some() {
@@ -53,7 +53,7 @@ pub fn day() -> usize {
     disk.iter()
         .flatten()
         .enumerate()
-        .fold(0, |acc, (pos, id)| acc + pos * id)
+        .fold(0, |acc, (pos, id)| acc + (pos as u64) * (*id as u64))
 }
 
 #[cfg(test)]
