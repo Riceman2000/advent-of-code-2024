@@ -84,8 +84,6 @@ pub fn day() -> usize {
     sum
 }
 
-//not 6460120102583 -> too low
-
 #[derive(Debug, Clone, Copy)]
 struct Block {
     id: usize,
