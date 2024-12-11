@@ -1,13 +1,14 @@
 use std::time::Instant;
 
-use atoi::atoi;
 use clap::Parser;
 use glob_match::glob_match;
-use textplots::{Chart, Plot, Shape};
+use plotly::{common::Title, layout::Axis, Bar, ImageFormat, Layout, Plot};
 
 // Needed to bring in all of the days
 #[allow(clippy::wildcard_imports)]
 use aoc::*;
+
+const GRAPH_SAVE_LOCATION: &str = "./media/benchmark-graph.png";
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -171,22 +172,21 @@ fn main() {
         return;
     }
 
+    let mut benchmark_string = String::new();
     if args.bench_table {
-        println!(
-            "|   Day   | Validated | Average time per iteration | Number of iterations | Execution time |\n\
-             | ------- | --------- | -------------------------- | -------------------- | -------------- |"
-        );
+        benchmark_string += "|   Day   | Validated | Average time per iteration | Number of iterations | Execution time |\n\
+                             | ------- | --------- | -------------------------- | -------------------- | -------------- |\n"
+    ;
     } else if args.bench_enable {
-        println!("\nBeginning benchmark reports:");
+        benchmark_string += "\nBeginning benchmark reports:\n";
     }
-
     for day in &processed {
         let Some(ref benchmark) = day.benchmark else {
             unreachable!("Checked that at least one benchmark option was enabled");
         };
         if args.bench_table {
-            println!(
-                "| {} | {:>9} | {:>26} | {:>20} | {:>14} |",
+            benchmark_string += &format!(
+                "| {} | {:>9} | {:>26} | {:>20} | {:>14} |\n",
                 day.day_name,
                 day.passed_test,
                 benchmark.average_formatted,
@@ -194,8 +194,8 @@ fn main() {
                 benchmark.total_formatted,
             );
         } else if args.bench_enable {
-            println!(
-                "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest passed: {}",
+            benchmark_string += &format!(
+                "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest passed: {}\n",
                 day.day_name,
                 benchmark.average_formatted,
                 benchmark.iterations,
@@ -204,29 +204,32 @@ fn main() {
             );
         }
     }
+    println!("{benchmark_string}");
 
     if args.bench_graph {
+        println!("Generating benchmark graph");
+        let ids: Vec<_> = processed.iter().map(|day| day.day_name).collect();
+
         let times: Vec<_> = processed
             .iter()
             .map(|day| {
-                let day_name_bytes = day.day_name.as_bytes();
-                // Count by 10, part 2 adds 5
-                let index = atoi::<u16>(&day_name_bytes[3..5]).unwrap() * 10
-                    + atoi::<u16>(&day_name_bytes[6..]).unwrap() * 5;
-                let index = index as f32;
-
                 // Log scale times
                 let mut time = day.benchmark.as_ref().unwrap().average_us;
                 time = time.log10();
-
-                (index, time)
+                time
             })
             .collect();
-        println!("\nLog scale graph of timing results\n```");
-        Chart::new(180, 60, 0.0, 255.0)
-            .lineplot(&Shape::Bars(&times))
-            .nice();
-        println!("```");
+
+        let mut plot = Plot::new();
+        let trace = Bar::new(ids, times);
+        let layout = Layout::new()
+            .x_axis(Axis::new().title(Title::from("Day")))
+            .y_axis(Axis::new().title(Title::from("Runtime in microseconds log10")))
+            .title(Title::from("Benchmark results logscale"));
+        plot.add_trace(trace);
+        plot.set_layout(layout);
+        plot.write_image(GRAPH_SAVE_LOCATION, ImageFormat::PNG, 800, 600, 1.0);
+        println!("Benchmark plot saved to {GRAPH_SAVE_LOCATION}");
     }
 }
 
