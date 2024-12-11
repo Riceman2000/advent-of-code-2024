@@ -2,14 +2,19 @@ use std::time::Instant;
 
 use clap::Parser;
 use glob_match::glob_match;
-use plotly::{common::Title, layout::Axis, Bar, ImageFormat, Layout, Plot};
+use plotly::{
+    common::Title,
+    layout::{Axis, Margin},
+    traces::table::{Cells, Header},
+    Bar, ImageFormat, Layout, Plot, Table,
+};
 
 // Needed to bring in all of the days
 #[allow(clippy::wildcard_imports)]
 use aoc::*;
 
 const GRAPH_SAVE_LOCATION: &str = "./media/benchmark-graph.png";
-const TABLE_SAVE_LOCATION: &str = "./media/benchmark-table.md";
+const TABLE_SAVE_LOCATION: &str = "./media/benchmark-table.png";
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -169,35 +174,14 @@ fn main() {
         std::process::exit(1);
     }
 
-    if !(args.bench_enable || args.bench_table || args.bench_graph) {
-        return;
-    }
-
-    // Benchmarks text reports, table and human readable reports
-    let mut benchmark_string = String::new();
-    if args.bench_table {
-        benchmark_string += "|   Day   | Validated | Average time per iteration | Number of iterations | Execution time |\n\
-                             | ------- | --------- | -------------------------- | -------------------- | -------------- |\n"
-    ;
-    } else if args.bench_enable {
-        benchmark_string += "\nBeginning benchmark reports:\n";
-    }
-    for day in &processed {
-        let Some(ref benchmark) = day.benchmark else {
-            unreachable!("Checked that at least one benchmark option was enabled");
-        };
-        if args.bench_table {
-            benchmark_string += &format!(
-                "| {} | {:>9} | {:>26} | {:>20} | {:>14} |\n",
-                day.day_name,
-                day.passed_test,
-                benchmark.average_formatted,
-                benchmark.iterations,
-                benchmark.total_formatted,
-            );
-        } else if args.bench_enable {
-            benchmark_string += &format!(
-                "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest passed: {}\n",
+    // Benchmarks text reports
+    if args.bench_enable {
+        for day in &processed {
+            let Some(ref benchmark) = day.benchmark else {
+                unreachable!("Checked that at least one benchmark option was enabled");
+            };
+            println!(
+                "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest passed: {}",
                 day.day_name,
                 benchmark.average_formatted,
                 benchmark.iterations,
@@ -206,39 +190,93 @@ fn main() {
             );
         }
     }
-    if args.bench_table || args.bench_enable {
-        print!("{benchmark_string}");
-    }
+
     if args.bench_table {
-        std::fs::write(TABLE_SAVE_LOCATION, benchmark_string.as_bytes()).unwrap();
+        println!("Generating benchmark table");
+        generate_bench_table(&processed);
+        println!("Benchmark table saved to {TABLE_SAVE_LOCATION}");
     }
 
     // Benchmarks graph
     if args.bench_graph {
         println!("Generating benchmark graph");
-        let ids: Vec<_> = processed.iter().map(|day| day.day_name).collect();
-
-        let times: Vec<_> = processed
-            .iter()
-            .map(|day| {
-                // Log scale times
-                let mut time = day.benchmark.as_ref().unwrap().average_us;
-                time = time.log10();
-                time
-            })
-            .collect();
-
-        let mut plot = Plot::new();
-        let trace = Bar::new(ids, times);
-        let layout = Layout::new()
-            .x_axis(Axis::new().title(Title::from("Day")))
-            .y_axis(Axis::new().title(Title::from("Runtime in microseconds log10")))
-            .title(Title::from("Benchmark results logscale"));
-        plot.add_trace(trace);
-        plot.set_layout(layout);
-        plot.write_image(GRAPH_SAVE_LOCATION, ImageFormat::PNG, 800, 600, 1.0);
+        generate_bench_graph(&processed);
         println!("Benchmark plot saved to {GRAPH_SAVE_LOCATION}");
     }
+}
+
+fn generate_bench_graph(processed: &[&DayResult]) {
+    let ids: Vec<_> = processed.iter().map(|day| day.day_name).collect();
+
+    let times: Vec<_> = processed
+        .iter()
+        .map(|day| {
+            // Log scale times
+            let mut time = day.benchmark.as_ref().unwrap().average_us;
+            time = time.log10();
+            time
+        })
+        .collect();
+
+    let mut plot = Plot::new();
+    let trace = Bar::new(ids, times);
+    let layout = Layout::new()
+        .x_axis(Axis::new().title(Title::from("Day")))
+        .y_axis(Axis::new().title(Title::from("Runtime in microseconds log10")))
+        .title(Title::from("Benchmark results logscale"));
+    plot.add_trace(trace);
+    plot.set_layout(layout);
+    plot.write_image(GRAPH_SAVE_LOCATION, ImageFormat::PNG, 800, 600, 1.0);
+}
+fn generate_bench_table(processed: &[&DayResult]) {
+    let mut table_rows = Vec::new();
+    for day in processed {
+        let Some(ref benchmark) = day.benchmark else {
+            unreachable!("Checked that at least one benchmark option was enabled");
+        };
+        table_rows.push(vec![
+            day.day_name.to_string(),
+            day.passed_test.to_string(),
+            benchmark.average_formatted.to_string(),
+            benchmark.iterations.to_string(),
+            benchmark.total_formatted.to_string(),
+        ]);
+    }
+    // Table rows must be transposed
+    let total_rows = table_rows.len();
+    table_rows = (0..table_rows[0].len())
+        .map(|i| {
+            table_rows
+                .iter()
+                .map(|inner| inner[i].clone())
+                .collect::<Vec<_>>()
+        })
+        .collect();
+
+    // Form plot
+    let mut plot = Plot::new();
+    let cells = Cells::new(table_rows);
+    let header = Header::new(vec![
+        "Day",
+        "Validated",
+        "Iteration time",
+        "Iterations",
+        "Total time",
+    ]);
+    let trace = Table::new(header, cells);
+    let margin = Margin::new().left(5).right(5).top(50).bottom(5);
+    let layout = Layout::new()
+        .title(Title::from("Benchmark results table"))
+        .margin(margin);
+    plot.add_trace(trace);
+    plot.set_layout(layout);
+    plot.write_image(
+        TABLE_SAVE_LOCATION,
+        ImageFormat::PNG,
+        800,
+        85 + 20 * total_rows,
+        1.0,
+    );
 }
 
 /// Benchmark a given day function
