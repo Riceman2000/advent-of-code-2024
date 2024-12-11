@@ -207,7 +207,7 @@ fn main() {
         }
     }
     if args.bench_table || args.bench_enable {
-        println!("{benchmark_string}");
+        print!("{benchmark_string}");
     }
     if args.bench_table {
         std::fs::write(TABLE_SAVE_LOCATION, benchmark_string.as_bytes()).unwrap();
