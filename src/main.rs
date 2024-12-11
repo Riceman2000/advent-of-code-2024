@@ -56,28 +56,43 @@ struct BenchmarkResult {
     total_formatted: String,
 }
 
+/// Please just ignore this, I am sorry for creating it
 macro_rules! process_day {
     ($day:ident, $args:expr) => {{
-        let day_name = stringify!($day);
-        let day_ran = $args.target_day.is_empty() || glob_match(&$args.target_day, day_name);
+        'runner: {
+            let day_name = stringify!($day);
 
-        if day_ran && !$args.output_disable && !$args.bench_table {
-            println!("{day_name} -> {}", $day::day());
-        }
+            let day_ran = $args.target_day.is_empty() || glob_match(&$args.target_day, day_name);
+            if !day_ran {
+                break 'runner DayResult {
+                    day_name,
+                    day_ran,
+                    passed_test: false,
+                    benchmark: None,
+                };
+            }
 
-        let (passed_test, benchmark) = if day_ran {
-            let passed_test = $day::verify_day(false);
-            let benchmark = bench_day($day::day, &$args);
-            (passed_test, Some(benchmark))
-        } else {
-            (false, None)
-        };
+            if !$args.output_disable && !$args.bench_table {
+                println!("{day_name} -> {}", $day::day());
+            }
 
-        DayResult {
-            day_name,
-            day_ran,
-            passed_test,
-            benchmark,
+            // It is best to avoid testing when it wont be reported because it will duplicate user
+            // debug statements
+            let (benchmark, passed_test) = if $args.bench_table {
+                (Some(bench_day($day::day, &$args)), $day::verify_day(false))
+            } else if $args.bench_enable || $args.bench_graph {
+                println!("Benchmarking {day_name}...");
+                (Some(bench_day($day::day, &$args)), $day::verify_day(false))
+            } else {
+                (None, false)
+            };
+
+            DayResult {
+                day_name,
+                day_ran,
+                passed_test,
+                benchmark,
+            }
         }
     }};
 }
@@ -152,16 +167,22 @@ fn main() {
         std::process::exit(1);
     }
 
+    if !(args.bench_enable || args.bench_table || args.bench_graph) {
+        return;
+    }
+
     if args.bench_table {
         println!(
             "|   Day   | Validated | Average time per iteration | Number of iterations | Execution time |\n\
              | ------- | --------- | -------------------------- | -------------------- | -------------- |"
         );
+    } else if args.bench_enable {
+        println!("\nBeginning benchmark reports:");
     }
 
     for day in &processed {
         let Some(ref benchmark) = day.benchmark else {
-            unreachable!()
+            unreachable!("Checked that at least one benchmark option was enabled");
         };
         if args.bench_table {
             println!(
@@ -174,7 +195,7 @@ fn main() {
             );
         } else if args.bench_enable {
             println!(
-                "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest result: {}",
+                "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest passed: {}",
                 day.day_name,
                 benchmark.average_formatted,
                 benchmark.iterations,
