@@ -1,3 +1,4 @@
+#![feature(isqrt)]
 #![feature(array_windows)]
 #![feature(iter_map_windows)]
 #![feature(iter_array_chunks)]
@@ -30,7 +31,7 @@ pub mod day12_1;
 pub mod day13_0;
 pub mod day13_1;
 pub mod day14_0;
-// pub mod day14_1;
+pub mod day14_1;
 // pub mod day15_0;
 // pub mod day15_1;
 // pub mod day16_0;
