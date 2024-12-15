@@ -38,33 +38,33 @@ pub fn day() -> i32 {
         })
         .collect();
 
-    let mut current_distances = vec![0; robots.len()];
-
     // Isolate best X
-    let mut x_distances = vec![0; WIDTH as usize];
-    for seconds in 0..WIDTH {
-        for (i, robot) in robots.iter().enumerate() {
-            let offset = robot.1[0] * seconds;
-            let new_x = robot.0[0] + offset;
-
-            current_distances[i] = new_x.rem_euclid(WIDTH).abs_diff(VERTICAL);
-        }
-        x_distances[seconds as usize] = current_distances.iter().sum();
-    }
-    let best_x = x_distances.iter().position_min().unwrap() as i32;
+    let best_x = (0..WIDTH)
+        .map(|seconds| {
+            robots
+                .iter()
+                .map(move |robot| {
+                    let new_x = robot.0[0] + (robot.1[0] * seconds);
+                    new_x.rem_euclid(WIDTH).abs_diff(VERTICAL)
+                })
+                .sum::<u32>()
+        })
+        .position_min()
+        .unwrap() as i32;
 
     // Isolate best Y
-    let mut y_distances = vec![0; HEIGHT as usize];
-    for seconds in 0..HEIGHT {
-        for (i, robot) in robots.iter().enumerate() {
-            let offset = robot.1[1] * seconds;
-            let new_y = robot.0[1] + offset;
-
-            current_distances[i] = new_y.rem_euclid(HEIGHT).abs_diff(HORIZONTAL);
-        }
-        y_distances[seconds as usize] = current_distances.iter().sum();
-    }
-    let best_y = y_distances.iter().position_min().unwrap() as i32;
+    let best_y = (0..WIDTH)
+        .map(|seconds| {
+            robots
+                .iter()
+                .map(move |robot| {
+                    let new_x = robot.0[1] + (robot.1[1] * seconds);
+                    new_x.rem_euclid(HEIGHT).abs_diff(HORIZONTAL)
+                })
+                .sum::<u32>()
+        })
+        .position_min()
+        .unwrap() as i32;
 
     // Chinese remainder theorem -> https://rosettacode.org/wiki/Chinese_remainder_theorem#Rust
     let mut sum = best_x * mod_inv(HEIGHT, WIDTH).unwrap() * HEIGHT;
