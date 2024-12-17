@@ -149,7 +149,7 @@ fn main() {
     results.push(process_day!(day15_1, args));
     results.push(process_day!(day16_0, args));
     results.push(process_day!(day16_1, args));
-    // results.push(process_day!(day17_0, args));
+    results.push(process_day!(day17_0, args));
     // results.push(process_day!(day17_1, args));
     // results.push(process_day!(day18_0, args));
     // results.push(process_day!(day18_1, args));
