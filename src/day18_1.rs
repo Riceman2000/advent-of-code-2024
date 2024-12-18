@@ -1,5 +1,5 @@
 use atoi::atoi;
-use pathfinding::directed::dijkstra;
+use pathfinding::directed::bfs;
 
 // Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../input/day18.txt");
@@ -49,17 +49,17 @@ fn path_exists(points: &[(usize, usize)]) -> bool {
     let mut points = points.to_vec();
     points.sort_unstable();
 
-    dijkstra::dijkstra(
+    bfs::bfs(
         &(START_POS.0, START_POS.1),
         |&(x, y): &(usize, usize)| {
             [
-                ((x + 1, y), 1),
-                ((x, y + 1), 1),
-                ((x.saturating_sub(1), y), 1),
-                ((x, y.saturating_sub(1)), 1),
+                (x + 1, y),
+                (x, y + 1),
+                (x.saturating_sub(1), y),
+                (x, y.saturating_sub(1)),
             ]
             .into_iter()
-            .filter(|&((x, y), _)| {
+            .filter(|&(x, y)| {
                 x <= MAP_MAX && y <= MAP_MAX && points.binary_search(&(x, y)).is_err()
             })
         },
