@@ -9,7 +9,7 @@ const INPUT: &[u8] = include_bytes!("../input/day17.txt");
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
-pub fn day() -> usize {
+pub fn day() -> String {
     let mut lines = INPUT.trim_ascii().split(|b| *b == b'\n');
     let mut a = atoi::<u64>(&lines.next().unwrap()[12..]).unwrap();
     let mut b = atoi::<u64>(&lines.next().unwrap()[12..]).unwrap();
@@ -22,12 +22,10 @@ pub fn day() -> usize {
         .map(|b| b.last().unwrap() - b'0')
         .collect();
 
-    println!("a: {a}, b: {b}, c: {c}, instructions: {instructions:?}");
-
     macro_rules! combo_op {
         ($operand:expr) => {
             match $operand {
-                o if (0..=3).contains(&o) => o,
+                0..=3 => $operand,
                 4 => a,
                 5 => b,
                 6 => c,
@@ -40,7 +38,6 @@ pub fn day() -> usize {
         let opcode: Opcode = unsafe { transmute(instructions[ip]) }; // Teehee
         let operand = instructions[ip + 1] as u64;
 
-        println!("{opcode:?} {operand}, a: {a}, b: {b}, ip: {ip}, out: {out:?}");
         match opcode {
             Opcode::Adv => a /= 2u64.pow(combo_op!(operand) as u32),
             Opcode::Bxl => b ^= operand,
@@ -48,24 +45,21 @@ pub fn day() -> usize {
             Opcode::Jnz => {
                 if a != 0 {
                     ip = operand as usize;
-                    // println!("\ta: {a}, b: {b}, ip: {ip}, out: {out:?}");
                     continue;
                 }
             }
             Opcode::Bxc => b ^= c,
             Opcode::Out => out.push(combo_op!(operand) % 8),
-            Opcode::Bdv => b /= 2u64.pow(combo_op!(operand) as u32),
-            Opcode::Cdv => c /= 2u64.pow(combo_op!(operand) as u32),
+            Opcode::Bdv => b = a / 2u64.pow(combo_op!(operand) as u32),
+            Opcode::Cdv => c = a / 2u64.pow(combo_op!(operand) as u32),
         }
-        println!("\ta: {a}, b: {b}, ip: {ip}, out: {out:?}");
         ip += 2;
     }
 
-    for o in out {
-        print!("{o},");
-    }
-    println!();
-    0
+    let out = out
+        .iter()
+        .fold(String::new(), |acc, n| acc + "," + &n.to_string());
+    out[1..].to_string()
 }
 
 #[repr(u8)]
@@ -86,7 +80,7 @@ enum Opcode {
 #[must_use]
 pub fn verify_day(print_output: bool) -> bool {
     // Correct value can be put here once it is known
-    let expected = 590;
+    let expected = "2,1,0,1,7,2,5,0,3";
 
     let actual = day();
     if actual == expected {
@@ -94,12 +88,7 @@ pub fn verify_day(print_output: bool) -> bool {
     }
 
     if print_output {
-        // To help handle unsigned subtraction
-        let sign = if actual > expected { '+' } else { '-' };
-        eprintln!(
-            "Got {actual} expected {expected}, diff {sign}{}",
-            expected.abs_diff(actual)
-        );
+        eprintln!("Got {actual} expected {expected}");
     }
     false
 }
