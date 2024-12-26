@@ -1,28 +1,28 @@
+use rayon::prelude::*;
+
 // Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../input/day06.txt");
 
 #[must_use]
-#[allow(clippy::cast_possible_wrap)]
-#[allow(clippy::cast_possible_truncation)]
-#[allow(clippy::cast_sign_loss)]
+#[allow(clippy::missing_panics_doc)]
 pub fn day() -> usize {
     let lines: Vec<&[u8]> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
-    let mut current_pos = (0, 0);
+    let mut start_pos = (0, 0);
     for (y, line) in lines.iter().enumerate() {
         if let Some(x) = line.iter().position(|c| *c == b'^') {
-            current_pos = (x, y);
+            start_pos = (x, y);
             break;
         }
     }
 
-    let mut direction_vectors = [(0, -1), (1, 0), (0, 1), (-1, 0)].iter().cycle();
-    let mut current_dir = direction_vectors.next().unwrap();
+    let mut current_dir = Direction::new();
+    let mut current_pos = start_pos;
 
     let mut visited = vec![current_pos];
+
     'main: loop {
-        let mut next_pos;
-        loop {
-            next_pos = (
+        current_pos = loop {
+            let next_pos = (
                 current_pos.0.wrapping_add_signed(current_dir.0),
                 current_pos.1.wrapping_add_signed(current_dir.1),
             );
@@ -30,40 +30,56 @@ pub fn day() -> usize {
                 break 'main;
             }
             if lines[next_pos.1][next_pos.0] == b'#' {
-                current_dir = direction_vectors.next().unwrap();
+                current_dir.next();
             } else {
-                break;
+                break next_pos;
             }
-        }
+        };
 
-        current_pos = next_pos;
         visited.push(current_pos);
     }
 
     visited.sort_unstable();
     visited.dedup();
 
-    let mut out = 0;
-    for (x, y) in visited {
-        if gets_stuck((x, y)) {
-            out += 1;
-        }
-    }
-    out
+    // Parrallel iterator
+    visited
+        .par_iter()
+        .fold(
+            || 0,
+            |a, c| {
+                if gets_stuck(*c, &lines, start_pos) {
+                    a + 1
+                } else {
+                    a
+                }
+            },
+        )
+        .sum()
 }
 
-fn gets_stuck(obstacle_coords: (usize, usize)) -> bool {
-    let lines: Vec<&[u8]> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
-    let mut current_pos = (0, 0);
-    for (y, line) in lines.iter().enumerate() {
-        if let Some(x) = line.iter().position(|c| *c == b'^') {
-            current_pos = (x, y);
-            break;
-        }
-    }
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+struct Direction(isize, isize);
 
-    let mut direction_vectors = [(0, -1), (1, 0), (0, 1), (-1, 0)].iter().cycle();
-    let mut current_dir = direction_vectors.next().unwrap();
+impl Direction {
+    fn new() -> Self {
+        Self(0, -1)
+    }
+    fn next(&mut self) {
+        let new_dir = match (self.0, self.1) {
+            (0, -1) => (1, 0),
+            (1, 0) => (0, 1),
+            (0, 1) => (-1, 0),
+            (-1, 0) => (0, -1),
+            _ => unreachable!(),
+        };
+        *self = Self(new_dir.0, new_dir.1);
+    }
+}
+
+fn gets_stuck(obstacle_coords: (usize, usize), lines: &[&[u8]], start_pos: (usize, usize)) -> bool {
+    let mut current_dir = Direction::new();
+    let mut current_pos = start_pos;
 
     let mut step_count = 0;
     'main: loop {
@@ -71,9 +87,8 @@ fn gets_stuck(obstacle_coords: (usize, usize)) -> bool {
         if step_count >= 6_000 {
             return true;
         }
-        let mut next_pos;
-        loop {
-            next_pos = (
+        current_pos = loop {
+            let next_pos = (
                 current_pos.0.wrapping_add_signed(current_dir.0),
                 current_pos.1.wrapping_add_signed(current_dir.1),
             );
@@ -83,13 +98,11 @@ fn gets_stuck(obstacle_coords: (usize, usize)) -> bool {
             if lines[next_pos.1][next_pos.0] == b'#'
                 || (next_pos.1 == obstacle_coords.1 && next_pos.0 == obstacle_coords.0)
             {
-                current_dir = direction_vectors.next().unwrap();
+                current_dir.next();
             } else {
-                break;
+                break next_pos;
             }
-        }
-
-        current_pos = next_pos;
+        };
     }
     false
 }
