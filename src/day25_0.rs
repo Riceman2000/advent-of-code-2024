@@ -80,7 +80,7 @@ fn process_key(grid: &[&[u8]]) -> Identifier {
 #[must_use]
 pub fn verify_day(print_output: bool) -> bool {
     // Correct value can be put here once it is known
-    let expected = 57_270_694_330_992;
+    let expected = 3_663;
 
     let actual = day();
     if actual == expected {
