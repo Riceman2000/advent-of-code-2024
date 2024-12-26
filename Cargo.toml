@@ -27,6 +27,7 @@ name = "days"
 harness = false
 
 [dependencies]
+atoi = "2.0.0"
 # Used in the main file to give users a way to interact with the application via the CLI
 clap = { version = "4.5.21", features = ["derive"] }
 glob-match = "0.2.1"
