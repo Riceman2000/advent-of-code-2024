@@ -6,7 +6,7 @@ use lazy_static::lazy_static;
 // Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../input/day21.txt");
 
-const ROBOT_DEPTH: u64 = 2;
+const ROBOT_DEPTH: u64 = 25;
 
 lazy_static! {
     static ref NUMPAD: HashMap<Point, u8> = {
@@ -249,7 +249,7 @@ fn calc_cost(goal: u8, prev_instr: u8, depth: u64, cache: &mut Cache) -> u64 {
 #[must_use]
 pub fn verify_day(print_output: bool) -> bool {
     // Correct value can be put here once it is known
-    let expected = 184_716;
+    let expected = 229_403_562_787_554;
 
     let actual = day();
     if actual == expected {

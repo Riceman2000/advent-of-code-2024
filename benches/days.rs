@@ -53,7 +53,7 @@ fn day_benches(c: &mut Criterion) {
     c.bench_function("day20_0", |b| b.iter(&mut day20_0::day));
     c.bench_function("day20_1", |b| b.iter(&mut day20_1::day));
     c.bench_function("day21_0", |b| b.iter(&mut day21_0::day));
-    // c.bench_function("day21_1", |b| b.iter(&mut day21_1::day));
+    c.bench_function("day21_1", |b| b.iter(&mut day21_1::day));
     c.bench_function("day22_0", |b| b.iter(&mut day22_0::day));
     c.bench_function("day22_1", |b| b.iter(&mut day22_1::day));
     // c.bench_function("day23_0", |b| b.iter(&mut day23_0::day));
