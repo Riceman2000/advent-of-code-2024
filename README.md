@@ -10,14 +10,14 @@ These benchmarks were done without any true care for accuracy or attempting to c
 
 |   Day   | Average time per iteration | Number of iterations | Execution time |
 | ------- | -------------------------- | -------------------- | -------------- |
-| day01_0 |                   24.735us |                20214 |         0.500s |
-| day01_1 |                   49.777us |                10045 |         0.500s |
-| day02_0 |                  101.104us |                 4946 |         0.500s |
-| day02_1 |                  116.392us |                 4296 |         0.500s |
-| day03_0 |                   80.781us |                 6190 |         0.500s |
-| day03_1 |                  132.280us |                 3780 |         0.500s |
-| day04_0 |                  351.965us |                 1421 |         0.500s |
-| day04_1 |                   89.426us |                 5592 |         0.500s |
+| day01_0 |                   24.820us |               100000 |         2.482s |
+| day01_1 |                   49.075us |               100000 |         4.908s |
+| day02_0 |                  101.178us |                49418 |         5.000s |
+| day02_1 |                  118.157us |                42317 |         5.000s |
+| day03_0 |                   79.950us |                62540 |         5.000s |
+| day03_1 |                  133.842us |                37358 |         5.000s |
+| day04_0 |                  357.202us |                13998 |         5.000s |
+| day04_1 |                   91.963us |                54370 |         5.000s |
 
 ## Notes
 
