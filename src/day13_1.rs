@@ -12,6 +12,7 @@ const BIG_EPSILON: f64 = 1e-3;
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::cast_sign_loss)]
 #[allow(clippy::missing_panics_doc)]
+#[allow(clippy::cast_precision_loss)]
 #[allow(clippy::cast_possible_truncation)]
 pub fn day() -> u64 {
     let games: Vec<_> = INPUT
@@ -31,8 +32,8 @@ pub fn day() -> u64 {
             let prize = chunk.next().unwrap();
             let x_pos = prize.iter().position(|c| *c == b'X').unwrap();
             let y_pos = prize.iter().position(|c| *c == b'Y').unwrap();
-            let px = atoi::<u64>(&prize[x_pos + 2..y_pos - 2]).unwrap() + 10000000000000;
-            let py = atoi::<u64>(&prize[y_pos + 2..]).unwrap() + 10000000000000;
+            let px = atoi::<u64>(&prize[x_pos + 2..y_pos - 2]).unwrap() + 10_000_000_000_000;
+            let py = atoi::<u64>(&prize[y_pos + 2..]).unwrap() + 10_000_000_000_000;
 
             Game {
                 ax,
