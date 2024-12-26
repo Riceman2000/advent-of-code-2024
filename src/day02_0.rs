@@ -8,8 +8,8 @@ const INPUT: &str = include_str!("../input/day02.txt");
 pub fn day() -> usize {
     let reports = INPUT.lines().map(|l| {
         l.split(' ')
-            .map(|n| n.parse::<isize>().unwrap())
-            .collect::<Vec<isize>>()
+            .map(|n| n.parse::<i32>().unwrap())
+            .collect::<Vec<i32>>()
     });
 
     let mut safe_count = 0;
@@ -18,8 +18,8 @@ pub fn day() -> usize {
             .iter()
             .copied()
             .map_windows::<_, _, 2>(|&[l, r]| r - l);
-        if diffs.clone().map(isize::signum).all_equal()
-            && diffs.map(isize::abs).all(|n| (1..=3).contains(&n))
+        if diffs.clone().map(i32::signum).all_equal()
+            && diffs.map(i32::abs).all(|n| (1..=3).contains(&n))
         {
             safe_count += 1;
             continue;
