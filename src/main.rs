@@ -72,15 +72,15 @@ macro_rules! process_day {
                 };
             }
 
-            if !$args.output_disable && !$args.bench_table {
+            if !$args.output_disable && !($args.bench_table || $args.bench_graph) {
                 println!("{day_name} -> {}", $day::day());
             }
 
             // It is best to avoid testing when it wont be reported because it will duplicate user
             // debug statements
-            let (benchmark, passed_test) = if $args.bench_table {
+            let (benchmark, passed_test) = if $args.bench_table || $args.bench_graph {
                 (Some(bench_day($day::day, &$args)), $day::verify_day(false))
-            } else if $args.bench_enable || $args.bench_graph {
+            } else if $args.bench_enable {
                 println!("Benchmarking {day_name}...");
                 (Some(bench_day($day::day, &$args)), $day::verify_day(false))
             } else {
