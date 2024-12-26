@@ -58,7 +58,7 @@ struct DayResult {
 
 struct BenchmarkResult {
     iterations: usize,
-    average_us: f32,
+    average_ns: f32,
     average_formatted: String,
     total_formatted: String,
 }
@@ -212,7 +212,7 @@ fn generate_bench_graph(processed: &[&DayResult]) {
         .iter()
         .map(|day| {
             // Log scale times
-            let mut time = day.benchmark.as_ref().unwrap().average_us;
+            let mut time = day.benchmark.as_ref().unwrap().average_ns;
             time = time.log10();
             time
         })
@@ -222,12 +222,13 @@ fn generate_bench_graph(processed: &[&DayResult]) {
     let trace = Bar::new(ids, times);
     let layout = Layout::new()
         .x_axis(Axis::new().title(Title::from("Day")))
-        .y_axis(Axis::new().title(Title::from("Runtime in microseconds log10")))
+        .y_axis(Axis::new().title(Title::from("Runtime in log10 nanoseconds")))
         .title(Title::from("Benchmark results logscale"));
     plot.add_trace(trace);
     plot.set_layout(layout);
     plot.write_image(GRAPH_SAVE_LOCATION, ImageFormat::PNG, 800, 600, 1.0);
 }
+
 fn generate_bench_table(processed: &[&DayResult]) {
     let mut table_rows = Vec::new();
     for day in processed {
@@ -288,41 +289,43 @@ fn generate_bench_table(processed: &[&DayResult]) {
 #[allow(clippy::cast_precision_loss)]
 #[allow(clippy::cast_possible_truncation)]
 fn bench_day<F: Fn() -> R, R: std::fmt::Display>(function: F, args: &Args) -> BenchmarkResult {
-    let mut total_us = 0;
+    let mut total_ns = 0;
     let mut iterations = 0;
     for i in 0..args.max_bench_iters {
         let start = Instant::now();
         // `black_box` -> Do not optimize out this function
         let _ = std::hint::black_box(function());
-        total_us += start.elapsed().as_micros();
+        total_ns += start.elapsed().as_nanos();
 
         // Limit total execution time
         iterations = i + 1;
-        if total_us > args.max_bench_ms * 1_000 {
+        if total_ns > args.max_bench_ms * 10u128.pow(6) {
             break;
         }
     }
 
     // We shouldn't overflow these unless one of the days is very very slow
-    let average_us = total_us as f32 / iterations as f32;
-    let total_us = total_us as f32;
+    let average_ns = total_ns as f32 / iterations as f32;
+    let total_ns = total_ns as f32;
 
     // Metric prefixes
-    let average_time = match average_us {
-        ..1e3 => format!("{average_us:0.3}us"),
-        1e3..1e6 => format!("{:0.3}ms", average_us / 1e3),
-        _ => format!("{:0.3}s", average_us / 1e6),
+    let average_formatted = match average_ns {
+        ..1e3 => format!("{average_ns:0.3}ns"),
+        1e3..1e6 => format!("{:0.3}us", average_ns / 1e3),
+        1e6..1e9 => format!("{:0.3}ms", average_ns / 1e6),
+        _ => format!("{:0.3}s", average_ns / 1e9),
     };
-    let total_time = match total_us {
-        ..1e3 => format!("{total_us:0.3}us"),
-        1e3..1e6 => format!("{:0.3}ms", total_us / 1e3),
-        _ => format!("{:0.3}s", total_us / 1e6),
+    let total_formatted = match total_ns {
+        ..1e3 => format!("{total_ns:0.3}ns"),
+        1e3..1e6 => format!("{:0.3}us", total_ns / 1e3),
+        1e6..1e9 => format!("{:0.3}ms", total_ns / 1e6),
+        _ => format!("{:0.3}s", total_ns / 1e9),
     };
 
     BenchmarkResult {
         iterations,
-        average_us,
-        average_formatted: average_time,
-        total_formatted: total_time,
+        average_ns,
+        average_formatted,
+        total_formatted,
     }
 }
