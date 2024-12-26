@@ -60,7 +60,7 @@ fn main() {
     total_proc += process_day("day02_1", day02_1::day, &args);
     total_proc += process_day("day03_0", day03_0::day, &args);
     total_proc += process_day("day03_1", day03_1::day, &args);
-    // total_proc += process_day("day04_0", day04_0::day, &args);
+    total_proc += process_day("day04_0", day04_0::day, &args);
     // total_proc += process_day("day04_1", day04_1::day, &args);
     // total_proc += process_day("day05_0", day05_0::day, &args);
     // total_proc += process_day("day05_1", day05_1::day, &args);
