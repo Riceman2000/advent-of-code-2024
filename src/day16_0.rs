@@ -140,7 +140,7 @@ impl Direction {
 #[must_use]
 pub fn verify_day(print_output: bool) -> bool {
     // Correct value can be put here once it is known
-    let expected = 1_509_780;
+    let expected = 82_460;
 
     let actual = day();
     if actual == expected {
