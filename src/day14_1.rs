@@ -15,6 +15,7 @@ const HORIZONTAL: i32 = HEIGHT / 2;
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::cast_sign_loss)]
 #[allow(clippy::missing_panics_doc)]
+#[allow(clippy::cast_possible_wrap)]
 #[allow(clippy::cast_possible_truncation)]
 pub fn day() -> i32 {
     let robots: Vec<_> = INPUT
@@ -73,6 +74,7 @@ pub fn day() -> i32 {
 }
 
 // Euclidian GCD
+#[allow(clippy::many_single_char_names)]
 fn egcd(a: i32, b: i32) -> (i32, i32, i32) {
     if a == 0 {
         (b, 0, 1)
