@@ -32,24 +32,16 @@ pub fn day() -> u64 {
         let nums = line.1;
         let num_ops = nums.len() - 1;
 
-        // println!("target: {target}, nums {nums:?}, opmask {op_mask:b}");
-
         for op_mask in 0..2u64.pow(nums.len() as u32 - 1) {
             let mut sum = nums[0];
             for op in 0..num_ops {
                 let mask = 1 << op;
                 let op_masked = (mask & op_mask) >> op;
-                // println!(
-                //     "target: {target}, nums {nums:?}, opmask {op_mask:b}, opmasked: {op_masked:b}"
-                // );
                 if op_masked == 1 {
-                    // println!("{} + {}", sum, nums[op + 1]);
                     sum += nums[op + 1];
                 } else {
-                    // println!("{} * {}", sum, nums[op + 1]);
                     sum *= nums[op + 1];
                 }
-                // std::thread::sleep(std::time::Duration::from_secs(1));
             }
 
             if sum == target {
@@ -68,6 +60,6 @@ mod tests {
     #[test]
     fn test_day() {
         // Correct value can be put here once it is known
-        assert_eq!(1_830_467, day());
+        assert_eq!(1_399_219_271_639, day());
     }
 }
