@@ -4,7 +4,7 @@ use lazy_static::lazy_static;
 // Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../input/day11.txt");
 
-const NUM_BLINKS: usize = 25;
+const NUM_BLINKS: usize = 75;
 
 const MAX_CACHE: usize = 1_000;
 const CACHE_DEPTH: usize = NUM_BLINKS + 1;
@@ -78,7 +78,7 @@ fn solve_from_lut(i: usize, j: usize, lut: &[[u64; MAX_CACHE]; CACHE_DEPTH]) -> 
 #[must_use]
 pub fn verify_day(print_output: bool) -> bool {
     // Correct value can be put here once it is known
-    let expected = 185_205;
+    let expected = 221_280_540_398_419;
 
     let actual = day();
     if actual == expected {
