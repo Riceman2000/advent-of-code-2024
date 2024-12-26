@@ -1,25 +1,27 @@
+use atoi::atoi;
+
 // Pull this file's contents into the binary as a string literal
-const INPUT: &str = include_str!("../input/day05.txt");
+const INPUT: &[u8] = include_bytes!("../input/day05.txt");
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 pub fn day() -> u32 {
-    let lines: Vec<_> = INPUT.trim_ascii_end().lines().collect();
+    let lines: Vec<_> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
     let section_split = lines.iter().position(|l| l.is_empty()).unwrap();
     let orders: Vec<_> = lines[0..section_split]
         .iter()
-        .map(|r| {
+        .map(|r| unsafe {
             (
-                r[0..2].parse::<u8>().unwrap(),
-                r[3..].parse::<u8>().unwrap(),
+                atoi::<u8>(&r[0..2]).unwrap_unchecked(),
+                atoi::<u8>(&r[3..]).unwrap_unchecked(),
             )
         })
         .collect();
     let reports: Vec<_> = lines[section_split + 1..]
         .iter()
         .map(|r| {
-            r.split(',')
-                .map(|n| n.parse::<u8>().unwrap())
+            r.split(|c| *c == b',')
+                .map(|n| unsafe { atoi::<u8>(n).unwrap_unchecked() })
                 .collect::<Vec<u8>>()
         })
         .collect();
