@@ -1,7 +1,11 @@
+use std::collections::HashMap;
+
 use rayon::prelude::*;
 
 // Pull this file's contents into the binary as a string literal
 const INPUT: &str = include_str!("../input/day19.txt");
+
+type Cache = HashMap<&'static str, usize>;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
@@ -16,35 +20,29 @@ pub fn day() -> usize {
         .fold(
             || 0,
             |acc, pat| {
-                let mut dp = vec![0; pat.len() + 1];
-                dp[0] = 1;
-
-                for i in 0..pat.len() {
-                    for &ss in &substrings {
-                        // If nothing fit last time including single letters
-                        if dp[i] == 0 {
-                            continue;
-                        }
-
-                        // If the substring length would not fit
-                        if i + ss.len() > pat.len() {
-                            continue;
-                        }
-
-                        // If the substring does not match
-                        if pat[i..i + ss.len()] != *ss {
-                            continue;
-                        }
-
-                        // Accumulate matches
-                        dp[i + ss.len()] += dp[i];
-                    }
-                }
-
-                acc + dp[pat.len()]
+                let mut cache = Cache::new();
+                acc + get_count(pat, &substrings, &mut cache)
             },
         )
         .sum()
+}
+
+fn get_count(pat: &'static str, substrings: &[&str], cache: &mut Cache) -> usize {
+    if pat.is_empty() {
+        return 1;
+    }
+    if let Some(v) = cache.get(pat) {
+        return *v;
+    }
+
+    let count = substrings
+        .iter()
+        .filter_map(|ss| pat.strip_prefix(ss))
+        .map(|remaining| get_count(remaining, substrings, cache))
+        .sum();
+
+    cache.insert(pat, count);
+    count
 }
 
 /// Used to allow for the verfication of results at runtime without a panic
