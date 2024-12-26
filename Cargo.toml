@@ -37,6 +37,7 @@ itertools = "0.13.0"
 lazy_static = "1.5.0"
 rayon = "1.10.0"
 regex = "1.11.1"
+textplots = "0.8.6"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
