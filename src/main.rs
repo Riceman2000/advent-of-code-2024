@@ -9,6 +9,7 @@ use plotly::{common::Title, layout::Axis, Bar, ImageFormat, Layout, Plot};
 use aoc::*;
 
 const GRAPH_SAVE_LOCATION: &str = "./media/benchmark-graph.png";
+const TABLE_SAVE_LOCATION: &str = "./media/benchmark-table.md";
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -172,6 +173,7 @@ fn main() {
         return;
     }
 
+    // Benchmarks text reports, table and human readable reports
     let mut benchmark_string = String::new();
     if args.bench_table {
         benchmark_string += "|   Day   | Validated | Average time per iteration | Number of iterations | Execution time |\n\
@@ -204,8 +206,15 @@ fn main() {
             );
         }
     }
-    println!("{benchmark_string}");
+    if args.bench_table {
+        std::fs::write(TABLE_SAVE_LOCATION, benchmark_string.as_bytes()).unwrap();
+        println!("Benchmark table saved to {TABLE_SAVE_LOCATION}");
+    }
+    if args.bench_table || args.bench_enable {
+        println!("{benchmark_string}");
+    }
 
+    // Benchmarks graph
     if args.bench_graph {
         println!("Generating benchmark graph");
         let ids: Vec<_> = processed.iter().map(|day| day.day_name).collect();

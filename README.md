@@ -8,28 +8,7 @@ This framework is meant to be easy to expand and iterate on. I hope to foster a 
 
 These benchmarks were done without any true care for accuracy or attempting to control external variables so take them with a grain of salt:
 
-|   Day   | Validated | Average time per iteration | Number of iterations | Execution time |
-| ------- | --------- | -------------------------- | -------------------- | -------------- |
-| day01_0 |      true |                   24.345us |               100000 |         2.435s |
-| day01_1 |      true |                   50.712us |                98596 |         5.000s |
-| day02_0 |      true |                   96.724us |                51694 |         5.000s |
-| day02_1 |      true |                  112.747us |                44347 |         5.000s |
-| day03_0 |      true |                   82.587us |                60543 |         5.000s |
-| day03_1 |      true |                  132.423us |                37758 |         5.000s |
-| day04_0 |      true |                  361.124us |                13846 |         5.000s |
-| day04_1 |      true |                   99.899us |                50051 |         5.000s |
-| day05_0 |      true |                   42.882us |               100000 |         4.288s |
-| day05_1 |      true |                  121.954us |                41000 |         5.000s |
-| day06_0 |      true |                   82.754us |                60421 |         5.000s |
-| day06_1 |      true |                    4.145ms |                 1207 |         5.003s |
-| day07_0 |      true |                    1.248ms |                 4008 |         5.001s |
-| day07_1 |      true |                   84.840ms |                   59 |         5.006s |
-| day08_0 |      true |                   18.823us |               100000 |         1.882s |
-| day08_1 |      true |                   39.423us |               100000 |         3.942s |
-| day09_0 |      true |                  253.057us |                19759 |         5.000s |
-| day09_1 |      true |                   36.364ms |                  138 |         5.018s |
-| day10_0 |      true |                  101.029us |                49491 |         5.000s |
-| day10_1 |      true |                   21.006us |               100000 |         2.101s |
+::include{file=media/benchmark-table.md}
 
 Log scale benchmark results:
 
