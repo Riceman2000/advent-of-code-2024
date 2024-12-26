@@ -8,14 +8,14 @@ This framework is meant to be easy to expand and iterate on. I hope to foster a 
 
 These benchmarks were done without any true care for accuracy or attempting to control external variables so take them with a grain of salt:
 
-|   Day   | Average time per iteration | Number of iterations | Total time |
-| ------- | -------------------------- | -------------------- | ---------- |
-| day01_0 |                   24.099us |                10000 |     0.241s |
-| day01_1 |                   72.762us |                10000 |     0.728s |
-| day02_0 |                  106.712us |                 9372 |     1.000s |
-| day02_1 |                  118.997us |                 8404 |     1.000s |
-| day03_0 |                   75.711us |                10000 |     0.757s |
-| day03_1 |                  128.580us |                 7778 |     1.000s |
+|   Day   | Average time per iteration | Number of iterations | Execution time |
+| ------- | -------------------------- | -------------------- | -------------- |
+| day01_0 |                   26.537us |               100000 |         2.654s |
+| day01_1 |                   50.314us |                99376 |         5.000s |
+| day02_0 |                  107.664us |                46441 |         5.000s |
+| day02_1 |                  119.864us |                41714 |         5.000s |
+| day03_0 |                   74.035us |                67536 |         5.000s |
+| day03_1 |                  129.519us |                38605 |         5.000s |
 
 ## Notes
 
