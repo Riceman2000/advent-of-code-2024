@@ -25,17 +25,14 @@ pub fn day() -> u32 {
         .collect();
 
     let mut sum: u32 = 0;
-    'report: for report in reports {
-        for (idx, num) in report.iter().enumerate() {
-            for order_rule in orders.iter().filter(|o| o.0 == *num) {
-                for test_num in report.iter().take(idx) {
-                    if *test_num == order_rule.1 {
-                        continue 'report;
-                    }
-                }
-            }
+    for report in reports {
+        let is_good = report
+            .array_windows()
+            .all(|&[a, b]| orders.contains(&(a, b)));
+
+        if is_good {
+            sum += u32::from(report[report.len() / 2]);
         }
-        sum += u32::from(report[report.len() / 2]);
     }
 
     sum
