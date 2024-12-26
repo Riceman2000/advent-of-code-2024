@@ -3,7 +3,7 @@ const INPUT: &str = include_str!("../input/day02.txt");
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u32 {
+pub fn day() -> usize {
     let reports: Vec<Vec<i32>> = INPUT
         .lines()
         .map(|l| {
@@ -13,31 +13,28 @@ pub fn day() -> u32 {
         })
         .collect();
 
-    let mut safe_count = 0u32;
-    for report in reports {
-        let mut idx = 0;
-        let diff_positive = report[1] - report[0] > 0;
-        let safe = loop {
-            idx = if idx >= report.len() - 1 {
-                break true;
-            } else {
-                idx + 1
-            };
-
-            let diff = report[idx] - report[idx - 1];
-            if (diff_positive && diff < 0) || (!diff_positive && diff > 0) {
-                break false;
+    let mut unsafe_count = 0;
+    for report in &reports {
+        let diffs: Vec<i32> = report
+            .iter()
+            .zip(report.iter().skip(1))
+            .map(|(a, b)| b - a)
+            .collect();
+        // println!("report: {report:?} \n\t{diffs:?}");
+        let diff_positive = diffs[0] > 0;
+        for diff in diffs {
+            if (diff_positive && diff < 0)
+                || (!diff_positive && diff > 0)
+                || diff == 0
+                || !(-3..=3).contains(&diff)
+            {
+                unsafe_count += 1;
+                break;
             }
-            if diff == 0 || !(-3..=3).contains(&diff) {
-                break false;
-            }
-        };
-        if safe {
-            safe_count += 1;
         }
     }
 
-    safe_count
+    reports.len() - unsafe_count
 }
 
 #[cfg(test)]
