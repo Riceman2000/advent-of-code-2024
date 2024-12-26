@@ -8,8 +8,11 @@ const CHEAT_RADIUS: isize = 20;
 const SHORTCUT_THRESHOLD: usize = 100;
 
 // Calculate offset vectors in a const context
+#[allow(clippy::cast_sign_loss)]
 const CHEAT_RADIUS_BUFFER_SIZE: usize =
     (2 * CHEAT_RADIUS.pow(2) + 2 * CHEAT_RADIUS + 1) as usize - 9;
+
+#[allow(clippy::cast_sign_loss)]
 #[allow(long_running_const_eval)]
 const RADIUS_OFFSETS: [((isize, isize), usize); CHEAT_RADIUS_BUFFER_SIZE] = {
     let mut radius_offsets = [((0, 0), 0); CHEAT_RADIUS_BUFFER_SIZE];
