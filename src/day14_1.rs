@@ -8,6 +8,9 @@ const INPUT: &[u8] = include_bytes!("../input/day14.txt");
 const WIDTH: i32 = 101;
 const HEIGHT: i32 = 103;
 
+const VERTICAL: i32 = WIDTH / 2;
+const HORIZONTAL: i32 = HEIGHT / 2;
+
 #[must_use]
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::cast_sign_loss)]
@@ -35,26 +38,58 @@ pub fn day() -> i32 {
         })
         .collect();
 
-    let mut positions = vec![Vector2::new(0, 0); robots.len()];
-    for seconds in 0..100_000 {
+    let mut current_distances = vec![0; robots.len()];
+
+    // Isolate best X
+    let mut x_distances = vec![0; WIDTH as usize];
+    for seconds in 0..WIDTH {
         for (i, robot) in robots.iter().enumerate() {
-            let offset = robot.1 * seconds;
-            let mut new_pos = robot.0 + offset;
+            let offset = robot.1[0] * seconds;
+            let new_x = robot.0[0] + offset;
 
-            // Clamp to max bounds
-            new_pos[0] = new_pos[0].rem_euclid(WIDTH);
-            new_pos[1] = new_pos[1].rem_euclid(HEIGHT);
-
-            positions[i] = new_pos;
+            current_distances[i] = new_x.rem_euclid(WIDTH).abs_diff(VERTICAL);
         }
-        // return seconds;
-
-        // When the image is showing, there are no bots overlapping
-        if positions.iter().all_unique() {
-            return seconds;
-        }
+        x_distances[seconds as usize] = current_distances.iter().sum();
     }
-    0
+    let best_x = x_distances.iter().position_min().unwrap() as i32;
+
+    // Isolate best Y
+    let mut y_distances = vec![0; HEIGHT as usize];
+    for seconds in 0..HEIGHT {
+        for (i, robot) in robots.iter().enumerate() {
+            let offset = robot.1[1] * seconds;
+            let new_y = robot.0[1] + offset;
+
+            current_distances[i] = new_y.rem_euclid(HEIGHT).abs_diff(HORIZONTAL);
+        }
+        y_distances[seconds as usize] = current_distances.iter().sum();
+    }
+    let best_y = y_distances.iter().position_min().unwrap() as i32;
+
+    // Chinese remainder theorem -> https://rosettacode.org/wiki/Chinese_remainder_theorem#Rust
+    let mut sum = best_x * mod_inv(HEIGHT, WIDTH).unwrap() * HEIGHT;
+    sum += best_y * mod_inv(WIDTH, HEIGHT).unwrap() * WIDTH;
+    sum % (HEIGHT * WIDTH)
+}
+
+// Euclidian GCD
+fn egcd(a: i32, b: i32) -> (i32, i32, i32) {
+    if a == 0 {
+        (b, 0, 1)
+    } else {
+        let (g, x, y) = egcd(b % a, a);
+        (g, y - (b / a) * x, x)
+    }
+}
+
+// Inverse mod
+fn mod_inv(x: i32, n: i32) -> Option<i32> {
+    let (g, x, _) = egcd(x, n);
+    if g == 1 {
+        Some((x % n + n) % n)
+    } else {
+        None
+    }
 }
 
 /// Used to allow for the verfication of results at runtime without a panic
