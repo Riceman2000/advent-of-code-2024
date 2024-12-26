@@ -30,5 +30,8 @@ harness = false
 clap = { version = "4.5.21", features = ["derive"] }
 glob-match = "0.2.1"
 
+# Helpful utilities
+itertools = "0.13.0"
+
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }

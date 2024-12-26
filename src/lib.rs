@@ -1,3 +1,5 @@
+#![feature(iter_map_windows)]
+
 // New day files must be included in the module tree by uncommenting them here
 pub mod day01_0;
 pub mod day01_1;

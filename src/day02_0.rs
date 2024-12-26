@@ -1,40 +1,32 @@
+use itertools::Itertools;
+
 // Pull this file's contents into the binary as a string literal
 const INPUT: &str = include_str!("../input/day02.txt");
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 pub fn day() -> usize {
-    let reports: Vec<Vec<i32>> = INPUT
-        .lines()
-        .map(|l| {
-            l.split(' ')
-                .map(|n| n.parse::<i32>().unwrap())
-                .collect::<Vec<i32>>()
-        })
-        .collect();
+    let reports = INPUT.lines().map(|l| {
+        l.split(' ')
+            .map(|n| n.parse::<isize>().unwrap())
+            .collect::<Vec<isize>>()
+    });
 
-    let mut unsafe_count = 0;
-    for report in &reports {
-        let diffs: Vec<i32> = report
+    let mut safe_count = 0;
+    for report in reports {
+        let diffs = report
             .iter()
-            .zip(report.iter().skip(1))
-            .map(|(a, b)| b - a)
-            .collect();
-        // println!("report: {report:?} \n\t{diffs:?}");
-        let diff_positive = diffs[0] > 0;
-        for diff in diffs {
-            if (diff_positive && diff < 0)
-                || (!diff_positive && diff > 0)
-                || diff == 0
-                || !(-3..=3).contains(&diff)
-            {
-                unsafe_count += 1;
-                break;
-            }
+            .copied()
+            .map_windows::<_, _, 2>(|&[l, r]| r - l);
+        if diffs.clone().map(isize::signum).all_equal()
+            && diffs.map(isize::abs).all(|n| (1..=3).contains(&n))
+        {
+            safe_count += 1;
+            continue;
         }
     }
 
-    reports.len() - unsafe_count
+    safe_count
 }
 
 #[cfg(test)]
