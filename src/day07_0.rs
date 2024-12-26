@@ -1,4 +1,5 @@
 use atoi::atoi;
+use rayon::prelude::*;
 
 // Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../input/day07.txt");
@@ -12,8 +13,8 @@ pub fn day() -> u64 {
         .split(|c| *c == b'\n')
         .map(|l| {
             let mut l = l.split(|c| *c == b':');
-            let target = atoi::<u64>(l.next().unwrap()).unwrap();
 
+            let target = atoi::<u64>(l.next().unwrap()).unwrap();
             let nums: Vec<_> = l
                 .next()
                 .unwrap()
@@ -26,31 +27,35 @@ pub fn day() -> u64 {
         })
         .collect();
 
-    let mut out = 0;
-    for line in lines {
-        let target = line.0;
-        let nums = line.1;
-        let num_ops = nums.len() - 1;
+    lines
+        .par_iter()
+        .fold(
+            || 0,
+            |acc, line| {
+                let target = line.0;
+                let nums = &line.1;
+                let num_ops = nums.len() - 1;
 
-        for op_mask in 0..2u64.pow(nums.len() as u32 - 1) {
-            let mut sum = nums[0];
-            for op in 0..num_ops {
-                let mask = 1 << op;
-                let op_masked = (mask & op_mask) >> op;
-                if op_masked == 1 {
-                    sum += nums[op + 1];
-                } else {
-                    sum *= nums[op + 1];
+                for op_mask in 0..2u64.pow(nums.len() as u32 - 1) {
+                    let mut sum = nums[0];
+                    for op in 0..num_ops {
+                        let mask = 1 << op;
+                        let op_masked = (mask & op_mask) >> op;
+                        if op_masked == 1 {
+                            sum += nums[op + 1];
+                        } else {
+                            sum *= nums[op + 1];
+                        }
+                    }
+
+                    if sum == target {
+                        return acc + sum;
+                    }
                 }
-            }
-
-            if sum == target {
-                out += sum;
-                break;
-            }
-        }
-    }
-    out
+                acc
+            },
+        )
+        .sum()
 }
 
 #[cfg(test)]
