@@ -8,7 +8,7 @@ This framework is meant to be easy to expand and iterate on. I hope to foster a 
 
 These benchmarks were done without any true care for accuracy or attempting to control external variables so take them with a grain of salt:
 
-::include{file=media/benchmark-table.md}
+![](./media/benchmark-table.md)
 
 Log scale benchmark results:
 
