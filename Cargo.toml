@@ -27,8 +27,8 @@ name = "days"
 harness = false
 
 [dependencies]
-atoi = "2.0.0"
 # Used in the main file to give users a way to interact with the application via the CLI
+plotly = { version = "0.11.0", features = ["kaleido"] }
 clap = { version = "4.5.21", features = ["derive"] }
 glob-match = "0.2.1"
 
@@ -37,7 +37,7 @@ itertools = "0.13.0"
 lazy_static = "1.5.0"
 rayon = "1.10.0"
 regex = "1.11.1"
-textplots = "0.8.6"
+atoi = "2.0.0"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
