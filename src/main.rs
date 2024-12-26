@@ -165,7 +165,7 @@ fn main() {
     results.push(process_day!(day23_1, args));
     results.push(process_day!(day24_0, args));
     results.push(process_day!(day24_1, args));
-    // results.push(process_day!(day25_0, args));
+    results.push(process_day!(day25_0, args));
     // results.push(process_day!(day25_1, args));
 
     let processed: Vec<_> = results.iter().filter(|r| r.day_ran).collect();
