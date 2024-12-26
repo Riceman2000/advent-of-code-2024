@@ -13,7 +13,7 @@ criterion_main!(benches);
 fn day_benches(c: &mut Criterion) {
     // To add days to the criterion benchmark platform uncomment them here
     c.bench_function("day01_0", |b| b.iter(&mut day01_0::day));
-    // c.bench_function("day01_1", |b| b.iter(&mut day01_1::day));
+    c.bench_function("day01_1", |b| b.iter(&mut day01_1::day));
     // c.bench_function("day02_0", |b| b.iter(&mut day02_0::day));
     // c.bench_function("day02_1", |b| b.iter(&mut day02_1::day));
     // c.bench_function("day03_0", |b| b.iter(&mut day03_0::day));
