@@ -40,6 +40,7 @@ fn main() {
     }
     if args.bench_table {
         println!("|   Day   | Average time per iteration | Number of iterations | Total time |");
+        println!("| ------- | -------------------------- | -------------------- | ---------- |");
     }
 
     let mut total_proc = 0;
