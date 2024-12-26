@@ -8,7 +8,7 @@ incremental = true
 debug = true
 
 [profile.release]
-incremental = false
+incremental = true
 codegen-units = 1
 opt-level = 3
 strip = "none"
