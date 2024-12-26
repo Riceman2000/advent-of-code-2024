@@ -14,7 +14,7 @@ This framework is meant to be easy to expand and iterate on. I hope to foster a 
     - `src/lib.rs` -> to include the new code in the binary
     - `benches/days.rs` -> to allow for benchmarking using `cargo criterion`
 
-When developing solutions you will likely want to run using `cargo run` without the `--release` flag. For benchmarking however you should use the `--release` flag to get the highest level of optimization. 
+When developing solutions you will likely want to run using `cargo run` without the `--release` flag for faster compile times. For benchmarking however you should use the `--release` flag to get the highest level of optimization. Criterion will automatically use a high level of optimization.
 
 ## Usage
 ### Run benchmarks with graphics and stats
@@ -22,6 +22,7 @@ When developing solutions you will likely want to run using `cargo run` without 
 cargo install cargo-criterion
 cargo criterion
 ```
+output will be in `target/criterion/index.html`
 
 ### See the CLI help menu
 ``` bash
