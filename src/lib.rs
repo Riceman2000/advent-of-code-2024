@@ -1,7 +1,6 @@
-#![feature(isqrt)]
-#![feature(array_chunks)]
 #![feature(array_windows)]
 #![feature(iter_map_windows)]
+#![feature(iter_array_chunks)]
 
 // New day files must be included in the module tree by uncommenting them here
 pub mod day01_0;
@@ -28,7 +27,7 @@ pub mod day11_0;
 pub mod day11_1;
 pub mod day12_0;
 pub mod day12_1;
-// pub mod day13_0;
+pub mod day13_0;
 // pub mod day13_1;
 // pub mod day14_0;
 // pub mod day14_1;
