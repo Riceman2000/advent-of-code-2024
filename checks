@@ -1,0 +1,102 @@
+#!/bin/bash
+
+set -e
+
+Help()
+{
+  echo
+  echo "Syntax: checks [-b|c|f|h|l]"
+  echo "options:"
+  echo "b     Benchmark all days"
+  echo "c     Clean all crates"
+  echo "f     Format all days"
+  echo "h     Print this message"
+  echo "l     Lint all days"
+  echo
+}
+
+CLEAN="cargo clean"
+FORMAT="cargo format"
+LINT="cargo clippy --all -- \
+  -W clippy::all \
+  -W clippy::pedantic \
+  -D warnings"
+
+Bench(){
+  pushd runner
+  cargo +nightly run --release --bin bench \
+    | awk '!/o: /'
+  popd > /dev/null
+}
+
+Clean(){
+  for dir in ./*/; do
+    pushd $dir > /dev/null
+    if [[ -f "Cargo.toml" ]]; then
+      echo Cleaning: ${PWD##*/}
+      $CLEAN
+    else
+      echo Skipping, no Cargo.toml found: ${PWD##*/}
+    fi
+    popd > /dev/null
+  done
+}
+
+Format(){
+  for dir in ./*/; do
+    pushd $dir > /dev/null
+    if [[ -f "Cargo.toml" ]]; then
+      echo Formatting: ${PWD##*/}
+      $FORMAT
+    else
+      echo Skipping, no Cargo.toml found: ${PWD##*/}
+    fi
+    popd > /dev/null
+  done
+}
+
+Lint(){
+  for dir in ./*/; do
+    pushd $dir > /dev/null
+    if [[ -f "Cargo.toml" ]]; then
+      echo Linting: ${PWD##*/}
+      $LINT
+    else
+      echo Skipping, no Cargo.toml found: ${PWD##*/}
+    fi
+    popd > /dev/null
+  done
+  echo "Done!"
+}
+
+
+
+# Opts
+while getopts ":bchl" option; do
+  case $option in
+    b)
+      Bench
+      exit;;
+    c)
+      Clean
+      exit;;
+    f)
+      Format
+      exit;;
+    h)
+      Help
+      exit;;
+    l)
+      Lint
+      exit;;
+    \?) # Invalid option
+      echo "Error: Invalid option"
+      Help
+      exit;
+  esac
+done
+
+# Fallthrough help message
+Help
+
+
