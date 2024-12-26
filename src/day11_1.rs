@@ -30,6 +30,7 @@ pub fn day() -> u64 {
         .sum()
 }
 
+#[allow(clippy::large_stack_arrays)]
 fn generate_lut() -> Box<[[u64; MAX_CACHE]; CACHE_DEPTH]> {
     let mut lut = Box::new([[0; MAX_CACHE]; CACHE_DEPTH]);
 

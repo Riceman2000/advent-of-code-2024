@@ -1,15 +1,18 @@
+use atoi::atoi;
+
 // Pull this file's contents into the binary as a string literal
-const INPUT: &str = include_str!("../input/day01.txt");
+const INPUT: &[u8] = include_bytes!("../input/day01.txt");
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
 pub fn day() -> u32 {
     let (col1, col2): (Vec<u32>, Vec<u32>) = INPUT
-        .lines()
-        .map(|l| {
-            let p0 = l[..5].parse::<u32>().unwrap();
-            let p1 = l[8..].parse::<u32>().unwrap();
+        .trim_ascii()
+        .split(|c| *c == b'\n')
+        .map(|l| unsafe {
+            let p0 = atoi::<u32>(&l[..5]).unwrap_unchecked();
+            let p1 = atoi::<u32>(&l[8..]).unwrap_unchecked();
             (p0, p1)
         })
         .unzip();
