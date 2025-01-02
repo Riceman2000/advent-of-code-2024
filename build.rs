@@ -9,7 +9,8 @@ fn main() {
     // Output file paths
     let out_dir = env::var("OUT_DIR").unwrap();
     let main_day_list_path = out_dir.clone() + "/main_day_list.gen.rs";
-    let divan_day_list_path = out_dir + "/divan_day_list.gen.rs";
+    let divan_day_list_path = out_dir.clone() + "/divan_day_list.gen.rs";
+    let criterion_day_list_path = out_dir + "/criterion_day_list.gen.rs";
 
     // Source paths
     let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
@@ -60,6 +61,7 @@ fn main() {
     // Note that some are constructed to be a single block with {}
     let mut main_day_list = String::from("{\n");
     let mut divan_day_list = String::new();
+    let mut criterion_day_list = String::from("{\n");
     let mut year_lib_map = HashMap::new();
     for (year_path, days) in years {
         let year = year_path.file_name().unwrap().to_string_lossy().to_string();
@@ -81,13 +83,17 @@ fn main() {
             main_day_list.push_str(&format!("process_day!({year}::{day}, args, results);\n"));
             divan_day_list.push_str(&format!(
                 "#[divan::bench]\
-                fn {year}_{day}() {{ let _ = black_box({year}::{day}::day()); }} \n"
+                fn {year}_{day}() {{ let _ = divian::black_box({year}::{day}::day()); }} \n"
+            ));
+            criterion_day_list.push_str(&format!(
+                "_c.bench_function(\"{year}::{day}\", |b| b.iter(&mut {year}::{day}::day));\n"
             ));
             year_lib_list.push_str(&format!("pub mod {day};\n"));
         }
         year_lib_map.entry(year).or_insert(year_lib_list);
     }
     main_day_list.push('}');
+    criterion_day_list.push('}');
 
     // Write out files to be included
     let mut main_day_list_file = fs::File::create(main_day_list_path).unwrap();
@@ -98,6 +104,11 @@ fn main() {
     let mut divan_day_list_file = fs::File::create(divan_day_list_path).unwrap();
     divan_day_list_file
         .write_all(divan_day_list.as_bytes())
+        .unwrap();
+
+    let mut criterion_day_list_file = fs::File::create(criterion_day_list_path).unwrap();
+    criterion_day_list_file
+        .write_all(criterion_day_list.as_bytes())
         .unwrap();
 
     for (year, content) in year_lib_map {

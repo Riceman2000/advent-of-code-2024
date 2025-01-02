@@ -1,6 +1,5 @@
-use divan::black_box;
-
 // Needed to bring in all of the days
+#[cfg(feature = "divian")]
 #[allow(clippy::wildcard_imports)]
 use aoc::*;
 
@@ -12,5 +11,6 @@ fn main() {
     divan::main();
 }
 
-// Generated benchmark framework made in build.rs
+// Generated code made in build.rs makes a list of days
+#[cfg(feature = "divian")]
 include!(concat!(env!("OUT_DIR"), "/divan_day_list.gen.rs"));

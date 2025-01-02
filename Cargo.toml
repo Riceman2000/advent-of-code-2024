@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-alloc_profile = []
+divian = []
+alloc_profile = ["divian"]
+criterion = []
 
 [profile.dev]
 incremental = true
@@ -24,10 +26,9 @@ inherits = "release"
 strip = false
 debug = true
 
-# Benchmarks via criterion
-# [[bench]]
-# name = "criterion"
-# harness = false
+[[bench]]
+name = "criterion"
+harness = false
 
 [[bench]]
 name = "divan"
@@ -40,7 +41,7 @@ clap = { version = "4.5.23", features = ["derive"] }
 glob-match = "0.2.1"
 
 # Helpful utilities
-itertools = "0.13.0"
+itertools = "0.14.0"
 lazy_static = "1.5.0"
 rayon = "1.10.0"
 regex = "1.11.1"
