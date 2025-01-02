@@ -1,7 +1,7 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 
 #[allow(clippy::wildcard_imports)]
-use aoc::*;
+use aoc::aoc2024::*;
 
 criterion_group! {
     name=benches;

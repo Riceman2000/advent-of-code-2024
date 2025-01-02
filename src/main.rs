@@ -47,6 +47,10 @@ struct Args {
     /// Max ms to benchmark before canceling
     #[arg(short = 'm', long, default_value_t = 1_000)]
     max_bench_ms: u128,
+
+    /// Max ms to warmup before benchmarking
+    #[arg(short = 'w', long, default_value_t = 500)]
+    max_warmup_ms: u128,
 }
 
 struct DayResult {
@@ -57,50 +61,79 @@ struct DayResult {
 }
 
 struct BenchmarkResult {
-    iterations: usize,
+    samples: usize,
     average_ns: f32,
-    average_formatted: String,
-    total_formatted: String,
+    total_ns: f32,
 }
 
-/// Please just ignore this, I am sorry for creating it
+impl BenchmarkResult {
+    // Metric prefixes
+    fn average_formatted(&self) -> String {
+        let average_ns = self.average_ns;
+        match average_ns {
+            ..1e3 => format!("{average_ns:0.3}ns"),
+            1e3..1e6 => format!("{:0.3}us", average_ns / 1e3),
+            1e6..1e9 => format!("{:0.3}ms", average_ns / 1e6),
+            _ => format!("{:0.3}s", average_ns / 1e9),
+        }
+    }
+    fn iterations_formatted(&self) -> String {
+        let samples = self.samples;
+        match samples {
+            ..1_000 => format!("{samples:0.1}"),
+            1_000..1_000_000 => format!("{:0.3}k", samples / 1_000),
+            1_000_000..1_000_000_000 => format!("{:0.3}M", samples / 1_000_000),
+            _ => format!("{:0.3}G", samples / 1_000_000_000),
+        }
+    }
+    fn total_formatted(&self) -> String {
+        let total_ns = self.total_ns;
+        match total_ns {
+            ..1e3 => format!("{total_ns:0.3}ns"),
+            1e3..1e6 => format!("{:0.3}us", total_ns / 1e3),
+            1e6..1e9 => format!("{:0.3}ms", total_ns / 1e6),
+            _ => format!("{:0.3}s", total_ns / 1e9),
+        }
+    }
+}
+
+/// This is not the best way to do this
 macro_rules! process_day {
-    ($day:ident, $args:expr) => {{
-        'runner: {
-            let day_name = stringify!($day);
+    ($day_path:path, $args:expr, $results:expr) => {{
+        use $day_path as day;
+        let day_name = stringify!($day_path);
 
-            let day_ran = $args.target_day.is_empty() || glob_match(&$args.target_day, day_name);
-            if !day_ran {
-                break 'runner DayResult {
-                    day_name,
-                    day_ran,
-                    passed_test: false,
-                    benchmark: None,
-                };
-            }
-
-            if !$args.output_disable && !($args.bench_table || $args.bench_graph) {
-                println!("{day_name} -> {}", $day::day());
-            }
-
-            // It is best to avoid testing when it wont be reported because it will duplicate user
-            // debug statements
-            let (benchmark, passed_test) = if $args.bench_table || $args.bench_graph {
-                (Some(bench_day($day::day, &$args)), $day::verify_day(false))
-            } else if $args.bench_enable {
-                println!("Benchmarking {day_name}...");
-                (Some(bench_day($day::day, &$args)), $day::verify_day(false))
-            } else {
-                (None, false)
-            };
-
-            DayResult {
+        let day_ran = $args.target_day.is_empty() || glob_match(&$args.target_day, day_name);
+        if !day_ran {
+            $results.push(DayResult {
                 day_name,
                 day_ran,
-                passed_test,
-                benchmark,
-            }
+                passed_test: false,
+                benchmark: None,
+            });
         }
+
+        if !$args.output_disable && !($args.bench_table || $args.bench_graph) {
+            println!("{day_name} -> {}", day::day());
+        }
+
+        // It is best to avoid testing when it wont be reported because it will duplicate user
+        // debug statements
+        let (benchmark, passed_test) = if $args.bench_table || $args.bench_graph {
+            (Some(bench_day(day::day, &$args)), day::verify_day(false))
+        } else if $args.bench_enable {
+            println!("Benchmarking {day_name}...");
+            (Some(bench_day(day::day, &$args)), day::verify_day(false))
+        } else {
+            (None, false)
+        };
+
+        $results.push(DayResult {
+            day_name,
+            day_ran,
+            passed_test,
+            benchmark,
+        });
     }};
 }
 
@@ -116,57 +149,8 @@ fn main() {
 
     let mut results = Vec::new();
 
-    // All days are processed here, uncomment days to add them
-    results.push(process_day!(day01_0, args));
-    results.push(process_day!(day01_1, args));
-    results.push(process_day!(day02_0, args));
-    results.push(process_day!(day02_1, args));
-    results.push(process_day!(day03_0, args));
-    results.push(process_day!(day03_1, args));
-    results.push(process_day!(day04_0, args));
-    results.push(process_day!(day04_1, args));
-    results.push(process_day!(day05_0, args));
-    results.push(process_day!(day05_1, args));
-    results.push(process_day!(day06_0, args));
-    results.push(process_day!(day06_1, args));
-    results.push(process_day!(day07_0, args));
-    results.push(process_day!(day07_1, args));
-    results.push(process_day!(day08_0, args));
-    results.push(process_day!(day08_1, args));
-    results.push(process_day!(day09_0, args));
-    results.push(process_day!(day09_1, args));
-    results.push(process_day!(day10_0, args));
-    results.push(process_day!(day10_1, args));
-    results.push(process_day!(day11_0, args));
-    results.push(process_day!(day11_1, args));
-    results.push(process_day!(day12_0, args));
-    results.push(process_day!(day12_1, args));
-    results.push(process_day!(day13_0, args));
-    results.push(process_day!(day13_1, args));
-    results.push(process_day!(day14_0, args));
-    results.push(process_day!(day14_1, args));
-    results.push(process_day!(day15_0, args));
-    results.push(process_day!(day15_1, args));
-    results.push(process_day!(day16_0, args));
-    results.push(process_day!(day16_1, args));
-    results.push(process_day!(day17_0, args));
-    results.push(process_day!(day17_1, args));
-    results.push(process_day!(day18_0, args));
-    results.push(process_day!(day18_1, args));
-    results.push(process_day!(day19_0, args));
-    results.push(process_day!(day19_1, args));
-    results.push(process_day!(day20_0, args));
-    results.push(process_day!(day20_1, args));
-    results.push(process_day!(day21_0, args));
-    results.push(process_day!(day21_1, args));
-    results.push(process_day!(day22_0, args));
-    results.push(process_day!(day22_1, args));
-    results.push(process_day!(day23_0, args));
-    results.push(process_day!(day23_1, args));
-    results.push(process_day!(day24_0, args));
-    results.push(process_day!(day24_1, args));
-    results.push(process_day!(day25_0, args));
-    // results.push(process_day!(day25_1, args));
+    // Generated code made in build.rs makes a list of days
+    include!(concat!(env!("OUT_DIR"), "/main_day_list.gen.rs"));
 
     let processed: Vec<_> = results.iter().filter(|r| r.day_ran).collect();
     if processed.is_empty() {
@@ -183,9 +167,9 @@ fn main() {
             println!(
                 "{} benchmark report: \n\t{} average per iteration \n\t{} iterations \n\t{} total \n\ttest passed: {}",
                 day.day_name,
-                benchmark.average_formatted,
-                benchmark.iterations,
-                benchmark.total_formatted,
+                benchmark.average_formatted(),
+                benchmark.samples,
+                benchmark.total_formatted(),
                 day.passed_test,
             );
         }
@@ -231,18 +215,42 @@ fn generate_bench_graph(processed: &[&DayResult]) {
 
 fn generate_bench_table(processed: &[&DayResult]) {
     let mut table_rows = Vec::new();
+    let mut total_bench_results = BenchmarkResult {
+        samples: 0,
+        total_ns: 0.0,
+        average_ns: 0.0,
+    };
+    let mut all_validated = true;
     for day in processed {
         let Some(ref benchmark) = day.benchmark else {
             unreachable!("Checked that at least one benchmark option was enabled");
         };
+
+        // Collect totals
+        total_bench_results.samples += benchmark.samples;
+        total_bench_results.average_ns += benchmark.average_ns;
+        total_bench_results.total_ns += benchmark.total_ns;
+        if !day.passed_test {
+            all_validated = false;
+        }
+
+        // Log current
         table_rows.push(vec![
             day.day_name.to_string(),
             day.passed_test.to_string(),
-            benchmark.average_formatted.to_string(),
-            benchmark.iterations.to_string(),
-            benchmark.total_formatted.to_string(),
+            benchmark.average_formatted(),
+            benchmark.iterations_formatted(),
+            benchmark.total_formatted(),
         ]);
     }
+    table_rows.push(vec![
+        "totals".to_string(),
+        all_validated.to_string(),
+        total_bench_results.average_formatted(),
+        total_bench_results.iterations_formatted(),
+        total_bench_results.total_formatted(),
+    ]);
+
     // Table rows must be transposed
     let total_rows = table_rows.len();
     table_rows = (0..table_rows[0].len())
@@ -260,8 +268,8 @@ fn generate_bench_table(processed: &[&DayResult]) {
     let header = Header::new(vec![
         "Day",
         "Validated",
-        "Iteration time",
-        "Iterations",
+        "Average time",
+        "Samples",
         "Total time",
     ]);
     let trace = Table::new(header, cells);
@@ -289,8 +297,22 @@ fn generate_bench_table(processed: &[&DayResult]) {
 #[allow(clippy::cast_precision_loss)]
 #[allow(clippy::cast_possible_truncation)]
 fn bench_day<F: Fn() -> R, R: std::fmt::Display>(function: F, args: &Args) -> BenchmarkResult {
+    // Warm up for a few samples to prep caches
+    let mut warmup_ns = 0;
+    loop {
+        let start = Instant::now();
+        // `black_box` -> Do not optimize out this function
+        let _ = std::hint::black_box(function());
+        warmup_ns += start.elapsed().as_nanos();
+
+        // Limit total warmup time
+        if warmup_ns > args.max_warmup_ms * 10u128.pow(6) {
+            break;
+        }
+    }
+
     let mut total_ns = 0;
-    let mut iterations = 0;
+    let mut samples = 0;
     for i in 0..args.max_bench_iters {
         let start = Instant::now();
         // `black_box` -> Do not optimize out this function
@@ -298,34 +320,19 @@ fn bench_day<F: Fn() -> R, R: std::fmt::Display>(function: F, args: &Args) -> Be
         total_ns += start.elapsed().as_nanos();
 
         // Limit total execution time
-        iterations = i + 1;
+        samples = i + 1;
         if total_ns > args.max_bench_ms * 10u128.pow(6) {
             break;
         }
     }
 
     // We shouldn't overflow these unless one of the days is very very slow
-    let average_ns = total_ns as f32 / iterations as f32;
+    let average_ns = total_ns as f32 / samples as f32;
     let total_ns = total_ns as f32;
 
-    // Metric prefixes
-    let average_formatted = match average_ns {
-        ..1e3 => format!("{average_ns:0.3}ns"),
-        1e3..1e6 => format!("{:0.3}us", average_ns / 1e3),
-        1e6..1e9 => format!("{:0.3}ms", average_ns / 1e6),
-        _ => format!("{:0.3}s", average_ns / 1e9),
-    };
-    let total_formatted = match total_ns {
-        ..1e3 => format!("{total_ns:0.3}ns"),
-        1e3..1e6 => format!("{:0.3}us", total_ns / 1e3),
-        1e6..1e9 => format!("{:0.3}ms", total_ns / 1e6),
-        _ => format!("{:0.3}s", total_ns / 1e9),
-    };
-
     BenchmarkResult {
-        iterations,
+        samples,
         average_ns,
-        average_formatted,
-        total_formatted,
+        total_ns,
     }
 }

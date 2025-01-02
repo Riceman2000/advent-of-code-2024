@@ -3,6 +3,9 @@ name = "aoc"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+alloc_profile = []
+
 [profile.dev]
 incremental = true
 debug = true
@@ -22,8 +25,12 @@ strip = false
 debug = true
 
 # Benchmarks via criterion
+# [[bench]]
+# name = "days"
+# harness = false
+
 [[bench]]
-name = "days"
+name = "divan"
 harness = false
 
 [dependencies]
@@ -41,5 +48,9 @@ atoi = "2.0.0"
 nalgebra = "0.33.2"
 pathfinding = "4.12.0"
 
+[build-dependencies]
+regex = "1.11.1"
+
 [dev-dependencies]
+divan = "0.1.17"
 criterion = { version = "0.5", features = ["html_reports"] }
