@@ -1,8 +1,8 @@
 use atoi::atoi;
 use lazy_static::lazy_static;
 
-// Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../../input/2024/day11.txt");
+aoc_assert::aoc_assert!(185_205);
 
 const NUM_BLINKS: usize = 25;
 
@@ -71,38 +71,5 @@ fn solve_from_lut(i: usize, j: usize, lut: &[[u64; MAX_CACHE]; CACHE_DEPTH]) -> 
             solve_from_lut(i - 1, j / multiplier, lut) + solve_from_lut(i - 1, j % multiplier, lut)
         }
         _ => solve_from_lut(i - 1, j * 2024, lut),
-    }
-}
-
-/// Used to allow for the verfication of results at runtime without a panic
-#[must_use]
-pub fn verify_day(print_output: bool) -> bool {
-    // Correct value can be put here once it is known
-    let expected = 185_205;
-
-    let actual = day();
-    if actual == expected {
-        return true;
-    }
-
-    if print_output {
-        // To help handle unsigned subtraction
-        let sign = if actual > expected { '+' } else { '-' };
-        eprintln!(
-            "Got {actual} expected {expected}, diff {sign}{}",
-            expected.abs_diff(actual)
-        );
-    }
-    false
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Test that is automatically run by `cargo test`
-    #[test]
-    fn test_day() {
-        assert!(verify_day(true));
     }
 }

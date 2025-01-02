@@ -1,5 +1,5 @@
-// Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../../input/2024/day09.txt");
+aoc_assert::aoc_assert!(6_430_446_922_192);
 
 #[must_use]
 #[allow(clippy::cast_possible_truncation)]
@@ -54,37 +54,4 @@ pub fn day() -> u64 {
         .flatten()
         .enumerate()
         .fold(0, |acc, (pos, id)| acc + (pos as u64) * (*id as u64))
-}
-
-/// Used to allow for the verfication of results at runtime without a panic
-#[must_use]
-pub fn verify_day(print_output: bool) -> bool {
-    // Correct value can be put here once it is known
-    let expected = 6_430_446_922_192;
-
-    let actual = day();
-    if actual == expected {
-        return true;
-    }
-
-    if print_output {
-        // To help handle unsigned subtraction
-        let sign = if actual > expected { '+' } else { '-' };
-        eprintln!(
-            "Got {actual} expected {expected}, diff {sign}{}",
-            expected.abs_diff(actual)
-        );
-    }
-    false
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Test that is automatically run by `cargo test`
-    #[test]
-    fn test_day() {
-        assert!(verify_day(true));
-    }
 }

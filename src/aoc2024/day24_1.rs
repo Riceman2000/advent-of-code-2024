@@ -2,8 +2,8 @@ use std::collections::{HashMap, VecDeque};
 
 use itertools::Itertools;
 
-// Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../../input/2024/day24.txt");
+aoc_assert::aoc_assert!("gwh,jct,rcb,wbw,wgb,z09,z21,z39");
 
 type Identifier = [u8; 3];
 type Nodes = HashMap<Identifier, Option<bool>>;
@@ -135,33 +135,4 @@ enum Gate {
     And,
     Or,
     Xor,
-}
-
-/// Used lts at runtime without a panic
-#[must_use]
-pub fn verify_day(print_output: bool) -> bool {
-    // Correct value can be put here once it is known
-    let expected = "gwh,jct,rcb,wbw,wgb,z09,z21,z39";
-
-    let actual = day();
-    if actual == expected {
-        return true;
-    }
-
-    if print_output {
-        // To help handle unsigned subtraction
-        eprintln!("Got {actual} expected {expected}");
-    }
-    false
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Test that is automatically run by `cargo test`
-    #[test]
-    fn test_day() {
-        assert!(verify_day(true));
-    }
 }

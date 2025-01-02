@@ -2,8 +2,8 @@ use std::mem::transmute;
 
 use atoi::atoi;
 
-// Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../../input/2024/day17.txt");
+aoc_assert::aoc_assert!("2,1,0,1,7,2,5,0,3");
 
 #[must_use]
 #[allow(clippy::cast_lossless)]
@@ -74,32 +74,4 @@ enum Opcode {
     Out = 5,
     Bdv = 6,
     Cdv = 7,
-}
-
-/// Used to allow for the verfication of results at runtime without a panic
-#[must_use]
-pub fn verify_day(print_output: bool) -> bool {
-    // Correct value can be put here once it is known
-    let expected = "2,1,0,1,7,2,5,0,3";
-
-    let actual = day();
-    if actual == expected {
-        return true;
-    }
-
-    if print_output {
-        eprintln!("Got {actual} expected {expected}");
-    }
-    false
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Test that is automatically run by `cargo test`
-    #[test]
-    fn test_day() {
-        assert!(verify_day(true));
-    }
 }

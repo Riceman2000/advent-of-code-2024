@@ -35,6 +35,9 @@ name = "divan"
 harness = false
 
 [dependencies]
+# Aoc assert proc macro
+aoc_assert = { path = "./aoc_assert" }
+
 # Used in the main file to give users a way to interact with the application via the CLI
 plotly = { version = "0.11.0", features = ["kaleido"] }
 clap = { version = "4.5.23", features = ["derive"] }

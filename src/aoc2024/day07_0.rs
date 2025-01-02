@@ -1,8 +1,8 @@
 use atoi::atoi;
 use rayon::prelude::*;
 
-// Pull this file's contents into the binary as a string literal
 const INPUT: &[u8] = include_bytes!("../../input/2024/day07.txt");
+aoc_assert::aoc_assert!(1_399_219_271_639);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
@@ -56,37 +56,4 @@ pub fn day() -> u64 {
             },
         )
         .sum()
-}
-
-/// Used to allow for the verfication of results at runtime without a panic
-#[must_use]
-pub fn verify_day(print_output: bool) -> bool {
-    // Correct value can be put here once it is known
-    let expected = 1_399_219_271_639;
-
-    let actual = day();
-    if actual == expected {
-        return true;
-    }
-
-    if print_output {
-        // To help handle unsigned subtraction
-        let sign = if actual > expected { '+' } else { '-' };
-        eprintln!(
-            "Got {actual} expected {expected}, diff {sign}{}",
-            expected.abs_diff(actual)
-        );
-    }
-    false
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Test that is automatically run by `cargo test`
-    #[test]
-    fn test_day() {
-        assert!(verify_day(true));
-    }
 }
