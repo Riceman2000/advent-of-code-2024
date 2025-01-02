@@ -1,4 +1,4 @@
-// New day files must be included in the module tree by uncommenting them here
+// Auto generated, no need to edit
 pub mod day01_0;
 pub mod day01_1;
 pub mod day02_0;

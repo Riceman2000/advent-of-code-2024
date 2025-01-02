@@ -1,5 +1,9 @@
 use regex::Regex;
-use std::{collections::HashMap, env, fs, io::Write};
+use std::{
+    collections::HashMap,
+    env, fs,
+    io::{Read, Write},
+};
 
 fn main() {
     // Output file paths
@@ -16,7 +20,7 @@ fn main() {
     let day_source_re: Regex = Regex::new(r"day\d{2}_(0|1).rs$").unwrap();
 
     // Find year directories within src
-    let src_dir_reader = fs::read_dir(src_dir).unwrap();
+    let src_dir_reader = fs::read_dir(src_dir.clone()).unwrap();
     let mut years = HashMap::new();
     for f in src_dir_reader {
         let entry = f.unwrap();
@@ -56,6 +60,7 @@ fn main() {
     // Note that some are constructed to be a single block with {}
     let mut main_day_list = String::from("{\n");
     let mut divan_day_list = String::new();
+    let mut year_lib_map = HashMap::new();
     for (year_path, days) in years {
         let year = year_path.file_name().unwrap().to_string_lossy().to_string();
         let mut days: Vec<_> = days
@@ -71,13 +76,16 @@ fn main() {
             .collect();
         days.sort();
 
+        let mut year_lib_list = String::from("// Auto generated, no need to edit\n");
         for day in days {
             main_day_list.push_str(&format!("process_day!({year}::{day}, args, results);\n"));
             divan_day_list.push_str(&format!(
                 "#[divan::bench]\
                 fn {year}_{day}() {{ let _ = black_box({year}::{day}::day()); }} \n"
             ));
+            year_lib_list.push_str(&format!("pub mod {day};\n"));
         }
+        year_lib_map.entry(year).or_insert(year_lib_list);
     }
     main_day_list.push('}');
 
@@ -91,4 +99,21 @@ fn main() {
     divan_day_list_file
         .write_all(divan_day_list.as_bytes())
         .unwrap();
+
+    for (year, content) in year_lib_map {
+        let year_lib_path = format!("{src_dir}/{year}.rs");
+
+        // Some auto running checkers could endlessly loop if we always overwrite this file so read
+        // it first to see if changes need to be made
+        if let Ok(mut year_lib_file) = fs::File::open(&year_lib_path) {
+            let mut current_content = String::new();
+            year_lib_file.read_to_string(&mut current_content).unwrap();
+            if current_content == content {
+                continue;
+            }
+        }
+
+        let mut year_lib_file = fs::File::create(year_lib_path).unwrap();
+        year_lib_file.write_all(content.as_bytes()).unwrap();
+    }
 }
