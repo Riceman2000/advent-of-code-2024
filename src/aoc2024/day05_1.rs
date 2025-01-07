@@ -2,7 +2,7 @@ use atoi::atoi;
 use std::cmp::Ordering;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day05.txt");
-aoc_assert::aoc_assert!(5_799);
+aoc_macros::aoc_assert!(5_799);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

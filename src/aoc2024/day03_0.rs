@@ -2,7 +2,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 
 const INPUT: &str = include_str!("../../input/2024/day03.txt");
-aoc_assert::aoc_assert!(170_068_701);
+aoc_macros::aoc_assert!(170_068_701);
 
 lazy_static! {
     static ref RE: Regex = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();

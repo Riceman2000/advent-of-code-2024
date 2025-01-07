@@ -1,5 +1,5 @@
 const INPUT: &[u8] = include_bytes!("../../input/2024/day10.txt");
-aoc_assert::aoc_assert!(1_324);
+aoc_macros::aoc_assert!(1_324);
 
 #[must_use]
 pub fn day() -> usize {

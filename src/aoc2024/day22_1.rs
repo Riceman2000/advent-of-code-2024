@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use atoi::atoi;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day22.txt");
-aoc_assert::aoc_assert!(2_268);
+aoc_macros::aoc_assert!(2_268);
 
 const ITERATIONS: usize = 2000;
 

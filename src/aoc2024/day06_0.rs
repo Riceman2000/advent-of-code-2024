@@ -1,5 +1,5 @@
 const INPUT: &[u8] = include_bytes!("../../input/2024/day06.txt");
-aoc_assert::aoc_assert!(5_239);
+aoc_macros::aoc_assert!(5_239);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

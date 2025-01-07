@@ -3,7 +3,7 @@ use std::collections::{HashMap, VecDeque};
 use itertools::Itertools;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day24.txt");
-aoc_assert::aoc_assert!("gwh,jct,rcb,wbw,wgb,z09,z21,z39");
+aoc_macros::aoc_assert!("gwh,jct,rcb,wbw,wgb,z09,z21,z39");
 
 type Identifier = [u8; 3];
 type Nodes = HashMap<Identifier, Option<bool>>;

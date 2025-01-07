@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use rayon::prelude::*;
 
 const INPUT: &str = include_str!("../../input/2024/day19.txt");
-aoc_assert::aoc_assert!(601_201_576_113_503);
+aoc_macros::aoc_assert!(601_201_576_113_503);
 
 type Cache = HashMap<&'static str, usize>;
 

@@ -1,5 +1,5 @@
 const INPUT: &[u8] = include_bytes!("../../input/2024/day04.txt");
-aoc_assert::aoc_assert!(2_390);
+aoc_macros::aoc_assert!(2_390);
 
 #[must_use]
 #[allow(clippy::cast_possible_wrap)]

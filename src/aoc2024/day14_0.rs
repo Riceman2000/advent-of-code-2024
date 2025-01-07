@@ -2,7 +2,7 @@ use atoi::atoi;
 use nalgebra::Vector2;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day14.txt");
-aoc_assert::aoc_assert!(225_552_000);
+aoc_macros::aoc_assert!(225_552_000);
 
 const WIDTH: i32 = 101;
 const HEIGHT: i32 = 103;

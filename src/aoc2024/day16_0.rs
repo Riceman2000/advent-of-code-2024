@@ -1,7 +1,7 @@
 use pathfinding::directed::dijkstra;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day16.txt");
-aoc_assert::aoc_assert!(82_460);
+aoc_macros::aoc_assert!(82_460);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

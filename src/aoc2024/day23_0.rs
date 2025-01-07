@@ -3,7 +3,7 @@ use std::collections::{BTreeSet, HashMap, HashSet};
 use itertools::Itertools;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day23.txt");
-aoc_assert::aoc_assert!(1_151);
+aoc_macros::aoc_assert!(1_151);
 
 type Identifier = [u8; 2];
 type Nodes = BTreeSet<Identifier>;

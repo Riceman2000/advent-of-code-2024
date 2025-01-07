@@ -4,4 +4,5 @@
 #![feature(slice_split_once)]
 #![feature(iter_array_chunks)]
 
-pub mod aoc2024;
+// Automatically import year directories
+aoc_macros::include_year_modules!();

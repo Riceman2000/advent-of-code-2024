@@ -3,7 +3,7 @@ use std::mem::transmute;
 use atoi::atoi;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day17.txt");
-aoc_assert::aoc_assert!("2,1,0,1,7,2,5,0,3");
+aoc_macros::aoc_assert!("2,1,0,1,7,2,5,0,3");
 
 #[must_use]
 #[allow(clippy::cast_lossless)]

@@ -2,7 +2,7 @@ use atoi::atoi;
 use lazy_static::lazy_static;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day11.txt");
-aoc_assert::aoc_assert!(221_280_540_398_419);
+aoc_macros::aoc_assert!(221_280_540_398_419);
 
 const NUM_BLINKS: usize = 75;
 

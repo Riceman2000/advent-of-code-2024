@@ -1,5 +1,5 @@
 const INPUT: &[u8] = include_bytes!("../../input/2024/day12.txt");
-aoc_assert::aoc_assert!(901_100);
+aoc_macros::aoc_assert!(901_100);
 
 // Constants to help keep directions in order
 const DIRS: [(isize, isize); 8] = [

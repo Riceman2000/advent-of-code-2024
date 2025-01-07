@@ -2,7 +2,7 @@ use atoi::atoi;
 use pathfinding::directed::bfs;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day18.txt");
-aoc_assert::aoc_assert!(370);
+aoc_macros::aoc_assert!(370);
 
 const START_POS: (usize, usize) = (0, 0);
 const MAP_MAX: usize = 70;

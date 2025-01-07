@@ -2,7 +2,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 
 const INPUT: &str = include_str!("../../input/2024/day19.txt");
-aoc_assert::aoc_assert!(226);
+aoc_macros::aoc_assert!(226);
 
 lazy_static! {
     static ref RE: Regex = {

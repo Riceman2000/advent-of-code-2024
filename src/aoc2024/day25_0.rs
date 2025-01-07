@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day25.txt");
-aoc_assert::aoc_assert!(3_663);
+aoc_macros::aoc_assert!(3_663);
 
 const KEY_LENGTH: usize = 5;
 const KEY_HEIGHT: u8 = 5;

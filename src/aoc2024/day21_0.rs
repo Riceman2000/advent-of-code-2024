@@ -4,7 +4,7 @@ use atoi::atoi;
 use lazy_static::lazy_static;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day21.txt");
-aoc_assert::aoc_assert!(184_716);
+aoc_macros::aoc_assert!(184_716);
 
 const ROBOT_DEPTH: u64 = 2;
 

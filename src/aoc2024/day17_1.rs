@@ -1,7 +1,7 @@
 use std::mem::transmute;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day17.txt");
-aoc_assert::aoc_assert!(267_265_166_222_235);
+aoc_macros::aoc_assert!(267_265_166_222_235);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

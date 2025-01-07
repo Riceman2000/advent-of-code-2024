@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 const INPUT: &str = include_str!("../../input/2024/day02.txt");
-aoc_assert::aoc_assert!(287);
+aoc_macros::aoc_assert!(287);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

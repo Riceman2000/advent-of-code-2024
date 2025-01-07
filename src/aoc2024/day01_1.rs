@@ -1,7 +1,7 @@
 use atoi::atoi;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day01.txt");
-aoc_assert::aoc_assert!(26_674_158);
+aoc_macros::aoc_assert!(26_674_158);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

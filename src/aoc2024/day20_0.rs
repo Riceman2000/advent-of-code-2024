@@ -1,7 +1,7 @@
 use pathfinding::directed::bfs;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day20.txt");
-aoc_assert::aoc_assert!(1_296);
+aoc_macros::aoc_assert!(1_296);
 
 const SHORTCUT_THRESHOLD: usize = 100;
 

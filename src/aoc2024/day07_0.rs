@@ -2,7 +2,7 @@ use atoi::atoi;
 use rayon::prelude::*;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day07.txt");
-aoc_assert::aoc_assert!(1_399_219_271_639);
+aoc_macros::aoc_assert!(1_399_219_271_639);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

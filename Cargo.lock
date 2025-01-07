@@ -102,7 +102,7 @@ dependencies = [
 name = "aoc"
 version = "0.1.0"
 dependencies = [
- "aoc_assert",
+ "aoc_macros",
  "atoi",
  "clap",
  "criterion",
@@ -118,10 +118,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "aoc_assert"
+name = "aoc_macros"
 version = "0.1.0"
 dependencies = [
  "quote",
+ "regex",
  "syn",
 ]
 

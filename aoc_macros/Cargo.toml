@@ -1,5 +1,5 @@
 [package]
-name = "aoc_assert"
+name = "aoc_macros"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,4 +8,5 @@ proc-macro = true
 
 [dependencies]
 quote = "1.0.38"
+regex = "1.11.1"
 syn = "2.0.94"

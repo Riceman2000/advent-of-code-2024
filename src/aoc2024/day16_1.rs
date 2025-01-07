@@ -2,7 +2,7 @@ use pathfinding::directed::astar;
 use pathfinding::prelude::*;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day16.txt");
-aoc_assert::aoc_assert!(590);
+aoc_macros::aoc_assert!(590);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

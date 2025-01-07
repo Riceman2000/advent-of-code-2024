@@ -2,7 +2,7 @@ use pathfinding::directed::bfs;
 use rayon::prelude::*;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day20.txt");
-aoc_assert::aoc_assert!(977_665);
+aoc_macros::aoc_assert!(977_665);
 
 const CHEAT_RADIUS: isize = 20;
 const SHORTCUT_THRESHOLD: usize = 100;

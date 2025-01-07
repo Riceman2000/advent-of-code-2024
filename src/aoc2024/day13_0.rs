@@ -3,7 +3,7 @@ use itertools::Itertools;
 use nalgebra::{Matrix2, Vector2};
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day13.txt");
-aoc_assert::aoc_assert!(35_574);
+aoc_macros::aoc_assert!(35_574);
 
 // Real epsilon is too small
 const BIG_EPSILON: f64 = 1e-3;

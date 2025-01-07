@@ -1,7 +1,7 @@
 use std::collections::{HashMap, VecDeque};
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day24.txt");
-aoc_assert::aoc_assert!(57_270_694_330_992);
+aoc_macros::aoc_assert!(57_270_694_330_992);
 
 type Identifier = [u8; 3];
 type Nodes = HashMap<Identifier, Option<bool>>;
