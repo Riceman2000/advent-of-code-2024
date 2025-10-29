@@ -1,9 +1,5 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 
-#[cfg(feature = "criterion")]
-#[allow(clippy::wildcard_imports)]
-use aoc::*;
-
 criterion_main!(benches);
 
 criterion_group! {
@@ -13,7 +9,5 @@ criterion_group! {
 }
 
 fn day_benches(_c: &mut Criterion) {
-    #[cfg(feature = "criterion")]
-    // Generated code made in build.rs makes a list of days
-    include!(concat!(env!("OUT_DIR"), "/criterion_day_list.gen.rs"));
+    aoc_macros::criterion_process_list!();
 }

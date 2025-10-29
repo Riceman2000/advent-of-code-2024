@@ -9,7 +9,7 @@ use plotly::{
     Bar, ImageFormat, Layout, Plot, Table,
 };
 
-// Needed to bring in all of the days
+// Avoids lints when leaving out years
 #[allow(clippy::wildcard_imports)]
 use aoc::*;
 
@@ -149,8 +149,11 @@ fn main() {
 
     let mut results = Vec::new();
 
-    // Generated code made in build.rs makes a list of days
-    include!(concat!(env!("OUT_DIR"), "/main_day_list.gen.rs"));
+    // Generates list of days based on file structure
+    aoc_macros::day_process_list!();
+
+    // TODO: Test code
+    // aoc_macros::divan_process_list!();
 
     let processed: Vec<_> = results.iter().filter(|r| r.day_ran).collect();
     if processed.is_empty() {

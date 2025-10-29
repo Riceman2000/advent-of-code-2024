@@ -1,8 +1,18 @@
 extern crate proc_macro;
 
+use std::path::Path;
+use std::{fs, path::PathBuf};
+
+use lazy_static::lazy_static;
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, Expr};
+use regex::Regex;
+use syn::{parse_macro_input, Expr, PathSegment};
+
+lazy_static! {
+    static ref year_module_re: Regex = Regex::new(r"(aoc\d{4})(\.rs)?$").unwrap();
+    static ref day_module_re: Regex = Regex::new(r"(day\d\d_\d)(\.rs)?$").unwrap();
+}
 
 #[proc_macro]
 pub fn aoc_assert(item: TokenStream) -> TokenStream {
@@ -39,12 +49,7 @@ pub fn aoc_assert(item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
-use regex::Regex;
-use std::fs;
-use std::path::Path;
-
-#[proc_macro]
-pub fn include_year_modules(_input: TokenStream) -> TokenStream {
+fn get_years() -> Vec<PathBuf> {
     let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
     let src_dir = manifest_dir + "/src";
     let src_path = Path::new(&src_dir);
@@ -53,21 +58,185 @@ pub fn include_year_modules(_input: TokenStream) -> TokenStream {
         panic!("Provided path is not a directory.");
     }
 
-    let year_module_re: Regex = Regex::new(r"aoc\d+$").unwrap();
-
-    let mut module_stmts = Vec::new();
+    let mut out = Vec::new();
     for entry in fs::read_dir(src_path).expect("Failed to read directory") {
         let entry = entry.expect("Failed to read directory entry");
         let file_name = entry.file_name();
         let file_name_str = file_name.to_string_lossy().to_string();
 
+        // Only accept module directories
+        if !entry.path().is_dir() {
+            continue;
+        }
+
         // Check if the file name matches the regex.
         if year_module_re.is_match(&file_name_str) {
-            // Generate a module statement.
-            let module_name: syn::Ident = syn::parse_str(&file_name_str).unwrap();
+            out.push(entry.path());
+        }
+    }
+    out
+}
+
+fn get_days(year_path: &Path) -> Vec<PathBuf> {
+    let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+    let mut search_path = PathBuf::from(manifest_dir);
+    search_path.push("src");
+
+    if !search_path.is_dir() {
+        panic!("Provided path is not a directory.");
+    }
+
+    // Get path of year module and verify it matches expectations
+    let year_file_name_str = year_path.file_name().unwrap().to_string_lossy().to_string();
+    let year_module = year_module_re
+        .captures(&year_file_name_str)
+        .expect("Macro called from improper file")
+        .get(1)
+        .expect("Failed to find year module")
+        .as_str();
+    search_path.push(year_module);
+
+    let mut out = Vec::new();
+    for entry in fs::read_dir(search_path).expect("Failed to read directory") {
+        let entry = entry.expect("Failed to read directory entry");
+        let file_name = entry.file_name();
+        let file_name_str = file_name.to_string_lossy().to_string();
+
+        // Check if the file name matches the regex.
+        if day_module_re.is_match(&file_name_str) {
+            out.push(entry.path());
+        }
+    }
+    out
+}
+
+fn module_from_path(path: &Path, re: &Regex) -> String {
+    let file_name_str = path
+        .file_name()
+        .expect("Failed to read file name")
+        .to_string_lossy()
+        .to_string();
+
+    re.captures(&file_name_str)
+        .expect("File does not match day pattern")
+        .get(1)
+        .expect("Failed to find day module")
+        .as_str()
+        .to_string()
+}
+
+fn get_syn_path(year: &Path, day: &Path) -> syn::Path {
+    let year_module = module_from_path(year, &year_module_re);
+    let year_ident: syn::Ident = syn::parse_str(&year_module).unwrap();
+    let year_segment = PathSegment {
+        ident: year_ident,
+        arguments: syn::PathArguments::None,
+    };
+
+    let day_module = module_from_path(day, &day_module_re);
+    let day_ident: syn::Ident = syn::parse_str(&day_module).unwrap();
+    let day_segment = PathSegment {
+        ident: day_ident,
+        arguments: syn::PathArguments::None,
+    };
+
+    // Construct path from segments
+    syn::Path {
+        leading_colon: None,
+        segments: syn::punctuated::Punctuated::from_iter(vec![year_segment.clone(), day_segment]),
+    }
+}
+
+#[proc_macro]
+pub fn day_process_list(_input: TokenStream) -> TokenStream {
+    let mut days = Vec::new();
+    for year in get_years() {
+        days.extend(get_days(&year));
+    }
+
+    let mut module_stmts = Vec::new();
+    for year in get_years() {
+        let year_module = module_from_path(&year, &year_module_re);
+        for day in get_days(&year) {
+            let day_path = get_syn_path(&year, &day);
+
             let stmt = quote! {
-                pub mod #module_name;
+                #[cfg(feature = #year_module)]
+                {
+                    process_day!(#day_path, args, results);
+                }
             };
+
+            module_stmts.push(stmt);
+        }
+    }
+
+    // Generate and return the token stream.
+    let expanded = quote! {
+        #(#module_stmts)*
+    };
+    TokenStream::from(expanded)
+}
+
+#[proc_macro]
+pub fn divan_process_list(_input: TokenStream) -> TokenStream {
+    let mut days = Vec::new();
+    for year in get_years() {
+        days.extend(get_days(&year));
+    }
+
+    let mut module_stmts = Vec::new();
+    for year in get_years() {
+        let year_module = module_from_path(&year, &year_module_re);
+        for day in get_days(&year) {
+            let day_module = module_from_path(&day, &day_module_re);
+            let day_path = get_syn_path(&year, &day);
+
+            // Get function name based off year and day
+            let fn_name = format!("{year_module}_{day_module}");
+            let fn_ident: syn::Ident = syn::parse_str(&fn_name).unwrap();
+
+            let stmt = quote! {
+                #[cfg(all(feature = #year_module, feature = "divan"))]
+                #[divan::bench]
+                fn #fn_ident() {
+                    let _ = divan::black_box(aoc::#day_path::day());
+                }
+            };
+
+            module_stmts.push(stmt);
+        }
+    }
+
+    // Generate and return the token stream.
+    let expanded = quote! {
+        #(#module_stmts)*
+    };
+    TokenStream::from(expanded)
+}
+
+#[proc_macro]
+pub fn criterion_process_list(_input: TokenStream) -> TokenStream {
+    let mut days = Vec::new();
+    for year in get_years() {
+        days.extend(get_days(&year));
+    }
+
+    let mut module_stmts = Vec::new();
+    for year in get_years() {
+        let year_module = module_from_path(&year, &year_module_re);
+        for day in get_days(&year) {
+            let day_module = module_from_path(&day, &day_module_re);
+            let day_path = get_syn_path(&year, &day);
+
+            // Get function name based off year and day
+            let fn_name = format!("{year_module}_{day_module}");
+
+            let stmt = quote! {
+                #[cfg(all(feature = #year_module, feature = "criterion"))]
+                _c.bench_function(#fn_name, |b| b.iter(&mut aoc::#day_path::day));
+            };
+
             module_stmts.push(stmt);
         }
     }

@@ -104,6 +104,7 @@ version = "0.1.0"
 dependencies = [
  "aoc_macros",
  "atoi",
+ "automod",
  "clap",
  "criterion",
  "divan",
@@ -121,6 +122,8 @@ dependencies = [
 name = "aoc_macros"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
+ "paste",
  "quote",
  "regex",
  "syn",
@@ -158,6 +161,17 @@ name = "autocfg"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
+
+[[package]]
+name = "automod"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebb4bd301db2e2ca1f5be131c24eb8ebf2d9559bc3744419e93baf8ddea7e670"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "base64"
