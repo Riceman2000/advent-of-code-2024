@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 use std::{fs, path::PathBuf};
 
 use proc_macro::TokenStream;
-use quote::quote;
+use quote::{quote, ToTokens};
 use regex::Regex;
 use syn::{parse_macro_input, Expr, PathSegment};
 
@@ -157,11 +157,47 @@ pub fn day_process_list(_input: TokenStream) -> TokenStream {
         let year_module = module_from_path(&year, &YEAR_MODULE_RE);
         for day in get_days(&year) {
             let day_path = get_syn_path(&year, &day);
+            let day_str = day_path.to_token_stream().to_string();
+
+            // Remove spaces
+            let day_str: String = day_str.chars().filter(|c| *c != ' ').collect();
 
             let stmt = quote! {
                 #[cfg(feature = #year_module)]
                 {
-                    process_day!(#day_path, args, results);
+                    use #day_path as day;
+
+                    let day_ran = args.target_day.is_empty() || glob_match(&args.target_day, #day_str);
+                    if !day_ran {
+                        results.push(DayResult {
+                            day_name: #day_str,
+                            day_ran,
+                            passed_test: false,
+                            benchmark: None,
+                        });
+                    }
+
+                    if !args.output_disable && !(args.bench_table || args.bench_graph) {
+                        println!("{} -> {}", #day_str, day::day());
+                    }
+
+                    // It is best to avoid testing when it wont be reported because it will duplicate user
+                    // debug statements
+                    let (benchmark, passed_test) = if args.bench_table || args.bench_graph {
+                        (Some(bench_day(day::day, &args)), day::verify_day(false))
+                    } else if args.bench_enable {
+                        println!("Benchmarking {}...", #day_str);
+                        (Some(bench_day(day::day, &args)), day::verify_day(false))
+                    } else {
+                        (None, false)
+                    };
+
+                    results.push(DayResult {
+                        day_name: #day_str,
+                        day_ran,
+                        passed_test,
+                        benchmark,
+                    });
                 }
             };
 

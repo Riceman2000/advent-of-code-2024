@@ -97,46 +97,6 @@ impl BenchmarkResult {
     }
 }
 
-/// This is not the best way to do this
-macro_rules! process_day {
-    ($day_path:path, $args:expr, $results:expr) => {{
-        use $day_path as day;
-        let day_name = stringify!($day_path);
-
-        let day_ran = $args.target_day.is_empty() || glob_match(&$args.target_day, day_name);
-        if !day_ran {
-            $results.push(DayResult {
-                day_name,
-                day_ran,
-                passed_test: false,
-                benchmark: None,
-            });
-        }
-
-        if !$args.output_disable && !($args.bench_table || $args.bench_graph) {
-            println!("{day_name} -> {}", day::day());
-        }
-
-        // It is best to avoid testing when it wont be reported because it will duplicate user
-        // debug statements
-        let (benchmark, passed_test) = if $args.bench_table || $args.bench_graph {
-            (Some(bench_day(day::day, &$args)), day::verify_day(false))
-        } else if $args.bench_enable {
-            println!("Benchmarking {day_name}...");
-            (Some(bench_day(day::day, &$args)), day::verify_day(false))
-        } else {
-            (None, false)
-        };
-
-        $results.push(DayResult {
-            day_name,
-            day_ran,
-            passed_test,
-            benchmark,
-        });
-    }};
-}
-
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::cast_precision_loss)]
 fn main() {
