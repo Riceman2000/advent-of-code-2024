@@ -14,6 +14,10 @@ Log scale benchmark results:
 
 ![](./media/benchmark-graph.png)
 
+Test svg graphivs:
+
+![](./media/test.svg)
+
 ## Usage
 ### Run benchmarks with graphics and stats
 ``` bash
