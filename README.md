@@ -8,7 +8,7 @@ This framework is meant to be easy to expand and iterate on without the overbear
 
 These benchmarks were done without any true care for accuracy or attempting to control external variables so take them with a grain of salt:
 
-![](./media/benchmark-table.png)
+![](./media/benchmark-table.svg)
 
 Log scale benchmark results:
 
