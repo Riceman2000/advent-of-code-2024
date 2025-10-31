@@ -2,7 +2,7 @@
 
 ## Mindset
 
-This framework is meant to be easy to expand and iterate on without the overbearing design decisions of some other AOC frameworks.
+I did not agree with many of the overbearing design decisions of the existing AOC frameworks so I made my own with even more overbearing design decisions that make it basically unusable for anyone else besides me, use it at your peril.
 
 ## Current benchmarks
 
@@ -18,7 +18,7 @@ Log scale benchmark results:
 ### Run benchmarks with graphics and stats
 ``` bash
 cargo install cargo-criterion
-cargo criterion
+cargo bench --features criterion
 ```
 output will be in `target/criterion/index.html`
 

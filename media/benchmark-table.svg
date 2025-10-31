@@ -1,7 +1,26 @@
 
-        <svg width="500" height="1125" xmlns="http://www.w3.org/2000/svg">
-        <foreignObject width="500" height="1125">
+        <svg width="800" height="1977" xmlns="http://www.w3.org/2000/svg">
+        <foreignObject width="100%" height="100%">
             <div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+              table {
+                border-collapse: collapse;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: white;
+              }
+              th, td {
+                border: 1px solid #000;
+                padding: 4px;
+                text-align: left;
+                line-height: 13px;
+              }
+              th {
+                background-color: #f0f0f0;
+              }
+            </style>
+              <div style="width:100%;height:100%;">
                 <table>
     <thead>
         <tr>
@@ -61,21 +80,21 @@
             <td>
                 <div>
                     <p>
-                        2.385ms
+                        24.307us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        41k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        238.479ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -98,21 +117,21 @@
             <td>
                 <div>
                     <p>
-                        2.399ms
+                        25.647us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        38k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        239.872ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -135,21 +154,21 @@
             <td>
                 <div>
                     <p>
-                        2.909ms
+                        36.283us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        27k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        290.883ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -172,21 +191,21 @@
             <td>
                 <div>
                     <p>
-                        5.771ms
+                        473.430us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        2k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        577.082ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -209,21 +228,21 @@
             <td>
                 <div>
                     <p>
-                        20.036ms
+                        3.836ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        50
+                        261
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.002s
+                        1.001s
                     </p>
                 </div>
             </td>
@@ -246,21 +265,21 @@
             <td>
                 <div>
                     <p>
-                        3.473ms
+                        306.792us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        3k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        347.285ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -283,21 +302,21 @@
             <td>
                 <div>
                     <p>
-                        333.612ms
+                        19.595ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        3
+                        52
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.001s
+                        1.019s
                     </p>
                 </div>
             </td>
@@ -320,21 +339,21 @@
             <td>
                 <div>
                     <p>
-                        797.146us
+                        40.574us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        24k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        79.715ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -357,21 +376,21 @@
             <td>
                 <div>
                     <p>
-                        6.565us
+                        180.808ns
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        100k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        656.453us
+                        18.081ms
                     </p>
                 </div>
             </td>
@@ -394,21 +413,21 @@
             <td>
                 <div>
                     <p>
-                        22.479ms
+                        5.629ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        45
+                        178
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.012s
+                        1.002s
                     </p>
                 </div>
             </td>
@@ -431,21 +450,21 @@
             <td>
                 <div>
                     <p>
-                        1.244ms
+                        15.602us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        64k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        124.423ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -468,21 +487,21 @@
             <td>
                 <div>
                     <p>
-                        7.999ms
+                        461.943us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        2k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        799.860ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -505,21 +524,21 @@
             <td>
                 <div>
                     <p>
-                        6.381ms
+                        412.565us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        2k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        638.055ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -542,21 +561,21 @@
             <td>
                 <div>
                     <p>
-                        1.289ms
+                        118.490us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        8k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        128.879ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -579,21 +598,21 @@
             <td>
                 <div>
                     <p>
-                        11.100ms
+                        464.709us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        91
+                        2k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.010s
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -616,21 +635,21 @@
             <td>
                 <div>
                     <p>
-                        1.115s
+                        59.692ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1
+                        17
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.115s
+                        1.015s
                     </p>
                 </div>
             </td>
@@ -653,21 +672,21 @@
             <td>
                 <div>
                     <p>
-                        3.498ms
+                        405.891us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        2k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        349.841ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -690,21 +709,21 @@
             <td>
                 <div>
                     <p>
-                        1.379s
+                        95.193ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1
+                        11
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.379s
+                        1.047s
                     </p>
                 </div>
             </td>
@@ -727,21 +746,21 @@
             <td>
                 <div>
                     <p>
-                        3.605ms
+                        115.908us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        8k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        360.473ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -764,21 +783,21 @@
             <td>
                 <div>
                     <p>
-                        6.545ms
+                        446.458us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        2k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        654.454ms
+                        1.001s
                     </p>
                 </div>
             </td>
@@ -801,21 +820,21 @@
             <td>
                 <div>
                     <p>
-                        250.441us
+                        18.833us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        53k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        25.044ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -838,21 +857,21 @@
             <td>
                 <div>
                     <p>
-                        46.307ms
+                        8.816ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        22
+                        114
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.019s
+                        1.005s
                     </p>
                 </div>
             </td>
@@ -875,21 +894,21 @@
             <td>
                 <div>
                     <p>
-                        2.006ms
+                        87.632us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        11k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        200.644ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -912,21 +931,21 @@
             <td>
                 <div>
                     <p>
-                        384.545ms
+                        80.395ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        3
+                        13
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.154s
+                        1.045s
                     </p>
                 </div>
             </td>
@@ -949,21 +968,21 @@
             <td>
                 <div>
                     <p>
-                        3.809ms
+                        139.133us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        7k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        380.890ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -986,21 +1005,21 @@
             <td>
                 <div>
                     <p>
-                        5.308us
+                        515.143ns
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        100k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        530.764us
+                        51.514ms
                     </p>
                 </div>
             </td>
@@ -1023,21 +1042,21 @@
             <td>
                 <div>
                     <p>
-                        44.237ms
+                        2.058ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        23
+                        486
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.017s
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1060,21 +1079,21 @@
             <td>
                 <div>
                     <p>
-                        56.391ms
+                        3.529ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        18
+                        284
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.015s
+                        1.002s
                     </p>
                 </div>
             </td>
@@ -1097,21 +1116,21 @@
             <td>
                 <div>
                     <p>
-                        10.954ms
+                        33.766us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        92
+                        29k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.008s
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1134,21 +1153,21 @@
             <td>
                 <div>
                     <p>
-                        522.574us
+                        22.686us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        44k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        52.257ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1171,21 +1190,21 @@
             <td>
                 <div>
                     <p>
-                        6.607us
+                        190.329ns
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        100k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        660.663us
+                        19.033ms
                     </p>
                 </div>
             </td>
@@ -1208,21 +1227,21 @@
             <td>
                 <div>
                     <p>
-                        7.644ms
+                        56.875us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        17k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        764.400ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1245,21 +1264,21 @@
             <td>
                 <div>
                     <p>
-                        2.418ms
+                        95.909us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        10k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        241.822ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1282,21 +1301,21 @@
             <td>
                 <div>
                     <p>
-                        746.372us
+                        20.821us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        48k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        74.637ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1319,21 +1338,21 @@
             <td>
                 <div>
                     <p>
-                        964.215us
+                        122.262us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        8k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        96.421ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1356,21 +1375,21 @@
             <td>
                 <div>
                     <p>
-                        9.986ms
+                        290.406us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        3k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        998.599ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1393,21 +1412,21 @@
             <td>
                 <div>
                     <p>
-                        3.436ms
+                        128.823us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        7k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        343.631ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1430,21 +1449,21 @@
             <td>
                 <div>
                     <p>
-                        3.315ms
+                        221.357us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        4k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        331.467ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1467,21 +1486,21 @@
             <td>
                 <div>
                     <p>
-                        57.007ms
+                        3.133ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        18
+                        320
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.026s
+                        1.002s
                     </p>
                 </div>
             </td>
@@ -1504,21 +1523,21 @@
             <td>
                 <div>
                     <p>
-                        2.872ms
+                        36.924us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        27k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        287.230ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1541,21 +1560,21 @@
             <td>
                 <div>
                     <p>
-                        3.365ms
+                        44.249us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        22k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        336.526ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1578,21 +1597,21 @@
             <td>
                 <div>
                     <p>
-                        14.081ms
+                        506.284us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        72
+                        1k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.014s
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1615,21 +1634,21 @@
             <td>
                 <div>
                     <p>
-                        1.153ms
+                        111.949us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        8k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        115.256ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1652,21 +1671,21 @@
             <td>
                 <div>
                     <p>
-                        118.615us
+                        32.500us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        30k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        11.861ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1689,21 +1708,21 @@
             <td>
                 <div>
                     <p>
-                        1.669ms
+                        192.544us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        5k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        166.933ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1726,21 +1745,21 @@
             <td>
                 <div>
                     <p>
-                        3.490s
+                        134.925ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1
+                        8
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        3.490s
+                        1.079s
                     </p>
                 </div>
             </td>
@@ -1763,21 +1782,21 @@
             <td>
                 <div>
                     <p>
-                        649.438us
+                        53.195us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        18k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        64.944ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1800,21 +1819,21 @@
             <td>
                 <div>
                     <p>
-                        27.747ms
+                        1.855ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        37
+                        539
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        1.027s
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1837,21 +1856,21 @@
             <td>
                 <div>
                     <p>
-                        507.642us
+                        29.181us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        34k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        50.764ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1874,21 +1893,21 @@
             <td>
                 <div>
                     <p>
-                        1.435ms
+                        146.201us
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        100
+                        6k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        143.455ms
+                        1.000s
                     </p>
                 </div>
             </td>
@@ -1911,27 +1930,28 @@
             <td>
                 <div>
                     <p>
-                        7.108s
+                        424.396ms
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        3k
+                        934k
                     </p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>
-                        27.806s
+                        47.310s
                     </p>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
+              </div>
             </div>
         </foreignObject>
         </svg>

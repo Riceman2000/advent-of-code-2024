@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+        <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+        
+</head>
+
+<body>
+    <div>
+        <div id="plotly-html-element" class="plotly-graph-div" style="height:100%; width:100%;"></div>
+
+        <script type="module">
+            const graph_div = document.getElementById("plotly-html-element");
+            await Plotly.newPlot(graph_div, {"data":[{"type":"bar","x":["aoc2025::day01_0","aoc2024::day01_0","aoc2024::day13_1","aoc2024::day23_0","aoc2024::day19_1","aoc2024::day12_0","aoc2024::day16_1","aoc2024::day08_1","aoc2024::day11_0","aoc2024::day06_1","aoc2024::day14_0","aoc2024::day18_0","aoc2024::day21_0","aoc2024::day24_0","aoc2024::day07_0","aoc2024::day09_1","aoc2024::day15_1","aoc2024::day23_1","aoc2024::day05_1","aoc2024::day12_1","aoc2024::day08_0","aoc2024::day22_0","aoc2024::day06_0","aoc2024::day07_1","aoc2024::day03_1","aoc2024::day17_0","aoc2024::day16_0","aoc2024::day21_1","aoc2024::day01_1","aoc2024::day04_1","aoc2024::day11_1","aoc2024::day14_1","aoc2024::day03_0","aoc2024::day10_1","aoc2024::day02_0","aoc2024::day04_0","aoc2024::day25_0","aoc2024::day09_0","aoc2024::day20_1","aoc2024::day13_0","aoc2024::day05_0","aoc2024::day20_0","aoc2024::day10_0","aoc2024::day17_1","aoc2024::day15_0","aoc2024::day22_1","aoc2024::day19_0","aoc2024::day18_1","aoc2024::day24_1","aoc2024::day02_1"],"y":[4.385735,4.4090405,4.5597034,5.675256,6.5839043,5.4868445,7.29214,4.6082478,2.2572188,6.7504253,4.1931934,5.664588,5.615493,5.073683,5.6671815,7.7759166,5.6084094,7.978603,5.064115,5.6497808,4.2749224,6.9452853,4.9426637,7.9052267,5.14343,2.7119274,6.313381,6.5476317,4.528481,4.3557496,2.279506,4.754923,4.98186,4.3185067,5.0872912,5.4630055,5.1099925,5.3450937,6.4959064,4.56731,4.645908,5.704394,5.0490184,4.5118895,5.2845297,8.130093,4.7258687,6.2684193,4.465107,5.1649504]}],"layout":{"title":{"text":"Benchmark results logscale"},"xaxis":{"title":{"text":"Day"}},"yaxis":{"title":{"text":"Runtime in log10 nanoseconds"}}},"config":{},"frames":null});
+        </script>
+    </div>
+</body>
+
+</html>
