@@ -12,11 +12,7 @@ These benchmarks were done without any true care for accuracy or attempting to c
 
 Log scale benchmark results:
 
-![](./media/benchmark-graph.png)
-
-Test svg graphivs:
-
-![](./media/test.svg)
+![](./media/benchmark-graph.svg)
 
 ## Usage
 ### Run benchmarks with graphics and stats
