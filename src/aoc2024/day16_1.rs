@@ -58,7 +58,6 @@ pub fn day() -> usize {
 }
 
 #[allow(dead_code)]
-#[allow(clippy::match_on_vec_items)]
 fn pretty_print(grid: &[Vec<Tile>], paths: &AstarSolution<(usize, usize, Direction)>) {
     let mut grid = grid.to_vec();
     for path in paths.clone() {

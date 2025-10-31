@@ -98,7 +98,6 @@ pub fn day() -> usize {
 }
 
 #[allow(dead_code)]
-#[allow(clippy::match_on_vec_items)]
 fn pretty_print(grid: &[Vec<Tile>]) {
     for line in grid {
         for c in line {

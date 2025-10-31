@@ -75,8 +75,7 @@ pub fn day() -> usize {
     let mut pos = 0;
     let mut sum = 0;
     for block in disk {
-        sum += std::iter::repeat(block.id)
-            .take(block.used)
+        sum += std::iter::repeat_n(block.id, block.used)
             .zip(pos..)
             .fold(0, |acc, (id, pos)| acc + id * pos);
         pos += block.used + block.free;

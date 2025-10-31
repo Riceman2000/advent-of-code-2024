@@ -1,58 +1,57 @@
-use std::collections::{BinaryHeap, HashMap};
+use std::{
+    collections::{BinaryHeap, HashMap},
+    sync::LazyLock,
+};
 
 use atoi::atoi;
-use lazy_static::lazy_static;
 
 const INPUT: &[u8] = include_bytes!("../../input/2024/day21.txt");
 aoc_macros::aoc_assert!(229_403_562_787_554);
 
 const ROBOT_DEPTH: u64 = 25;
 
-lazy_static! {
-    static ref NUMPAD: HashMap<Point, u8> = {
-        // +---+---+---+
-        // | 7 | 8 | 9 |
-        // +---+---+---+
-        // | 4 | 5 | 6 |
-        // +---+---+---+
-        // | 1 | 2 | 3 |
-        // +---+---+---+
-        //     | 0 | A |
-        //     +---+---+
-        HashMap::from([
-            (Point::new(0, 0), b'7'),
-            (Point::new(0, 1), b'8'),
-            (Point::new(0, 2), b'9'),
-            (Point::new(1, 0), b'4'),
-            (Point::new(1, 1), b'5'),
-            (Point::new(1, 2), b'6'),
-            (Point::new(2, 0), b'1'),
-            (Point::new(2, 1), b'2'),
-            (Point::new(2, 2), b'3'),
-            (Point::new(3, 1), b'0'),
-            (Point::new(3, 2), b'A'),
-        ])
-    };
+static NUMPAD: LazyLock<HashMap<Point, u8>> = LazyLock::new(|| {
+    // +---+---+---+
+    // | 7 | 8 | 9 |
+    // +---+---+---+
+    // | 4 | 5 | 6 |
+    // +---+---+---+
+    // | 1 | 2 | 3 |
+    // +---+---+---+
+    //     | 0 | A |
+    //     +---+---+
+    HashMap::from([
+        (Point::new(0, 0), b'7'),
+        (Point::new(0, 1), b'8'),
+        (Point::new(0, 2), b'9'),
+        (Point::new(1, 0), b'4'),
+        (Point::new(1, 1), b'5'),
+        (Point::new(1, 2), b'6'),
+        (Point::new(2, 0), b'1'),
+        (Point::new(2, 1), b'2'),
+        (Point::new(2, 2), b'3'),
+        (Point::new(3, 1), b'0'),
+        (Point::new(3, 2), b'A'),
+    ])
+});
 
-    static ref DIRPAD: HashMap<Point, u8> = {
-        //     +---+---+
-        //     | ^ | A |
-        // +---+---+---+
-        // | < | v | > |
-        // +---+---+---+
-        HashMap::from([
-            (Point::new(0, 1), b'^'),
-            (Point::new(0, 2), b'A'),
-            (Point::new(1, 0), b'<'),
-            (Point::new(1, 1), b'v'),
-            (Point::new(1, 2), b'>'),
-        ])
-    };
+static DIRPAD: LazyLock<HashMap<Point, u8>> = LazyLock::new(|| {
+    //     +---+---+
+    //     | ^ | A |
+    // +---+---+---+
+    // | < | v | > |
+    // +---+---+---+
+    HashMap::from([
+        (Point::new(0, 1), b'^'),
+        (Point::new(0, 2), b'A'),
+        (Point::new(1, 0), b'<'),
+        (Point::new(1, 1), b'v'),
+        (Point::new(1, 2), b'>'),
+    ])
+});
 
-    static ref DIRPAD_INV: HashMap<u8, Point> = {
-        DIRPAD.iter().map(|(pos, c)| (*c, *pos)).collect()
-    };
-}
+static DIRPAD_INV: LazyLock<HashMap<u8, Point>> =
+    LazyLock::new(|| DIRPAD.iter().map(|(pos, c)| (*c, *pos)).collect());
 
 #[must_use]
 #[allow(clippy::cast_sign_loss)]

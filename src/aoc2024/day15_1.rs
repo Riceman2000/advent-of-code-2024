@@ -125,7 +125,7 @@ fn flood_shift(pos: (usize, usize), dir: Direction, grid: &mut Vec<Vec<Tile>>) {
             Tile::Empty => (),
             Tile::Wall => unreachable!("new_pos is a wall"),
         },
-    };
+    }
     grid[new_pos.1][new_pos.0] = pos_tile;
     grid[pos.1][pos.0] = Tile::Empty;
 }

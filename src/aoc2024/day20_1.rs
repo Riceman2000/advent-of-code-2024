@@ -13,8 +13,7 @@ const CHEAT_RADIUS_BUFFER_SIZE: usize =
     (2 * CHEAT_RADIUS.pow(2) + 2 * CHEAT_RADIUS + 1) as usize - 9;
 
 #[allow(clippy::cast_sign_loss)]
-#[allow(long_running_const_eval)]
-const RADIUS_OFFSETS: [((isize, isize), usize); CHEAT_RADIUS_BUFFER_SIZE] = {
+static RADIUS_OFFSETS: [((isize, isize), usize); CHEAT_RADIUS_BUFFER_SIZE] = {
     let mut radius_offsets = [((0, 0), 0); CHEAT_RADIUS_BUFFER_SIZE];
     let mut index = 0;
 
@@ -121,7 +120,6 @@ pub fn day() -> usize {
 }
 
 #[allow(dead_code)]
-#[allow(clippy::match_on_vec_items)]
 fn pretty_print(grid: &[Vec<Tile>]) {
     for line in grid {
         for c in line {

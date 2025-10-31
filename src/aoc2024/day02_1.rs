@@ -27,7 +27,6 @@ pub fn day() -> u32 {
             }
         } else {
             safe_count += 1;
-            continue;
         }
     }
 

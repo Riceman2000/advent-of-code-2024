@@ -22,7 +22,6 @@ pub fn day() -> usize {
             && diffs.map(i32::abs).all(|n| (1..=3).contains(&n))
         {
             safe_count += 1;
-            continue;
         }
     }
 

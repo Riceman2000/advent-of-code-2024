@@ -1,12 +1,12 @@
-use lazy_static::lazy_static;
+use std::sync::LazyLock;
+
 use regex::Regex;
 
 const INPUT: &str = include_str!("../../input/2024/day03.txt");
 aoc_macros::aoc_assert!(78_683_433);
 
-lazy_static! {
-    static ref RE: Regex = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|don't\(\)|do\(\)").unwrap();
-}
+static RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|don't\(\)|do\(\)").unwrap());
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]

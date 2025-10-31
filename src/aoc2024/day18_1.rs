@@ -26,7 +26,7 @@ pub fn day() -> String {
 
     let mut r_bound = points.len() - 1;
     let mut l_bound = SCAN_START;
-    let mut pivot = (r_bound + l_bound) / 2;
+    let mut pivot = usize::midpoint(l_bound, r_bound);
     while l_bound <= r_bound {
         let l_result = path_exists(&points[..pivot]);
         let r_result = path_exists(&points[..=pivot]);
@@ -39,7 +39,7 @@ pub fn day() -> String {
             r_bound = pivot - 1;
         }
 
-        pivot = (l_bound + r_bound) / 2;
+        pivot = usize::midpoint(l_bound, r_bound);
     }
     format!("{:?}", points[pivot])
 }

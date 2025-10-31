@@ -111,7 +111,6 @@ pub fn day() -> String {
             })
         {
             must_swap.push(c.output);
-            continue;
         }
     }
 

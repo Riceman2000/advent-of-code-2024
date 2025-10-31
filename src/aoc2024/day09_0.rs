@@ -5,7 +5,7 @@ aoc_macros::aoc_assert!(6_430_446_922_192);
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_lossless)]
 pub fn day() -> u64 {
-    let mut disk = [None; 100_000];
+    let mut disk = vec![None; 100_000];
     let mut cursor = 0;
     for (id, entry) in INPUT.trim_ascii().chunks(2).enumerate() {
         let used = entry[0] as usize - 48;

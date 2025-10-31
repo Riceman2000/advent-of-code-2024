@@ -63,9 +63,7 @@ pub fn day() -> usize {
                         Tile::Wall => {
                             break player_location;
                         }
-                        Tile::Box => {
-                            continue;
-                        }
+                        Tile::Box => (),
                     }
                 }
             }
