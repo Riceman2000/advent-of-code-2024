@@ -9,11 +9,13 @@ default_job = "clippy"
 
 [jobs.check]
 command = ["cargo", "check", "--color", "always"]
-need_stdout = false
+need_stdout = true
+allow_warnings = true
 
 [jobs.check-all]
 command = ["cargo", "check", "--all-targets", "--color", "always"]
-need_stdout = false
+need_stdout = true
+allow_warnings = true
 
 [jobs.clippy]
 watch = ["build.rs", "Cargo.toml"]
@@ -27,7 +29,8 @@ command = [
 	"-W",
 	"clippy::pedantic",
 ]
-need_stdout = false
+need_stdout = true
+allow_warnings = true
 
 [jobs.test]
 watch = ["build.rs", "Cargo.toml"]
@@ -44,13 +47,15 @@ need_stdout = true
 
 [jobs.doc]
 command = ["cargo", "doc", "--color", "always", "--no-deps"]
-need_stdout = false
+need_stdout = true
+allow_warnings = true
 
 # If the doc compiles, then it opens in your browser and bacon switches
 # to the previous job
 [jobs.doc-open]
 command = ["cargo", "doc", "--color", "always", "--no-deps", "--open"]
-need_stdout = false
+need_stdout = true
+allow_warnings = true
 on_success = "back"                                                    # so that we don't open the browser at each change
 
 # You can run your application and have the result displayed in bacon,
