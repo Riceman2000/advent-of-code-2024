@@ -49,23 +49,24 @@ harness = false
 aoc_macros = { path = "./aoc_macros" }
 
 # Used in the main file to give users a way to interact with the application via the CLI
-plotly = { version = "0.11.0", features = ["kaleido"] }
-clap = { version = "4.5.23", features = ["derive"] }
+plotly = "0.13.5"
+plotters = { version = "0.3.7", default-features = false, features = ["svg_backend", "all_series", "all_elements"]}
+clap = { version = "4.5.51", features = ["derive"] }
 glob-match = "0.2.1"
 automod = "1.0.15"
 
 # Helpful utilities for solving problems
 itertools = "0.14.0"
-lazy_static = "1.5.0"
-rayon = "1.10.0"
-regex = "1.11.1"
+rayon = "1.11.0"
+regex = "1.12.2"
 atoi = "2.0.0"
-nalgebra = "0.33.2"
-pathfinding = "4.12.0"
+nalgebra = "0.34.1"
+pathfinding = "4.14.0"
+table_to_html = "0.9.0"
 
 [build-dependencies]
-regex = "1.11.1"
+regex = "1.12.2"
 
 [dev-dependencies]
-divan = "0.1.17"
-criterion = { version = "0.5", features = ["html_reports"] }
+divan = "0.1.21"
+criterion = { version = "0.7", features = ["html_reports"] }

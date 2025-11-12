@@ -74,6 +74,7 @@ fn get_years() -> Vec<PathBuf> {
             out.push(entry.path());
         }
     }
+    out.sort();
     out
 }
 
@@ -105,6 +106,7 @@ fn get_days(year_path: &Path) -> Vec<PathBuf> {
             out.push(entry.path());
         }
     }
+    out.sort();
     out
 }
 
