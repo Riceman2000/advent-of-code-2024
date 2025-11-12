@@ -49,8 +49,6 @@ harness = false
 aoc_macros = { path = "./aoc_macros" }
 
 # Used in the main file to give users a way to interact with the application via the CLI
-plotly = "0.13.5"
-plotters = { version = "0.3.7", default-features = false, features = ["svg_backend", "all_series", "all_elements"]}
 clap = { version = "4.5.51", features = ["derive"] }
 glob-match = "0.2.1"
 automod = "1.0.15"
@@ -63,6 +61,7 @@ atoi = "2.0.0"
 nalgebra = "0.34.1"
 pathfinding = "4.14.0"
 table_to_html = "0.9.0"
+charming = { version = "0.6.0", features = ["ssr"] }
 
 [build-dependencies]
 regex = "1.12.2"

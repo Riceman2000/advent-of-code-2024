@@ -185,10 +185,8 @@ pub fn day_process_list(_input: TokenStream) -> TokenStream {
 
                     // It is best to avoid testing when it wont be reported because it will duplicate user
                     // debug statements
-                    let (benchmark, passed_test) = if args.bench_table || args.bench_graph {
-                        (Some(bench_day(day::day, &args)), day::verify_day(false))
-                    } else if args.bench_enable {
-                        println!("Benchmarking {}...", #day_str);
+                    let (benchmark, passed_test) = if args.bench_table || args.bench_graph || args.bench_enable {
+                        print!("Benchmarking {}.", #day_str);
                         (Some(bench_day(day::day, &args)), day::verify_day(false))
                     } else {
                         (None, false)
