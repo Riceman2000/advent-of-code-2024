@@ -6,7 +6,7 @@ edition = "2021"
 [features]
 # AOC years
 default = [
-  "aoc2024",
+  # "aoc2024",
   "aoc2025"
 ]
 aoc2024 = []

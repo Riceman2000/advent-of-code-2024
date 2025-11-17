@@ -14,51 +14,6 @@ use aoc::*;
 const GRAPH_SAVE_LOCATION: &str = "./media/benchmark-graph.svg";
 const README_LOCATION: &str = "./README.md";
 
-
-struct DayResult {
-    day_name: &'static str,
-    day_ran: bool,
-    passed_test: bool,
-    benchmark: Option<BenchmarkResult>,
-}
-
-struct BenchmarkResult {
-    samples: usize,
-    average_ns: f32,
-    total_ns: f32,
-}
-
-impl BenchmarkResult {
-    // Metric prefixes
-    fn average_formatted(&self) -> String {
-        let average_ns = self.average_ns;
-        match average_ns {
-            ..1e3 => format!("{average_ns:0.3}ns"),
-            1e3..1e6 => format!("{:0.3}us", average_ns / 1e3),
-            1e6..1e9 => format!("{:0.3}ms", average_ns / 1e6),
-            _ => format!("{:0.3}s", average_ns / 1e9),
-        }
-    }
-    fn iterations_formatted(&self) -> String {
-        let samples = self.samples;
-        match samples {
-            ..1_000 => format!("{samples:0.1}"),
-            1_000..1_000_000 => format!("{:0.3}k", samples / 1_000),
-            1_000_000..1_000_000_000 => format!("{:0.3}M", samples / 1_000_000),
-            _ => format!("{:0.3}G", samples / 1_000_000_000),
-        }
-    }
-    fn total_formatted(&self) -> String {
-        let total_ns = self.total_ns;
-        match total_ns {
-            ..1e3 => format!("{total_ns:0.3}ns"),
-            1e3..1e6 => format!("{:0.3}us", total_ns / 1e3),
-            1e6..1e9 => format!("{:0.3}ms", total_ns / 1e6),
-            _ => format!("{:0.3}s", total_ns / 1e9),
-        }
-    }
-}
-
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::cast_precision_loss)]
 fn main() {
@@ -72,7 +27,44 @@ fn main() {
     let mut results = Vec::new();
 
     // Generates list of days based on file structure
-    aoc_macros::day_process_list!();
+    // aoc_macros::day_process_list!();
+
+    #[cfg(feature = "aoc2025")]
+    {
+        use aoc::aoc2025::day01_0::Day;
+        let day = Day();
+
+        let day_ran = args.target_day.is_empty() || glob_match(&args.target_day, Day::name());
+        if !day_ran {
+            results.push(aoc::DayResult {
+                day_name: Day::name(),
+                day_ran,
+                passed_test: false,
+                benchmark: None,
+            });
+        }
+
+        if !args.output_disable && !(args.bench_table || args.bench_graph) {
+            println!("{} -> {}", Day::name(), Day::day_long());
+        }
+
+        // It is best to avoid testing when it wont be reported because it will duplicate user
+        // debug statements
+        let (benchmark, passed_test) = if args.bench_table || args.bench_graph || args.bench_enable
+        {
+            print!("Benchmarking {}.", Day::name());
+            (Some(Day::bench_day()), Day::verify_long(false))
+        } else {
+            (None, false)
+        };
+
+        results.push(DayResult {
+            day_name: Day::name(),
+            day_ran,
+            passed_test,
+            benchmark,
+        });
+    }
 
     let processed: Vec<_> = results.iter().filter(|r| r.day_ran).collect();
     if processed.is_empty() {

@@ -8,6 +8,7 @@ use std::sync::LazyLock;
 use std::time::Instant;
 
 use clap::Parser;
+use glob_match::glob_match;
 
 automod::dir!(pub "src/");
 
@@ -50,42 +51,129 @@ pub struct Args {
     pub max_warmup_ms: u128,
 }
 
-struct DayResult {
-    day_name: &'static str,
-    day_ran: bool,
-    passed_test: bool,
-    benchmark: Option<BenchmarkResult>,
+pub struct DayResult {
+    pub day_name: &'static str,
+    pub day_ran: bool,
+    pub passed_test: bool,
+    pub benchmark: Option<BenchmarkResult>,
 }
 
-struct BenchmarkResult {
-    samples: usize,
-    average_ns: f32,
-    total_ns: f32,
+pub struct BenchmarkResult {
+    pub samples: usize,
+    pub average_ns: f32,
+    pub total_ns: f32,
 }
 
-struct ExpectedValues<T> {
-    short: T,
-    long: T,
+impl BenchmarkResult {
+    // Metric prefixes
+    pub fn average_formatted(&self) -> String {
+        let average_ns = self.average_ns;
+        match average_ns {
+            ..1e3 => format!("{average_ns:0.3}ns"),
+            1e3..1e6 => format!("{:0.3}us", average_ns / 1e3),
+            1e6..1e9 => format!("{:0.3}ms", average_ns / 1e6),
+            _ => format!("{:0.3}s", average_ns / 1e9),
+        }
+    }
+    pub fn iterations_formatted(&self) -> String {
+        let samples = self.samples;
+        match samples {
+            ..1_000 => format!("{samples:0.1}"),
+            1_000..1_000_000 => format!("{:0.3}k", samples / 1_000),
+            1_000_000..1_000_000_000 => format!("{:0.3}M", samples / 1_000_000),
+            _ => format!("{:0.3}G", samples / 1_000_000_000),
+        }
+    }
+    pub fn total_formatted(&self) -> String {
+        let total_ns = self.total_ns;
+        match total_ns {
+            ..1e3 => format!("{total_ns:0.3}ns"),
+            1e3..1e6 => format!("{:0.3}us", total_ns / 1e3),
+            1e6..1e9 => format!("{:0.3}ms", total_ns / 1e6),
+            _ => format!("{:0.3}s", total_ns / 1e9),
+        }
+    }
 }
 
-struct InputValues<T> {
-    short: T,
-    long: T,
+/// Implemented types for data input
+enum InputType {
+    Bytes,
+    Str,
 }
 
-trait AocDay {
+pub trait AocDay<'a> {
     type InputType;
     type OutputType: std::cmp::PartialEq + std::fmt::Display;
 
+    // Required methods
     fn day(input: Self::InputType) -> Self::OutputType;
-    fn expected_values() -> ExpectedValues<Self::OutputType>;
-    fn input_values() -> InputValues<Self::InputType>;
+    fn name() -> &'static str;
+    fn expected_short() -> Self::OutputType;
+    fn expected_long() -> Self::OutputType;
+    fn input_short() -> Self::InputType;
+    fn input_long() -> Self::InputType;
 
-    fn verify_short() -> bool {
-        Self::day(Self::input_values().short) == Self::expected_values().short
+    // Provided methods
+    fn day_short() -> Self::OutputType {
+        Self::day(Self::input_short())
     }
-    fn verify_long() -> bool {
-        Self::day(Self::input_values().long) == Self::expected_values().long
+    fn day_long() -> Self::OutputType {
+        Self::day(Self::input_long())
+    }
+    fn verify_short(print_status: bool) -> bool {
+        let actual = Self::day_short();
+        let expected = Self::expected_short();
+        if actual == expected {
+            return true;
+        }
+        if print_status {
+            eprintln!("{} short expected {expected} got {actual}", Self::name());
+        }
+        false
+    }
+    fn verify_long(print_status: bool) -> bool {
+        let actual = Self::day_long();
+        let expected = Self::expected_long();
+        if actual == expected {
+            return true;
+        }
+        if print_status {
+            eprintln!("{} long expected {expected} got {actual}", Self::name());
+        }
+        false
+    }
+
+    fn process_day() -> DayResult {
+        let day_ran = ARGS.target_day.is_empty() || glob_match(&ARGS.target_day, Self::name());
+        if !day_ran {
+            return DayResult {
+                day_name: Self::name(),
+                day_ran,
+                passed_test: false,
+                benchmark: None,
+            };
+        }
+
+        if !(ARGS.output_disable || ARGS.bench_table || ARGS.bench_graph) {
+            println!("{} -> {}", Self::name(), Self::day_long());
+        }
+
+        // It is best to avoid testing when it wont be reported because it will duplicate user
+        // debug statements
+        let (benchmark, passed_test) = if ARGS.bench_table || ARGS.bench_graph || ARGS.bench_enable
+        {
+            print!("Benchmarking {}.", Self::name());
+            (Some(Self::bench_day()), Self::verify_long(false))
+        } else {
+            (None, false)
+        };
+
+        DayResult {
+            day_name: Self::name(),
+            day_ran,
+            passed_test,
+            benchmark,
+        }
     }
 
     #[allow(clippy::cast_precision_loss)]
@@ -98,7 +186,7 @@ trait AocDay {
         loop {
             let start = Instant::now();
             // `black_box` -> Do not optimize out this function
-            let _ = std::hint::black_box(Self::day(Self::input_values().long));
+            let _ = std::hint::black_box(Self::day_long());
             warmup_ns += start.elapsed().as_nanos();
 
             // Limit total warmup time
@@ -114,7 +202,7 @@ trait AocDay {
         for i in 0..args.max_bench_iters {
             let start = Instant::now();
             // `black_box` -> Do not optimize out this function
-            let _ = std::hint::black_box(Self::day(Self::input_values().long));
+            let _ = std::hint::black_box(Self::day_long());
             total_ns += start.elapsed().as_nanos();
 
             // Limit total execution time
