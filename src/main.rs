@@ -80,20 +80,10 @@ fn generate_bench_graph(processed: &[&DayResult]) {
         .y_axis(Axis::new().type_(AxisType::Category).data(ids))
         .x_axis(Axis::new().type_(AxisType::Value))
         .series(Bar::new().data(times));
-    let mut renderer = ImageRenderer::new(600, 450).theme(Theme::Westeros);
+    let mut renderer = ImageRenderer::new(1920, 1080).theme(Theme::Westeros);
     renderer
         .save(&chart, GRAPH_SAVE_LOCATION)
         .expect("Failed to render graph");
-
-    // let mut plot = Plot::new();
-    // let trace = Bar::new(ids, times);
-    // let layout = Layout::new()
-    //     .x_axis(Axis::new().title(Title::from("Day")))
-    //     .y_axis(Axis::new().title(Title::from("Runtime in log10 nanoseconds")))
-    //     .title(Title::from("Benchmark results logscale"));
-    // plot.add_trace(trace);
-    // plot.set_layout(layout);
-    // plot.write_html(GRAPH_SAVE_LOCATION);
 }
 
 fn generate_bench_table(processed: &[&DayResult]) {
