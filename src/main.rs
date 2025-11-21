@@ -80,7 +80,7 @@ fn generate_bench_graph(processed: &[&DayResult]) {
         .y_axis(Axis::new().type_(AxisType::Category).data(ids))
         .x_axis(Axis::new().type_(AxisType::Value))
         .series(Bar::new().data(times));
-    let mut renderer = ImageRenderer::new(1920, 1080).theme(Theme::Westeros);
+    let mut renderer = ImageRenderer::new(1920, 1080).theme(Theme::Dark);
     renderer
         .save(&chart, GRAPH_SAVE_LOCATION)
         .expect("Failed to render graph");
