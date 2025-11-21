@@ -1,12 +1,15 @@
 use std::mem::transmute;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day17.txt");
-aoc_macros::aoc_assert!(267_265_166_222_235);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(267_265_166_222_235))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u64 {
-    let mut lines = INPUT.trim_ascii().split(|b| *b == b'\n');
+pub fn day(input: &[u8]) -> u64 {
+    let mut lines = input.trim_ascii().split(|b| *b == b'\n');
     let mut a = 1;
     let b = 0;
     let c = 0;

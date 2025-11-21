@@ -1,8 +1,11 @@
 use pathfinding::directed::bfs;
 use rayon::prelude::*;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day20.txt");
-aoc_macros::aoc_assert!(977_665);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(977_665))]
+pub struct Day;
 
 const CHEAT_RADIUS: isize = 20;
 const SHORTCUT_THRESHOLD: usize = 100;
@@ -42,10 +45,10 @@ static RADIUS_OFFSETS: [((isize, isize), usize); CHEAT_RADIUS_BUFFER_SIZE] = {
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
+pub fn day(input: &[u8]) -> usize {
     let mut start_pos = (0, 0);
     let mut exit_pos = (0, 0);
-    let mut grid: Vec<_> = INPUT
+    let mut grid: Vec<_> = input
         .trim_ascii()
         .split(|c| *c == b'\n')
         .enumerate()

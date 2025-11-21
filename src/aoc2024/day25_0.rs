@@ -1,7 +1,10 @@
 use itertools::Itertools;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day25.txt");
-aoc_macros::aoc_assert!(3_663);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(3_663))]
+pub struct Day;
 
 const KEY_LENGTH: usize = 5;
 const KEY_HEIGHT: u8 = 5;
@@ -9,8 +12,8 @@ type Identifier = [u8; KEY_LENGTH];
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let lines: Vec<_> = INPUT.trim_ascii().split(|b| *b == b'\n').collect();
+pub fn day(input: &[u8]) -> usize {
+    let lines: Vec<_> = input.trim_ascii().split(|b| *b == b'\n').collect();
     let grids = lines.split(|l| l.is_empty());
 
     // Super rough estimate for size

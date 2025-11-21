@@ -2,16 +2,19 @@ use std::collections::{HashMap, HashSet};
 
 use atoi::atoi;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day22.txt");
-aoc_macros::aoc_assert!(2_268);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(2_268))]
+pub struct Day;
 
 const ITERATIONS: usize = 2000;
 
 #[must_use]
 #[allow(clippy::cast_sign_loss)]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u64 {
-    let vendors: Vec<_> = INPUT
+pub fn day(input: &[u8]) -> u64 {
+    let vendors: Vec<_> = input
         .trim_ascii()
         .split(|b| *b == b'\n')
         .map(|n| atoi::<u64>(n).unwrap())

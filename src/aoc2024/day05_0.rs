@@ -1,12 +1,15 @@
 use atoi::atoi;
 
-// Pull this file's contents into the binary as a string literal
-const INPUT: &[u8] = include_bytes!("../../input/2024/day05.txt");
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(5_268))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u32 {
-    let lines: Vec<_> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
+pub fn day(input: &[u8]) -> u32 {
+    let lines: Vec<_> = input.trim_ascii_end().split(|c| *c == b'\n').collect();
     let section_split = lines.iter().position(|l| l.is_empty()).unwrap();
     let mut orders = [const { Vec::new() }; 100]; // Indexes 0-99
     for order_line in &lines[0..section_split] {
@@ -35,37 +38,4 @@ pub fn day() -> u32 {
     }
 
     sum
-}
-
-/// Used to allow for the verfication of results at runtime without a panic
-#[must_use]
-pub fn verify_day(print_output: bool) -> bool {
-    // Correct value can be put here once it is known
-    let expected = 5_268;
-
-    let actual = day();
-    if actual == expected {
-        return true;
-    }
-
-    if print_output {
-        // To help handle unsigned subtraction
-        let sign = if actual > expected { '+' } else { '-' };
-        eprintln!(
-            "Got {actual} expected {expected}, diff {sign}{}",
-            expected.abs_diff(actual)
-        );
-    }
-    false
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Test that is automatically run by `cargo test`
-    #[test]
-    fn test_day() {
-        assert!(verify_day(true));
-    }
 }

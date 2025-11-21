@@ -2,16 +2,19 @@ use std::collections::{HashMap, VecDeque};
 
 use itertools::Itertools;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day24.txt");
-aoc_macros::aoc_assert!("gwh,jct,rcb,wbw,wgb,z09,z21,z39");
+#[derive(aoc_macros::AocDay)]
+#[output_type("String")]
+#[expected_short(None)]
+#[expected_long(Some("gwh,jct,rcb,wbw,wgb,z09,z21,z39".to_string()))]
+pub struct Day;
 
 type Identifier = [u8; 3];
 type Nodes = HashMap<Identifier, Option<bool>>;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> String {
-    let lines: Vec<_> = INPUT.trim_ascii().split(|b| *b == b'\n').collect();
+pub fn day(input: &[u8]) -> String {
+    let lines: Vec<_> = input.trim_ascii().split(|b| *b == b'\n').collect();
     let (initial_conditions, connections_raw) = lines.split_once(|l| l.is_empty()).unwrap();
 
     let mut nodes = Nodes::new();

@@ -5,8 +5,11 @@ use std::{
 
 use atoi::atoi;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day21.txt");
-aoc_macros::aoc_assert!(229_403_562_787_554);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(229_403_562_787_554))]
+pub struct Day;
 
 const ROBOT_DEPTH: u64 = 25;
 
@@ -56,8 +59,8 @@ static DIRPAD_INV: LazyLock<HashMap<u8, Point>> =
 #[must_use]
 #[allow(clippy::cast_sign_loss)]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u64 {
-    let codes: Vec<_> = INPUT.trim_ascii().split(|b| *b == b'\n').collect();
+pub fn day(input: &[u8]) -> u64 {
+    let codes: Vec<_> = input.trim_ascii().split(|b| *b == b'\n').collect();
 
     let mut sum = 0;
     for code in codes {

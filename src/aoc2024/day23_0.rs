@@ -2,8 +2,11 @@ use std::collections::{BTreeSet, HashMap, HashSet};
 
 use itertools::Itertools;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day23.txt");
-aoc_macros::aoc_assert!(1_151);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(1_151))]
+pub struct Day;
 
 type Identifier = [u8; 2];
 type Nodes = BTreeSet<Identifier>;
@@ -11,8 +14,8 @@ type Graph = HashMap<Identifier, Nodes>;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let pairs = INPUT
+pub fn day(input: &[u8]) -> usize {
+    let pairs = input
         .trim_ascii()
         .split(|b| *b == b'\n')
         .map(|l| ([l[0], l[1]], [l[3], l[4]]));

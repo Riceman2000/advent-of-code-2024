@@ -2,15 +2,19 @@ use std::collections::HashMap;
 
 use rayon::prelude::*;
 
-const INPUT: &str = include_str!("../../input/2024/day19.txt");
-aoc_macros::aoc_assert!(601_201_576_113_503);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(601_201_576_113_503))]
+pub struct Day;
 
 type Cache = HashMap<&'static str, usize>;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let mut lines = INPUT.trim().lines();
+pub fn day(input: &'static [u8]) -> usize {
+    let input = unsafe { str::from_utf8_unchecked(input) };
+    let mut lines = input.trim().lines();
     let substrings: Vec<_> = lines.next().unwrap().split(", ").collect();
     let patterns: Vec<_> = lines.skip(1).collect();
 

@@ -1,9 +1,7 @@
-use std::io::Write;
-use std::{fs, path::PathBuf, time::Instant};
+use std::{fs, path::PathBuf};
 
 use charming::{component::Axis, element::AxisType, series::Bar, Chart};
 use charming::{theme::Theme, ImageRenderer};
-use glob_match::glob_match;
 use regex::Regex;
 use table_to_html::HtmlTable;
 
@@ -27,44 +25,7 @@ fn main() {
     let mut results = Vec::new();
 
     // Generates list of days based on file structure
-    // aoc_macros::day_process_list!();
-
-    #[cfg(feature = "aoc2025")]
-    {
-        use aoc::aoc2025::day01_0::Day;
-        let day = Day();
-
-        let day_ran = args.target_day.is_empty() || glob_match(&args.target_day, Day::name());
-        if !day_ran {
-            results.push(aoc::DayResult {
-                day_name: Day::name(),
-                day_ran,
-                passed_test: false,
-                benchmark: None,
-            });
-        }
-
-        if !args.output_disable && !(args.bench_table || args.bench_graph) {
-            println!("{} -> {}", Day::name(), Day::day_long());
-        }
-
-        // It is best to avoid testing when it wont be reported because it will duplicate user
-        // debug statements
-        let (benchmark, passed_test) = if args.bench_table || args.bench_graph || args.bench_enable
-        {
-            print!("Benchmarking {}.", Day::name());
-            (Some(Day::bench_day()), Day::verify_long(false))
-        } else {
-            (None, false)
-        };
-
-        results.push(DayResult {
-            day_name: Day::name(),
-            day_ran,
-            passed_test,
-            benchmark,
-        });
-    }
+    aoc_macros::day_process_list!();
 
     let processed: Vec<_> = results.iter().filter(|r| r.day_ran).collect();
     if processed.is_empty() {
@@ -201,58 +162,4 @@ fn generate_bench_table(processed: &[&DayResult]) {
         .replace(&readme_content, format!("$1{table_str}$2"))
         .to_string();
     fs::write(&readme, readme_content).expect("Failed to write README");
-}
-
-/// Benchmark a given day function
-/// The signature of this function reads as follows:
-/// `process_day` accepts a string literal, a type `F`, and the program arguments.
-/// The type generic type `F` allows anything that is a function which
-/// returns a generic type `R`.
-/// The generic type `R` must be able to be printed to stdout using the `Display` trait.
-#[allow(clippy::cast_precision_loss)]
-#[allow(clippy::cast_possible_truncation)]
-fn bench_day<F: Fn() -> R, R: std::fmt::Display>(function: F, args: &Args) -> BenchmarkResult {
-    // Warm up for a few samples to prep caches
-    let mut warmup_ns = 0;
-    loop {
-        let start = Instant::now();
-        // `black_box` -> Do not optimize out this function
-        let _ = std::hint::black_box(function());
-        warmup_ns += start.elapsed().as_nanos();
-
-        // Limit total warmup time
-        if warmup_ns > args.max_warmup_ms * 10u128.pow(6) {
-            break;
-        }
-    }
-    print!(".");
-    std::io::stdout().flush().unwrap();
-
-    let mut total_ns = 0;
-    let mut samples = 0;
-    for i in 0..args.max_bench_iters {
-        let start = Instant::now();
-        // `black_box` -> Do not optimize out this function
-        let _ = std::hint::black_box(function());
-        total_ns += start.elapsed().as_nanos();
-
-        // Limit total execution time
-        samples = i + 1;
-        if total_ns > args.max_bench_ms * 10u128.pow(6) {
-            break;
-        }
-    }
-    print!(".");
-    std::io::stdout().flush().unwrap();
-
-    // We shouldn't overflow these unless one of the days is very very slow
-    let average_ns = total_ns as f32 / samples as f32;
-    let total_ns = total_ns as f32;
-    println!(" Done.");
-
-    BenchmarkResult {
-        samples,
-        average_ns,
-        total_ns,
-    }
 }

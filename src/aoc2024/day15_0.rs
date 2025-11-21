@@ -1,10 +1,13 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day15.txt");
-aoc_macros::aoc_assert!(1_479_679);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(1_479_679))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let lines: Vec<_> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
+pub fn day(input: &[u8]) -> usize {
+    let lines: Vec<_> = input.trim_ascii_end().split(|c| *c == b'\n').collect();
     let section_split = lines.iter().position(|l| l.is_empty()).unwrap();
 
     let mut player_location = (0, 0);

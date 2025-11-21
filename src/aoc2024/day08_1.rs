@@ -1,14 +1,17 @@
 use itertools::Itertools;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day08.txt");
-aoc_macros::aoc_assert!(1235);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(1235))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_possible_wrap)]
-pub fn day() -> usize {
-    let lines: Vec<&[u8]> = INPUT.trim_ascii().split(|c| *c == b'\n').collect();
+pub fn day(input: &[u8]) -> usize {
+    let lines: Vec<&[u8]> = input.trim_ascii().split(|c| *c == b'\n').collect();
 
     let height = lines.len() as i32;
     let width = lines[0].len() as i32;

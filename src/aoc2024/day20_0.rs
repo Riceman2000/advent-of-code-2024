@@ -1,16 +1,19 @@
 use pathfinding::directed::bfs;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day20.txt");
-aoc_macros::aoc_assert!(1_296);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(1_296))]
+pub struct Day;
 
 const SHORTCUT_THRESHOLD: usize = 100;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
+pub fn day(input: &[u8]) -> usize {
     let mut start_pos = (0, 0);
     let mut exit_pos = (0, 0);
-    let mut grid: Vec<_> = INPUT
+    let mut grid: Vec<_> = input
         .trim_ascii()
         .split(|c| *c == b'\n')
         .enumerate()

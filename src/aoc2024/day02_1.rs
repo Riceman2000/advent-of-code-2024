@@ -1,12 +1,16 @@
 use itertools::Itertools;
 
-const INPUT: &str = include_str!("../../input/2024/day02.txt");
-aoc_macros::aoc_assert!(354);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(354))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u32 {
-    let reports: Vec<Vec<i32>> = INPUT
+pub fn day(input: &[u8]) -> u32 {
+    let input = unsafe { str::from_utf8_unchecked(input) };
+    let reports: Vec<Vec<i32>> = input
         .lines()
         .map(|l| {
             l.split(' ')

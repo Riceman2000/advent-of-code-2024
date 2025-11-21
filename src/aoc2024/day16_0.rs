@@ -1,14 +1,17 @@
 use pathfinding::directed::dijkstra;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day16.txt");
-aoc_macros::aoc_assert!(82_460);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(82_460))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
+pub fn day(input: &[u8]) -> usize {
     let mut start_pos = (0, 0);
     let mut exit_pos = (0, 0);
-    let grid: Vec<_> = INPUT
+    let grid: Vec<_> = input
         .trim_ascii()
         .split(|c| *c == b'\n')
         .enumerate()

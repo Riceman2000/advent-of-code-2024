@@ -1,8 +1,11 @@
 use atoi::atoi;
 use pathfinding::directed::bfs;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day18.txt");
-aoc_macros::aoc_assert!(370);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(370))]
+pub struct Day;
 
 const START_POS: (usize, usize) = (0, 0);
 const MAP_MAX: usize = 70;
@@ -10,8 +13,8 @@ const EXIT_POS: (usize, usize) = (MAP_MAX, MAP_MAX);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let mut points: Vec<_> = INPUT
+pub fn day(input: &[u8]) -> usize {
+    let mut points: Vec<_> = input
         .trim_ascii()
         .split(|c| *c == b'\n')
         .take(1024)

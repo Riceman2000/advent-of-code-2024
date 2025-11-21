@@ -1,10 +1,13 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day06.txt");
-aoc_macros::aoc_assert!(5_239);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(5_239))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let lines: Vec<&[u8]> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
+pub fn day(input: &[u8]) -> usize {
+    let lines: Vec<&[u8]> = input.trim_ascii_end().split(|c| *c == b'\n').collect();
     let mut current_pos = (0, 0);
     for (y, line) in lines.iter().enumerate() {
         if let Some(x) = line.iter().position(|c| *c == b'^') {

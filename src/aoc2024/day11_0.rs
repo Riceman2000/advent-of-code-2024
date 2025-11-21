@@ -2,8 +2,11 @@ use std::sync::LazyLock;
 
 use atoi::atoi;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day11.txt");
-aoc_macros::aoc_assert!(185_205);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(185_205))]
+pub struct Day;
 
 const NUM_BLINKS: usize = 25;
 
@@ -17,8 +20,8 @@ static LUT: LazyLock<Vec<[u64; MAX_CACHE]>> = LazyLock::new(generate_lut);
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u64 {
-    let nums: Vec<_> = INPUT
+pub fn day(input: &[u8]) -> u64 {
+    let nums: Vec<_> = input
         .trim_ascii()
         .split(|b| *b == b' ')
         .map(|n| atoi::<usize>(n).unwrap())

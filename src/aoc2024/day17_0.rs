@@ -2,15 +2,18 @@ use std::mem::transmute;
 
 use atoi::atoi;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day17.txt");
-aoc_macros::aoc_assert!("2,1,0,1,7,2,5,0,3");
+#[derive(aoc_macros::AocDay)]
+#[output_type("String")]
+#[expected_short(None)]
+#[expected_long(Some("2,1,0,1,7,2,5,0,3".to_string()))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::cast_lossless)]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
-pub fn day() -> String {
-    let mut lines = INPUT.trim_ascii().split(|b| *b == b'\n');
+pub fn day(input: &[u8]) -> String {
+    let mut lines = input.trim_ascii().split(|b| *b == b'\n');
     let mut a = atoi::<u64>(&lines.next().unwrap()[12..]).unwrap();
     let mut b = atoi::<u64>(&lines.next().unwrap()[12..]).unwrap();
     let mut c = atoi::<u64>(&lines.next().unwrap()[12..]).unwrap();

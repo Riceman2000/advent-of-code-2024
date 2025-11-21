@@ -1,8 +1,11 @@
 use atoi::atoi;
 use nalgebra::Vector2;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day14.txt");
-aoc_macros::aoc_assert!(225_552_000);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(225_552_000))]
+pub struct Day;
 
 const WIDTH: i32 = 101;
 const HEIGHT: i32 = 103;
@@ -16,8 +19,8 @@ const HORIZONTAL: i32 = HEIGHT / 2;
 #[allow(clippy::cast_sign_loss)]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
-pub fn day() -> u64 {
-    let robots: Vec<_> = INPUT
+pub fn day(input: &[u8]) -> u64 {
+    let robots: Vec<_> = input
         .trim_ascii()
         .split(|b| *b == b'\n')
         .map(|line| {

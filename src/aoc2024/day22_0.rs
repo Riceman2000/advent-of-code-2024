@@ -1,12 +1,15 @@
 use atoi::atoi;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day22.txt");
-aoc_macros::aoc_assert!(20_441_185_092);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(20_441_185_092))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u64 {
-    let nums = INPUT
+pub fn day(input: &[u8]) -> u64 {
+    let nums = input
         .trim_ascii()
         .split(|b| *b == b'\n')
         .map(|n| atoi::<u64>(n).unwrap());

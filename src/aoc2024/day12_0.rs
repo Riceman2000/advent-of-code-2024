@@ -1,9 +1,12 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day12.txt");
-aoc_macros::aoc_assert!(1_473_276);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(1_473_276))]
+pub struct Day;
 
 #[must_use]
-pub fn day() -> u32 {
-    let mut lines: Vec<(u8, bool)> = INPUT.trim_ascii().iter().map(|c| (*c, false)).collect();
+pub fn day(input: &[u8]) -> u32 {
+    let mut lines: Vec<(u8, bool)> = input.trim_ascii().iter().map(|c| (*c, false)).collect();
     let mut lines: Vec<&mut [(u8, bool)]> = lines.split_mut(|b| b.0 == b'\n').collect();
 
     let mut sum = 0;

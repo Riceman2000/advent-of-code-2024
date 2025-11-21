@@ -1,9 +1,12 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day10.txt");
-aoc_macros::aoc_assert!(566);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(566))]
+pub struct Day;
 
 #[must_use]
-pub fn day() -> usize {
-    let lines: Vec<_> = INPUT.trim_ascii().split(|b| *b == b'\n').collect();
+pub fn day(input: &[u8]) -> usize {
+    let lines: Vec<_> = input.trim_ascii().split(|b| *b == b'\n').collect();
 
     let mut entry_points = Vec::new();
     for (y, line) in lines.iter().enumerate() {

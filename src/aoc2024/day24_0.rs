@@ -1,15 +1,18 @@
 use std::collections::{HashMap, VecDeque};
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day24.txt");
-aoc_macros::aoc_assert!(57_270_694_330_992);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(57_270_694_330_992))]
+pub struct Day;
 
 type Identifier = [u8; 3];
 type Nodes = HashMap<Identifier, Option<bool>>;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> usize {
-    let lines: Vec<_> = INPUT.trim_ascii().split(|b| *b == b'\n').collect();
+pub fn day(input: &[u8]) -> usize {
+    let lines: Vec<_> = input.trim_ascii().split(|b| *b == b'\n').collect();
     let (initial_conditions, connections) = lines.split_once(|l| l.is_empty()).unwrap();
 
     let mut nodes = Nodes::new();

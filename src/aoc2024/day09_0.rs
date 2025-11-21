@@ -1,13 +1,16 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day09.txt");
-aoc_macros::aoc_assert!(6_430_446_922_192);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(6_430_446_922_192))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_lossless)]
-pub fn day() -> u64 {
+pub fn day(input: &[u8]) -> u64 {
     let mut disk = vec![None; 100_000];
     let mut cursor = 0;
-    for (id, entry) in INPUT.trim_ascii().chunks(2).enumerate() {
+    for (id, entry) in input.trim_ascii().chunks(2).enumerate() {
         let used = entry[0] as usize - 48;
 
         // Last number is a file that has no free space

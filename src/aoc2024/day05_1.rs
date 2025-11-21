@@ -1,13 +1,16 @@
 use atoi::atoi;
 use std::cmp::Ordering;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day05.txt");
-aoc_macros::aoc_assert!(5_799);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(5_799))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u32 {
-    let lines: Vec<_> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
+pub fn day(input: &[u8]) -> u32 {
+    let lines: Vec<_> = input.trim_ascii_end().split(|c| *c == b'\n').collect();
     let section_split = lines.iter().position(|l| l.is_empty()).unwrap();
     let mut orders = [const { Vec::new() }; 100]; // Indexes 0-99
     for order_line in &lines[0..section_split] {

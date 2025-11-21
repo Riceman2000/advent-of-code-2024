@@ -66,6 +66,7 @@ pub struct BenchmarkResult {
 
 impl BenchmarkResult {
     // Metric prefixes
+    #[must_use]
     pub fn average_formatted(&self) -> String {
         let average_ns = self.average_ns;
         match average_ns {
@@ -75,6 +76,7 @@ impl BenchmarkResult {
             _ => format!("{:0.3}s", average_ns / 1e9),
         }
     }
+    #[must_use]
     pub fn iterations_formatted(&self) -> String {
         let samples = self.samples;
         match samples {
@@ -84,6 +86,7 @@ impl BenchmarkResult {
             _ => format!("{:0.3}G", samples / 1_000_000_000),
         }
     }
+    #[must_use]
     pub fn total_formatted(&self) -> String {
         let total_ns = self.total_ns;
         match total_ns {
@@ -95,34 +98,35 @@ impl BenchmarkResult {
     }
 }
 
-/// Implemented types for data input
-enum InputType {
-    Bytes,
-    Str,
-}
-
-pub trait AocDay<'a> {
-    type InputType;
+pub trait AocDay {
     type OutputType: std::cmp::PartialEq + std::fmt::Display;
 
     // Required methods
-    fn day(input: Self::InputType) -> Self::OutputType;
+    fn day(input: &'static [u8]) -> Self::OutputType;
     fn name() -> &'static str;
-    fn expected_short() -> Self::OutputType;
-    fn expected_long() -> Self::OutputType;
-    fn input_short() -> Self::InputType;
-    fn input_long() -> Self::InputType;
+    fn expected_short() -> Option<Self::OutputType>;
+    fn expected_long() -> Option<Self::OutputType>;
+    fn input_short() -> &'static [u8];
+    fn input_long() -> &'static [u8];
 
     // Provided methods
+    #[must_use]
     fn day_short() -> Self::OutputType {
         Self::day(Self::input_short())
     }
+    #[must_use]
     fn day_long() -> Self::OutputType {
         Self::day(Self::input_long())
     }
+    #[must_use]
     fn verify_short(print_status: bool) -> bool {
         let actual = Self::day_short();
-        let expected = Self::expected_short();
+        let Some(expected) = Self::expected_short() else {
+            if print_status {
+                println!("{} short skipped", Self::name());
+            }
+            return true;
+        };
         if actual == expected {
             return true;
         }
@@ -131,9 +135,15 @@ pub trait AocDay<'a> {
         }
         false
     }
+    #[must_use]
     fn verify_long(print_status: bool) -> bool {
         let actual = Self::day_long();
-        let expected = Self::expected_long();
+        let Some(expected) = Self::expected_long() else {
+            if print_status {
+                println!("{} long skipped", Self::name());
+            }
+            return true;
+        };
         if actual == expected {
             return true;
         }
@@ -143,6 +153,7 @@ pub trait AocDay<'a> {
         false
     }
 
+    #[must_use]
     fn process_day() -> DayResult {
         let day_ran = ARGS.target_day.is_empty() || glob_match(&ARGS.target_day, Self::name());
         if !day_ran {
@@ -178,6 +189,7 @@ pub trait AocDay<'a> {
 
     #[allow(clippy::cast_precision_loss)]
     #[allow(clippy::cast_possible_truncation)]
+    #[must_use]
     fn bench_day() -> BenchmarkResult {
         let args = &ARGS;
 

@@ -1,45 +1,15 @@
 use atoi::atoi;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day01.txt");
-pub struct Day();
-impl<'a> crate::AocDay<'a> for Day {
-    // Should be easy to generate
-    fn day(_input: Self::InputType) -> Self::OutputType {
-        day()
-    }
-
-    // Populated via file structure
-    fn name() -> &'static str {
-        "aoc2025::day01_0"
-    }
-
-    // INPUT stuff controlled by the input enum
-    type InputType = &'a [u8];
-    fn input_long() -> Self::InputType {
-        // maybe reference a file static for this via LazyLock
-        // Maybe check that files exist and grab them
-        include_bytes!("../../input/2024/day01.txt")
-    }
-    fn input_short() -> Self::InputType {
-        include_bytes!("../../input/2024/day01-short.txt")
-    }
-
-    // Directly controlled by user, all owned types
-    type OutputType = u32;
-    fn expected_short() -> Self::OutputType {
-        0
-    }
-    fn expected_long() -> Self::OutputType {
-        1_830_467
-    }
-}
-
-aoc_macros::aoc_assert!(1_830_467);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(1_830_467))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u32 {
-    let (mut col1, mut col2): (Vec<u32>, Vec<u32>) = INPUT
+pub fn day(input: &[u8]) -> u32 {
+    let (mut col1, mut col2): (Vec<u32>, Vec<u32>) = input
         .trim_ascii()
         .split(|c| *c == b'\n')
         .map(|l| unsafe {

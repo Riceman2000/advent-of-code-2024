@@ -1,12 +1,15 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day04.txt");
-aoc_macros::aoc_assert!(2_390);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(2_390))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::cast_possible_wrap)]
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_sign_loss)]
-pub fn day() -> u32 {
-    let lines: Vec<&[u8]> = INPUT.trim_ascii_end().split(|c| *c == b'\n').collect();
+pub fn day(input: &[u8]) -> u32 {
+    let lines: Vec<&[u8]> = input.trim_ascii_end().split(|c| *c == b'\n').collect();
     let mut seen = 0;
 
     let offset_vectors = [

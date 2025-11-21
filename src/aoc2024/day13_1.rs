@@ -2,8 +2,11 @@ use atoi::atoi;
 use itertools::Itertools;
 use nalgebra::{Matrix2, Vector2};
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day13.txt");
-aoc_macros::aoc_assert!(80_882_098_756_071);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(80_882_098_756_071))]
+pub struct Day;
 
 // Real epsilon is too small
 const BIG_EPSILON: f64 = 1e-3;
@@ -14,8 +17,8 @@ const BIG_EPSILON: f64 = 1e-3;
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_precision_loss)]
 #[allow(clippy::cast_possible_truncation)]
-pub fn day() -> u64 {
-    let games: Vec<_> = INPUT
+pub fn day(input: &[u8]) -> u64 {
+    let games: Vec<_> = input
         .trim_ascii()
         .split(|b| *b == b'\n')
         .chunks(4)

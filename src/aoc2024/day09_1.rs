@@ -1,12 +1,15 @@
-const INPUT: &[u8] = include_bytes!("../../input/2024/day09.txt");
-aoc_macros::aoc_assert!(6_460_170_593_016);
+#[derive(aoc_macros::AocDay)]
+#[output_type("usize")]
+#[expected_short(None)]
+#[expected_long(Some(6_460_170_593_016))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_possible_wrap)]
-pub fn day() -> usize {
-    let mut disk: Vec<_> = INPUT
+pub fn day(input: &[u8]) -> usize {
+    let mut disk: Vec<_> = input
         .trim_ascii()
         .chunks(2)
         .enumerate()

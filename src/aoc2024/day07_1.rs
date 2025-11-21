@@ -1,14 +1,17 @@
 use atoi::atoi;
 use rayon::prelude::*;
 
-const INPUT: &[u8] = include_bytes!("../../input/2024/day07.txt");
-aoc_macros::aoc_assert!(275_791_737_999_003);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u64")]
+#[expected_short(None)]
+#[expected_long(Some(275_791_737_999_003))]
+pub struct Day;
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
 #[allow(clippy::cast_possible_truncation)]
-pub fn day() -> u64 {
-    let lines: Vec<(u64, Vec<u64>)> = INPUT
+pub fn day(input: &[u8]) -> u64 {
+    let lines: Vec<(u64, Vec<u64>)> = input
         .trim_ascii()
         .split(|c| *c == b'\n')
         .map(|l| {

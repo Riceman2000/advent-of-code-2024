@@ -2,18 +2,22 @@ use std::sync::LazyLock;
 
 use regex::Regex;
 
-const INPUT: &str = include_str!("../../input/2024/day03.txt");
-aoc_macros::aoc_assert!(78_683_433);
+#[derive(aoc_macros::AocDay)]
+#[output_type("u32")]
+#[expected_short(None)]
+#[expected_long(Some(78_683_433))]
+pub struct Day;
 
 static RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|don't\(\)|do\(\)").unwrap());
 
 #[must_use]
 #[allow(clippy::missing_panics_doc)]
-pub fn day() -> u32 {
+pub fn day(input: &[u8]) -> u32 {
+    let input = unsafe { str::from_utf8_unchecked(input) };
     let mut sum = 0;
     let mut enabled = true;
-    for cap in RE.captures_iter(INPUT) {
+    for cap in RE.captures_iter(input) {
         match cap.get(0).unwrap().as_str() {
             "don't()" => enabled = false,
             "do()" => enabled = true,

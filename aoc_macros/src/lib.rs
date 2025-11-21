@@ -1,203 +1,179 @@
 extern crate proc_macro;
 
-use std::path::Path;
-use std::sync::LazyLock;
-use std::{fs, path::PathBuf};
+mod aoc_fs;
+
+use std::path::PathBuf;
 
 use proc_macro::TokenStream;
-use quote::{quote, ToTokens};
-use regex::Regex;
-use syn::{parse_macro_input, Expr, PathSegment};
+use quote::quote;
+use syn::{parse_macro_input, parse_quote, DeriveInput};
 
-static YEAR_MODULE_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(aoc\d{4})(\.rs)?$").unwrap());
-static DAY_MODULE_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(day\d\d_\d)(\.rs)?$").unwrap());
+use crate::aoc_fs::{DAY_MODULE_RE, DAY_NAME_RE, YEAR_MODULE_RE, YEAR_NAME_RE};
 
-#[proc_macro]
-pub fn aoc_assert(item: TokenStream) -> TokenStream {
-    // Parse the input tokens - expected value
-    let expected_value = parse_macro_input!(item as Expr);
+#[derive(Default)]
+struct AocDayArrts {
+    output_type: Option<syn::Type>,
 
-    let expanded = quote! {
-        #[must_use]
-        pub fn verify_day(print_output: bool) -> bool {
-            let expected = #expected_value;
-            let actual = day();
-
-            if actual == expected {
-                return true;
-            }
-
-            if print_output {
-                eprintln!("Got {actual} expected {expected}");
-            }
-            false
-        }
-
-        #[cfg(test)]
-        mod tests {
-            use super::*;
-
-            #[test]
-            fn test_day() {
-                assert!(verify_day(true));
-            }
-        }
-    };
-
-    TokenStream::from(expanded)
+    expected_long: Option<syn::Expr>,
+    expected_short: Option<syn::Expr>,
 }
 
-fn get_years() -> Vec<PathBuf> {
-    let mut src_path = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-    src_path.push("src");
+/// Macro used to derive the necessary benchmarking and testing functions for an Advent of Code Day
+/// # Panics
+/// If you use it wrong
+#[proc_macro_derive(AocDay, attributes(output_type, expected_short, expected_long))]
+pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
+    let DeriveInput {
+        attrs,
+        ident: struct_ident,
+        data,
+        generics,
+        ..
+    }: DeriveInput = parse_macro_input!(item as DeriveInput);
 
+    // Get calling file
+    let span = proc_macro::Span::call_site();
+    let file = PathBuf::from(span.file());
+    let parent = file.parent().expect("Called from improper file");
+
+    // Input file paths
+    let year = aoc_fs::extract_from_path(&parent, &YEAR_NAME_RE);
+    let day = aoc_fs::extract_from_path(&file, &DAY_NAME_RE);
+    let input_short = format!("./input/{year}/{day}-short.txt");
+    let input_long = format!("./input/{year}/{day}.txt");
+
+    // Day name
+    let day_mod = aoc_fs::extract_from_path(&file, &DAY_MODULE_RE);
+    let day_name = format!("{year}::{day_mod}");
+
+    // Feature
+    let feature = aoc_fs::extract_from_path(&parent, &YEAR_MODULE_RE);
+
+    // Only accept unit structs
+    let syn::Data::Struct(syn::DataStruct {
+        struct_token: _,
+        fields,
+        semi_token: _,
+    }) = data
+    else {
+        panic!("AocDay can only be derived on structs")
+    };
     assert!(
-        src_path.is_dir(),
-        "Improper directory structure for src directory"
+        matches!(fields, syn::Fields::Unit),
+        "AocDay can only be derived on unit structs"
     );
 
-    let mut out = Vec::new();
-    for entry in fs::read_dir(src_path).expect("Failed to read directory") {
-        let entry = entry.expect("Failed to read directory entry");
-        let file_name = entry.file_name();
-        let file_name_str = file_name.to_string_lossy().to_string();
-
-        // Only accept module directories
-        if !entry.path().is_dir() {
-            continue;
-        }
-
-        // Check if the file name matches the regex.
-        if YEAR_MODULE_RE.is_match(&file_name_str) {
-            out.push(entry.path());
-        }
-    }
-    out.sort();
-    out
-}
-
-fn get_days(year_path: &Path) -> Vec<PathBuf> {
-    let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    let mut search_path = PathBuf::from(manifest_dir);
-    search_path.push("src");
-
-    assert!(search_path.is_dir(), "Search directory was not dir");
-
-    // Get path of year module and verify it matches expectations
-    let year_file_name_str = year_path.file_name().unwrap().to_string_lossy().to_string();
-    let year_module = YEAR_MODULE_RE
-        .captures(&year_file_name_str)
-        .expect("Macro called from improper file")
-        .get(1)
-        .expect("Failed to find year module")
-        .as_str();
-    search_path.push(year_module);
-
-    let mut out = Vec::new();
-    for entry in fs::read_dir(search_path).expect("Failed to read directory") {
-        let entry = entry.expect("Failed to read directory entry");
-        let file_name = entry.file_name();
-        let file_name_str = file_name.to_string_lossy().to_string();
-
-        // Check if the file name matches the regex.
-        if DAY_MODULE_RE.is_match(&file_name_str) {
-            out.push(entry.path());
+    // Process attrs
+    let mut aoc_day_attrs = AocDayArrts::default();
+    for attr in attrs {
+        if attr.path().is_ident("output_type") {
+            let output_type: syn::LitStr = attr
+                .parse_args()
+                .expect("Expected str literal for output type");
+            let output_type = syn::parse_str(&output_type.value())
+                .expect("Could not parse output_type into Type");
+            aoc_day_attrs.output_type = Some(output_type);
+        } else if attr.path().is_ident("expected_long") {
+            let expected_long = attr.parse_args().unwrap();
+            aoc_day_attrs.expected_long = Some(expected_long);
+        } else if attr.path().is_ident("expected_short") {
+            let expected_short = attr.parse_args().unwrap();
+            aoc_day_attrs.expected_short = Some(expected_short);
         }
     }
-    out.sort();
-    out
-}
 
-fn module_from_path(path: &Path, re: &Regex) -> String {
-    let file_name_str = path
-        .file_name()
-        .expect("Failed to read file name")
-        .to_string_lossy()
-        .to_string();
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
-    re.captures(&file_name_str)
-        .expect("File does not match day pattern")
-        .get(1)
-        .expect("Failed to find day module")
-        .as_str()
-        .to_string()
-}
+    // Enforce required values and set defaults for optional values
+    let output_type = aoc_day_attrs.output_type.expect("output_type not provided");
+    let expected_short = aoc_day_attrs.expected_short.unwrap_or(parse_quote!(None));
+    let expected_long = aoc_day_attrs.expected_long.unwrap_or(parse_quote!(None));
 
-fn get_syn_path(year: &Path, day: &Path) -> syn::Path {
-    let year_module = module_from_path(year, &YEAR_MODULE_RE);
-    let year_ident: syn::Ident = syn::parse_str(&year_module).unwrap();
-    let year_segment = PathSegment {
-        ident: year_ident,
-        arguments: syn::PathArguments::None,
+    // If an expected value is not given a unit test is not created
+    let short_test = if expected_short == parse_quote!(None) {
+        quote! {}
+    } else {
+        quote! {
+            #[test]
+            fn test_short() {
+                assert!(Day::verify_short(true));
+            }
+        }
     };
 
-    let day_module = module_from_path(day, &DAY_MODULE_RE);
-    let day_ident: syn::Ident = syn::parse_str(&day_module).unwrap();
-    let day_segment = PathSegment {
-        ident: day_ident,
-        arguments: syn::PathArguments::None,
+    let long_test = if expected_long == parse_quote!(None) {
+        quote! {}
+    } else {
+        quote! {
+            #[test]
+            fn test_long() {
+                assert!(Day::verify_long(true));
+            }
+        }
     };
 
-    // Construct path from segments
-    syn::Path {
-        leading_colon: None,
-        segments: syn::punctuated::Punctuated::from_iter(vec![year_segment.clone(), day_segment]),
+    quote! {
+    pub static INPUT_SHORT: std::sync::LazyLock<Vec<u8>> =
+        std::sync::LazyLock::new(|| std::fs::read(#input_short).expect("Failed to read short input"));
+    pub static INPUT_LONG: std::sync::LazyLock<Vec<u8>> =
+        std::sync::LazyLock::new(|| std::fs::read(#input_long).expect("Failed to read long input"));
+
+    impl #impl_generics crate::AocDay for #struct_ident #ty_generics #where_clause {
+        fn day(input: &'static [u8]) -> Self::OutputType {
+            day(input)
+        }
+
+        fn name() -> &'static str {
+            #day_name
+        }
+
+        fn input_long() -> &'static [u8] {
+            &INPUT_LONG
+        }
+        fn input_short() -> &'static [u8] {
+            &INPUT_SHORT
+        }
+
+        type OutputType = #output_type;
+        fn expected_short() -> Option<Self::OutputType> {
+            #expected_short
+        }
+        fn expected_long() -> Option<Self::OutputType> {
+            #expected_long
+        }
     }
+
+    #[cfg(test)]
+    #[cfg(feature = #feature)]
+    mod tests {
+        use super::*;
+        use crate::AocDay;
+
+        #short_test
+
+        #long_test
+    }
+    }
+    .into()
 }
 
 #[proc_macro]
 pub fn day_process_list(_input: TokenStream) -> TokenStream {
     let mut days = Vec::new();
-    for year in get_years() {
-        days.extend(get_days(&year));
+    for year in aoc_fs::get_years() {
+        days.extend(aoc_fs::get_days(&year));
     }
 
     let mut module_stmts = Vec::new();
-    for year in get_years() {
-        let year_module = module_from_path(&year, &YEAR_MODULE_RE);
-        for day in get_days(&year) {
-            let day_path = get_syn_path(&year, &day);
-            let day_str = day_path.to_token_stream().to_string();
-
-            // Remove spaces
-            let day_str: String = day_str.chars().filter(|c| *c != ' ').collect();
+    for year in aoc_fs::get_years() {
+        let year_module = aoc_fs::extract_from_path(&year, &YEAR_MODULE_RE);
+        for day in aoc_fs::get_days(&year) {
+            let day_path = aoc_fs::get_syn_path(&year, &day);
 
             let stmt = quote! {
                 #[cfg(feature = #year_module)]
                 {
-                    use #day_path as day;
-
-                    let day_ran = args.target_day.is_empty() || glob_match(&args.target_day, #day_str);
-                    if !day_ran {
-                        results.push(DayResult {
-                            day_name: #day_str,
-                            day_ran,
-                            passed_test: false,
-                            benchmark: None,
-                        });
-                    }
-
-                    if !args.output_disable && !(args.bench_table || args.bench_graph) {
-                        println!("{} -> {}", #day_str, day::day());
-                    }
-
-                    // It is best to avoid testing when it wont be reported because it will duplicate user
-                    // debug statements
-                    let (benchmark, passed_test) = if args.bench_table || args.bench_graph || args.bench_enable {
-                        print!("Benchmarking {}.", #day_str);
-                        (Some(bench_day(day::day, &args)), day::verify_day(false))
-                    } else {
-                        (None, false)
-                    };
-
-                    results.push(DayResult {
-                        day_name: #day_str,
-                        day_ran,
-                        passed_test,
-                        benchmark,
-                    });
+                    results.push(#day_path::Day::process_day());
                 }
             };
 
@@ -216,16 +192,16 @@ pub fn day_process_list(_input: TokenStream) -> TokenStream {
 #[allow(clippy::missing_panics_doc)]
 pub fn divan_process_list(_input: TokenStream) -> TokenStream {
     let mut days = Vec::new();
-    for year in get_years() {
-        days.extend(get_days(&year));
+    for year in aoc_fs::get_years() {
+        days.extend(aoc_fs::get_days(&year));
     }
 
     let mut module_stmts = Vec::new();
-    for year in get_years() {
-        let year_module = module_from_path(&year, &YEAR_MODULE_RE);
-        for day in get_days(&year) {
-            let day_module = module_from_path(&day, &DAY_MODULE_RE);
-            let day_path = get_syn_path(&year, &day);
+    for year in aoc_fs::get_years() {
+        let year_module = aoc_fs::extract_from_path(&year, &YEAR_MODULE_RE);
+        for day in aoc_fs::get_days(&year) {
+            let day_module = aoc_fs::extract_from_path(&day, &DAY_MODULE_RE);
+            let day_path = aoc_fs::get_syn_path(&year, &day);
 
             // Get function name based off year and day
             let fn_name = format!("{year_module}_{day_module}");
@@ -253,16 +229,16 @@ pub fn divan_process_list(_input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn criterion_process_list(_input: TokenStream) -> TokenStream {
     let mut days = Vec::new();
-    for year in get_years() {
-        days.extend(get_days(&year));
+    for year in aoc_fs::get_years() {
+        days.extend(aoc_fs::get_days(&year));
     }
 
     let mut module_stmts = Vec::new();
-    for year in get_years() {
-        let year_module = module_from_path(&year, &YEAR_MODULE_RE);
-        for day in get_days(&year) {
-            let day_module = module_from_path(&day, &DAY_MODULE_RE);
-            let day_path = get_syn_path(&year, &day);
+    for year in aoc_fs::get_years() {
+        let year_module = aoc_fs::extract_from_path(&year, &YEAR_MODULE_RE);
+        for day in aoc_fs::get_days(&year) {
+            let day_module = aoc_fs::extract_from_path(&day, &DAY_MODULE_RE);
+            let day_path = aoc_fs::get_syn_path(&year, &day);
 
             // Get function name based off year and day
             let fn_name = format!("{year_module}_{day_module}");
