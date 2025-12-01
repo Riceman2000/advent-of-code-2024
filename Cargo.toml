@@ -6,9 +6,11 @@ edition = "2021"
 [features]
 # AOC years
 default = [
+  # "plotting",
   # "aoc2024",
   "aoc2025"
 ]
+plotting = [ "charming" ]
 aoc2024 = []
 aoc2025 = []
 
@@ -50,6 +52,7 @@ aoc_macros = { path = "./aoc_macros" }
 
 # Used in the main file to give users a way to interact with the application via the CLI
 clap = { version = "4.5.51", features = ["derive"] }
+charming = { version = "0.6.0", features = ["ssr"], optional = true }
 glob-match = "0.2.1"
 automod = "1.0.15"
 
@@ -61,7 +64,6 @@ atoi = "2.0.0"
 nalgebra = "0.34.1"
 pathfinding = "4.14.0"
 table_to_html = "0.9.0"
-charming = { version = "0.6.0", features = ["ssr"] }
 
 [build-dependencies]
 regex = "1.12.2"

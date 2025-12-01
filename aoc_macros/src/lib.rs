@@ -8,7 +8,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, parse_quote, DeriveInput};
 
-use crate::aoc_fs::{DAY_MODULE_RE, DAY_NUMBER_RE, YEAR_MODULE_RE, YEAR_NUMBER_RE};
+use crate::aoc_fs::{DAY_MODULE_RE, DAY_NUMBER_RE, DAY_PART_RE, YEAR_MODULE_RE, YEAR_NUMBER_RE};
 
 #[derive(Default)]
 struct AocDayArrts {
@@ -43,6 +43,9 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     let day_number: usize = aoc_fs::extract_from_path(&file, &DAY_NUMBER_RE)
         .parse()
         .expect("Day number parse failure");
+    let day_part: usize = aoc_fs::extract_from_path(&file, &DAY_PART_RE)
+        .parse()
+        .expect("Day part parse failure");
     aoc_fs::fetch_inputs(year_number, day_number);
     let input_short = format!("./input/{year_number}/day{day_number}-short.txt");
     let input_long = format!("./input/{year_number}/day{day_number}.txt");
@@ -104,6 +107,9 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
 
         fn day_number() -> usize {
             #day_number
+        }
+        fn day_part() -> usize {
+            #day_part
         }
         fn year_number() -> usize {
             #year_number

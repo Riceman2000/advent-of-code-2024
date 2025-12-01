@@ -108,12 +108,18 @@ pub trait AocDay {
     fn input_short() -> &'static [u8];
     fn input_long() -> &'static [u8];
     fn day_number() -> usize;
+    fn day_part() -> usize;
     fn year_number() -> usize;
 
     // Provided methods
     #[must_use]
     fn name() -> String {
-        format!("{}::{}", Self::year_number(), Self::day_number())
+        format!(
+            "{}::{}_{}",
+            Self::year_number(),
+            Self::day_number(),
+            Self::day_part()
+        )
     }
     #[must_use]
     fn day_short() -> Self::OutputType {

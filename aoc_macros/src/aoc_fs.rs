@@ -13,6 +13,8 @@ pub static DAY_MODULE_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(day\d\d_\d)(\.rs)?$").unwrap());
 pub static DAY_NUMBER_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"day(\d\d)_\d(\.rs)?$").unwrap());
+pub static DAY_PART_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"day\d\d_(\d)(\.rs)?$").unwrap());
 
 /// Fetch the long input from aoc API and place an empty file for the short input if they are not present
 /// Does nothing if they are already there

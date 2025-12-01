@@ -1,15 +1,20 @@
 use std::{fs, path::PathBuf};
 
-use charming::{component::Axis, element::AxisType, series::Bar, Chart};
-use charming::{theme::Theme, ImageRenderer};
 use regex::Regex;
 use table_to_html::HtmlTable;
+
+#[cfg(feature = "plotting")]
+use charming::{
+    component::Axis, element::AxisType, series::Bar, theme::Theme, Chart, ImageRenderer,
+};
 
 // Avoids lints when leaving out years
 #[allow(clippy::wildcard_imports)]
 use aoc::*;
 
+#[cfg(feature = "plotting")]
 const GRAPH_SAVE_LOCATION: &str = "./media/benchmark-graph.svg";
+
 const README_LOCATION: &str = "./README.md";
 
 #[allow(clippy::cast_lossless)]
@@ -56,6 +61,7 @@ fn main() {
         println!("Benchmark table saved to README");
     }
 
+    #[cfg(feature = "plotting")]
     if args.bench_graph {
         println!("Generating benchmark graph");
         generate_bench_graph(&processed);
@@ -63,6 +69,7 @@ fn main() {
     }
 }
 
+#[cfg(feature = "plotting")]
 fn generate_bench_graph(processed: &[&DayResult]) {
     let ids: Vec<_> = processed.iter().map(|day| day.day_name.clone()).collect();
 

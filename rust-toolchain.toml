@@ -1,5 +1,4 @@
 [toolchain]
-# Issues with rust-analyzer after this version
-channel = "nightly-2025-10-28"
+channel = "nightly-2025-11-30"
 components = [ "rustfmt", "clippy", "rust-analyzer" ]
 
