@@ -52,7 +52,7 @@ pub struct Args {
 }
 
 pub struct DayResult {
-    pub day_name: &'static str,
+    pub day_name: String,
     pub day_ran: bool,
     pub passed_test: bool,
     pub benchmark: Option<BenchmarkResult>,
@@ -103,13 +103,18 @@ pub trait AocDay {
 
     // Required methods
     fn day(input: &'static [u8]) -> Self::OutputType;
-    fn name() -> &'static str;
     fn expected_short() -> Option<Self::OutputType>;
     fn expected_long() -> Option<Self::OutputType>;
     fn input_short() -> &'static [u8];
     fn input_long() -> &'static [u8];
+    fn day_number() -> usize;
+    fn year_number() -> usize;
 
     // Provided methods
+    #[must_use]
+    fn name() -> String {
+        format!("{}::{}", Self::year_number(), Self::day_number())
+    }
     #[must_use]
     fn day_short() -> Self::OutputType {
         Self::day(Self::input_short())
@@ -155,7 +160,7 @@ pub trait AocDay {
 
     #[must_use]
     fn process_day() -> DayResult {
-        let day_ran = ARGS.target_day.is_empty() || glob_match(&ARGS.target_day, Self::name());
+        let day_ran = ARGS.target_day.is_empty() || glob_match(&ARGS.target_day, &Self::name());
         if !day_ran {
             return DayResult {
                 day_name: Self::name(),

@@ -64,7 +64,7 @@ fn main() {
 }
 
 fn generate_bench_graph(processed: &[&DayResult]) {
-    let ids: Vec<_> = processed.iter().map(|day| day.day_name).collect();
+    let ids: Vec<_> = processed.iter().map(|day| day.day_name.clone()).collect();
 
     let times: Vec<_> = processed
         .iter()
@@ -118,7 +118,7 @@ fn generate_bench_table(processed: &[&DayResult]) {
 
         // Log current
         table_rows.push(vec![
-            day.day_name.to_string(),
+            day.day_name.clone(),
             day.passed_test.to_string(),
             benchmark.average_formatted(),
             benchmark.iterations_formatted(),

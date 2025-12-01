@@ -7,12 +7,35 @@ use syn::PathSegment;
 
 pub static YEAR_MODULE_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(aoc\d{4})(\.rs)?$").unwrap());
-pub static YEAR_NAME_RE: LazyLock<Regex> =
+pub static YEAR_NUMBER_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"aoc(\d{4})(\.rs)?$").unwrap());
 pub static DAY_MODULE_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(day\d\d_\d)(\.rs)?$").unwrap());
-pub static DAY_NAME_RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(day\d\d)_\d(\.rs)?$").unwrap());
+pub static DAY_NUMBER_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"day(\d\d)_\d(\.rs)?$").unwrap());
+
+/// Fetch the long input from aoc API and place an empty file for the short input if they are not present
+/// Does nothing if they are already there
+pub fn fetch_inputs(year: usize, day: usize) {
+    let path_long = PathBuf::from(format!("input/{year}/day{day}.txt"));
+    let path_short = PathBuf::from(format!("input/{year}/day{day}-short.txt"));
+
+    // Create year path if necessary
+    let year_dir = path_long.parent().expect("Input dir malformed");
+    if !year_dir.is_dir() {
+        fs::create_dir(year_dir).expect("Could not create year input dir");
+    }
+
+    // Place input files
+    if !path_short.exists() {
+        fs::File::create(path_short).expect("Failed to create short input file");
+    }
+
+    // TODO: Get input from API
+    if !path_long.exists() {
+        fs::File::create(path_long).expect("Failed to create long input file");
+    }
+}
 
 pub fn get_years() -> Vec<PathBuf> {
     let mut src_path = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());

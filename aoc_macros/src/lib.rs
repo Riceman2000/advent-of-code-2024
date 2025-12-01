@@ -8,7 +8,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, parse_quote, DeriveInput};
 
-use crate::aoc_fs::{DAY_MODULE_RE, DAY_NAME_RE, YEAR_MODULE_RE, YEAR_NAME_RE};
+use crate::aoc_fs::{DAY_MODULE_RE, DAY_NUMBER_RE, YEAR_MODULE_RE, YEAR_NUMBER_RE};
 
 #[derive(Default)]
 struct AocDayArrts {
@@ -36,18 +36,17 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     let file = PathBuf::from(span.file());
     let parent = file.parent().expect("Called from improper file");
 
-    // Input file paths
-    let year = aoc_fs::extract_from_path(&parent, &YEAR_NAME_RE);
-    let day = aoc_fs::extract_from_path(&file, &DAY_NAME_RE);
-    let input_short = format!("./input/{year}/{day}-short.txt");
-    let input_long = format!("./input/{year}/{day}.txt");
-
-    // Day name
-    let day_mod = aoc_fs::extract_from_path(&file, &DAY_MODULE_RE);
-    let day_name = format!("{year}::{day_mod}");
-
-    // Feature
-    let feature = aoc_fs::extract_from_path(&parent, &YEAR_MODULE_RE);
+    // Things based on file structure
+    let year_number: usize = aoc_fs::extract_from_path(parent, &YEAR_NUMBER_RE)
+        .parse()
+        .expect("Year number parse failure");
+    let day_number: usize = aoc_fs::extract_from_path(&file, &DAY_NUMBER_RE)
+        .parse()
+        .expect("Day number parse failure");
+    aoc_fs::fetch_inputs(year_number, day_number);
+    let input_short = format!("./input/{year_number}/day{day_number}-short.txt");
+    let input_long = format!("./input/{year_number}/day{day_number}.txt");
+    let feature = aoc_fs::extract_from_path(parent, &YEAR_MODULE_RE);
 
     // Only accept unit structs
     let syn::Data::Struct(syn::DataStruct {
@@ -90,27 +89,7 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     let expected_long = aoc_day_attrs.expected_long.unwrap_or(parse_quote!(None));
 
     // If an expected value is not given a unit test is not created
-    let short_test = if expected_short == parse_quote!(None) {
-        quote! {}
-    } else {
-        quote! {
-            #[test]
-            fn test_short() {
-                assert!(Day::verify_short(true));
-            }
-        }
-    };
-
-    let long_test = if expected_long == parse_quote!(None) {
-        quote! {}
-    } else {
-        quote! {
-            #[test]
-            fn test_long() {
-                assert!(Day::verify_long(true));
-            }
-        }
-    };
+    let unit_tests = unit_tests(&expected_short, &expected_long);
 
     quote! {
     pub static INPUT_SHORT: std::sync::LazyLock<Vec<u8>> =
@@ -123,8 +102,11 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
             day(input)
         }
 
-        fn name() -> &'static str {
-            #day_name
+        fn day_number() -> usize {
+            #day_number
+        }
+        fn year_number() -> usize {
+            #year_number
         }
 
         fn input_long() -> &'static [u8] {
@@ -143,8 +125,37 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
         }
     }
 
-    #[cfg(test)]
     #[cfg(feature = #feature)]
+    #unit_tests
+    }
+    .into()
+}
+fn unit_tests(expected_short: &syn::Expr, expected_long: &syn::Expr) -> proc_macro2::TokenStream {
+    // If an expected value is not given a unit test is not created
+    let short_test = if is_expr_none(expected_short) {
+        quote! {}
+    } else {
+        quote! {
+            #[test]
+            fn test_short() {
+                assert!(Day::verify_short(true));
+            }
+        }
+    };
+
+    let long_test = if is_expr_none(expected_long) {
+        quote! {}
+    } else {
+        quote! {
+            #[test]
+            fn test_long() {
+                assert!(Day::verify_long(true));
+            }
+        }
+    };
+
+    quote! {
+    #[cfg(test)]
     mod tests {
         use super::*;
         use crate::AocDay;
@@ -154,7 +165,18 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
         #long_test
     }
     }
-    .into()
+}
+
+fn is_expr_none(expr: &syn::Expr) -> bool {
+    // Pattern match against the expression to check if it's a Path type and represents `None`.
+    if let syn::Expr::Path(expr_path) = expr {
+        // Check if the path is a single identifier (no colons, meaning no module path)
+        // and the identifier is "None".
+        expr_path.path.segments.len() == 1 && expr_path.path.segments[0].ident == "None"
+    } else {
+        // If the expression is not a Path type, it's not a `None`.
+        false
+    }
 }
 
 #[proc_macro]

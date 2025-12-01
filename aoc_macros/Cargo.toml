@@ -8,6 +8,8 @@ proc-macro = true
 
 [dependencies]
 paste = "1.0.15"
+proc-macro2 = "1.0.103"
 quote = "1.0.38"
 regex = "1.11.1"
 syn = "2.0.94"
+# syn = { version = "2.0.94", features = ["derive", "full"] }
