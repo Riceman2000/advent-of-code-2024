@@ -239,7 +239,7 @@ pub fn divan_process_list(_input: TokenStream) -> TokenStream {
                 #[cfg(all(feature = #year_module, feature = "divan"))]
                 #[divan::bench]
                 fn #fn_ident() {
-                    let _ = divan::black_box(aoc::#day_path::day());
+                    let _ = divan::black_box(aoc::#day_path::Day::day_long());
                 }
             };
 
@@ -249,6 +249,7 @@ pub fn divan_process_list(_input: TokenStream) -> TokenStream {
 
     // Generate and return the token stream.
     let expanded = quote! {
+        use aoc::AocDay;
         #(#module_stmts)*
     };
     TokenStream::from(expanded)
@@ -273,7 +274,7 @@ pub fn criterion_process_list(_input: TokenStream) -> TokenStream {
 
             let stmt = quote! {
                 #[cfg(all(feature = #year_module, feature = "criterion"))]
-                _c.bench_function(#fn_name, |b| b.iter(&mut aoc::#day_path::day));
+                _c.bench_function(#fn_name, |b| b.iter(&mut aoc::#day_path::Day::day_long));
             };
 
             module_stmts.push(stmt);
@@ -282,6 +283,7 @@ pub fn criterion_process_list(_input: TokenStream) -> TokenStream {
 
     // Generate and return the token stream.
     let expanded = quote! {
+        use aoc::AocDay;
         #(#module_stmts)*
     };
     TokenStream::from(expanded)
