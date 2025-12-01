@@ -20,8 +20,8 @@
 <text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1216 1018)" fill="#B9B8CE">4</text>
 <text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1472 1018)" fill="#B9B8CE">5</text>
 <text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1728 1018)" fill="#B9B8CE">6</text>
-<path d="M192 608.6l1364.4 0l0 327.8l-1364.4 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
-<path d="M192 133.6l1445.9 0l0 327.8l-1445.9 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<path d="M192 608.6l1133.6 0l0 327.8l-1133.6 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<path d="M192 133.6l1445.3 0l0 327.8l-1445.3 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
 <style ><![CDATA[
 .zr0-cls-0:hover {
 pointer-events:none;
