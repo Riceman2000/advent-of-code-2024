@@ -2,8 +2,8 @@ use atoi::atoi;
 
 #[derive(aoc_macros::AocDay)]
 #[output_type("i32")]
-#[expected_short(Some(3))]
-#[expected_long(Some(1081))]
+#[expected_short(Some(6))]
+#[expected_long(Some(6689))]
 pub struct Day;
 
 #[must_use]
@@ -30,6 +30,9 @@ pub fn day(input: &'static [u8]) -> i32 {
                 if n < 0 {
                     n = 99;
                 }
+                if n == 0 {
+                    out += 1;
+                }
             }
         } else {
             for _ in 0..s {
@@ -37,10 +40,10 @@ pub fn day(input: &'static [u8]) -> i32 {
                 if n > 99 {
                     n = 0;
                 }
+                if n == 0 {
+                    out += 1;
+                }
             }
-        }
-        if n == 0 {
-            out += 1;
         }
     }
 
