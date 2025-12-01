@@ -18,8 +18,7 @@ pub fn day(input: &'static [u8]) -> i32 {
             if l[0] == b'L' {
                 n *= -1;
             }
-            acc += n;
-            acc %= 100;
+            acc = (acc + n).rem_euclid(100);
             if acc == 0 {
                 out += 1;
             }
