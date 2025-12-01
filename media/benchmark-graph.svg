@@ -1,10 +1,11 @@
 <svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" viewBox="0 0 1920 1080">
 <rect width="1920" height="1080" x="0" y="0" fill="#100C2A"></rect>
 <path d="M192.5 60L192.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
-<path d="M499.5 60L499.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
-<path d="M806.5 60L806.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
-<path d="M1113.5 60L1113.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
-<path d="M1421.5 60L1421.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
+<path d="M448.5 60L448.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
+<path d="M704.5 60L704.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
+<path d="M960.5 60L960.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
+<path d="M1216.5 60L1216.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
+<path d="M1472.5 60L1472.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
 <path d="M1728.5 60L1728.5 1010" fill="transparent" stroke="#484753" class="zr0-cls-0"></path>
 <path d="M192.5 1010L192.5 60" fill="transparent" stroke="#B9B8CE" stroke-linecap="round" class="zr0-cls-0"></path>
 <path d="M192 1010.5L187 1010.5" fill="transparent" stroke="#B9B8CE" class="zr0-cls-0"></path>
@@ -13,13 +14,14 @@
 <text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(184 772.5)" fill="#B9B8CE">2025::1_0</text>
 <text dominant-baseline="central" text-anchor="end" style="font-size:12px;font-family:sans-serif;" transform="translate(184 297.5)" fill="#B9B8CE">2025::1_1</text>
 <text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(192 1018)" fill="#B9B8CE">0</text>
-<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(499.2 1018)" fill="#B9B8CE">0.3</text>
-<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(806.4 1018)" fill="#B9B8CE">0.6</text>
-<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1113.6 1018)" fill="#B9B8CE">0.9</text>
-<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1420.8 1018)" fill="#B9B8CE">1.2</text>
-<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1728 1018)" fill="#B9B8CE">1.5</text>
-<path d="M192 608.6l1356 0l0 327.8l-1356 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
-<path d="M192 133.6l1357.2 0l0 327.8l-1357.2 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(448 1018)" fill="#B9B8CE">1</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(704 1018)" fill="#B9B8CE">2</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(960 1018)" fill="#B9B8CE">3</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1216 1018)" fill="#B9B8CE">4</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1472 1018)" fill="#B9B8CE">5</text>
+<text dominant-baseline="central" text-anchor="middle" style="font-size:12px;font-family:sans-serif;" y="6" transform="translate(1728 1018)" fill="#B9B8CE">6</text>
+<path d="M192 608.6l1364.4 0l0 327.8l-1364.4 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="0" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
+<path d="M192 133.6l1445.9 0l0 327.8l-1445.9 0Z" fill="#4992ff" ecmeta_series_index="0" ecmeta_data_index="1" ecmeta_ssr_type="chart" class="zr0-cls-1"></path>
 <style ><![CDATA[
 .zr0-cls-0:hover {
 pointer-events:none;
