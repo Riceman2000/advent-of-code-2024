@@ -12,27 +12,35 @@ pub fn day(input: &'static [u8]) -> usize {
     input
         .trim_ascii()
         .split(|c| *c == b',')
-        .map(|ids| {
-            let mut ids = ids.split(|c| *c == b'-').map(|n| atoi::<usize>(n).unwrap());
-            let a = ids.next().unwrap();
-            let b = ids.next().unwrap();
-            (a, b)
+        .map(|ids| unsafe {
+            let mid = ids.iter().position(|c| *c == b'-').unwrap_unchecked();
+            (
+                atoi::<usize>(&ids[..mid]).unwrap_unchecked(),
+                atoi::<usize>(&ids[mid + 1..]).unwrap_unchecked(),
+            )
         })
-        .fold(0, |mut acc, (a, b)| unsafe {
+        .fold(0, |mut acc, (a, b)| {
             acc += (a..=b).filter(check_num).sum::<usize>();
-
             acc
         })
 }
 
 fn check_num(n: &usize) -> bool {
     let n = *n;
-    let digs = (n as f64).log10().floor() as usize + 1;
+    let digs = {
+        let mut n = n;
+        let mut count = 0;
+        while n > 0 {
+            n /= 10;
+            count += 1;
+        }
+        count
+    };
     if digs % 2 != 0 {
         return false;
     }
-    let upper = n / 10_usize.pow(digs as u32 / 2);
-    let lower = n - upper * 10_usize.pow(digs as u32 / 2);
+    let upper = n / 10_usize.pow(digs / 2);
+    let lower = n % 10_usize.pow(digs / 2);
     if upper == lower {
         return true;
     }
