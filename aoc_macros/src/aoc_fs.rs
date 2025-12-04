@@ -19,8 +19,8 @@ pub static DAY_PART_RE: LazyLock<Regex> =
 /// Fetch the long input from aoc API and place an empty file for the short input if they are not present
 /// Does nothing if they are already there
 pub fn fetch_inputs(year: usize, day: usize) {
-    let path_long = PathBuf::from(format!("input/{year}/day{day}.txt"));
-    let path_short = PathBuf::from(format!("input/{year}/day{day}-short.txt"));
+    let path_long = PathBuf::from(format!("input/{year}/day{day:02}.txt"));
+    let path_short = PathBuf::from(format!("input/{year}/day{day:02}-short.txt"));
 
     // Create year path if necessary
     let year_dir = path_long.parent().expect("Input dir malformed");

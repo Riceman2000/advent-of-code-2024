@@ -47,8 +47,8 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
         .parse()
         .expect("Day part parse failure");
     aoc_fs::fetch_inputs(year_number, day_number);
-    let input_short = format!("./input/{year_number}/day{day_number}-short.txt");
-    let input_long = format!("./input/{year_number}/day{day_number}.txt");
+    let input_short = format!("./input/{year_number}/day{day_number:02}-short.txt");
+    let input_long = format!("./input/{year_number}/day{day_number:02}.txt");
     let feature = aoc_fs::extract_from_path(parent, &YEAR_MODULE_RE);
 
     // Only accept unit structs
