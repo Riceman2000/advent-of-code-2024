@@ -30,7 +30,7 @@ fn sum_invalids(a: usize, b: usize) -> usize {
     let digs_low = count_digits(a);
     let digs_high = count_digits(b);
 
-    // Iterate over all possible lenghts of invalid numbers, no odds
+    // Iterate over all possible lengths of invalid numbers, no odds
     let mut sum = 0;
     for digs in digs_low..=digs_high {
         // For each "width" of repeating values e.g. 3 for 123123123 we save our sum for dedupe later

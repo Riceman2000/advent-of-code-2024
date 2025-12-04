@@ -30,7 +30,7 @@ fn sum_invalids(a: usize, b: usize) -> usize {
     let digs_low = count_digits(a);
     let digs_high = count_digits(b);
 
-    // Iterate over all possible lenghts of invalid numbers, no odds
+    // Iterate over all possible lengths of invalid numbers, no odds
     let mut sum = 0;
     for digs in (digs_low..=digs_high).filter(|d| d % 2 == 0) {
         let half_low = 10usize.pow((digs / 2) - 1);

@@ -35,7 +35,7 @@ pub fn day(input: &[u8]) -> u64 {
 fn generate_lut() -> Vec<[u64; MAX_CACHE]> {
     let mut lut = vec![[0; MAX_CACHE]; CACHE_DEPTH];
 
-    // Zero blinks always yeilds 1 stone
+    // Zero blinks always yields 1 stone
     lut[0].fill(1);
 
     // For each possible stone look back at the last solution for the previous number of blinks, if

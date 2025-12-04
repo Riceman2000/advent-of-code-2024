@@ -112,8 +112,8 @@ pub fn day(input: &[u8]) -> usize {
                         };
 
                         // Determine if shortcut is valid
-                        let shortcut_steps_remaning = dist + path.len() - shortcut_pos;
-                        let time_saved = steps_remaining.saturating_sub(shortcut_steps_remaning);
+                        let shortcut_steps_remaining = dist + path.len() - shortcut_pos;
+                        let time_saved = steps_remaining.saturating_sub(shortcut_steps_remaining);
                         time_saved >= SHORTCUT_THRESHOLD
                     })
                     .count()

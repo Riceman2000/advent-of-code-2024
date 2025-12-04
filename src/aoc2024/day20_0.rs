@@ -91,8 +91,8 @@ pub fn day(input: &[u8]) -> usize {
             })
             .filter(|shortcut_pos| {
                 // Knowing that we traveled two steps during shortcut, determine time saved
-                let shortcut_steps_remaning = 2 + path.len() - shortcut_pos;
-                let time_saved = steps_remaining.saturating_sub(shortcut_steps_remaning);
+                let shortcut_steps_remaining = 2 + path.len() - shortcut_pos;
+                let time_saved = steps_remaining.saturating_sub(shortcut_steps_remaining);
                 time_saved >= SHORTCUT_THRESHOLD
             })
             .count();

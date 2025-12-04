@@ -17,7 +17,7 @@ pub fn day(input: &[u8]) -> u64 {
     let mut sum = 0;
     for mut num in nums {
         for _ in 0..2000 {
-            num = psudo_random(num);
+            num = pseudo_random(num);
         }
         sum += num;
         // println!("num: {num}");
@@ -26,7 +26,7 @@ pub fn day(input: &[u8]) -> u64 {
 }
 
 #[inline]
-fn psudo_random(mut num: u64) -> u64 {
+fn pseudo_random(mut num: u64) -> u64 {
     num ^= num * 64;
     num %= 16_777_216;
     num ^= num / 32;

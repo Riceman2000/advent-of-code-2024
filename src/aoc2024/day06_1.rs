@@ -45,7 +45,7 @@ pub fn day(input: &[u8]) -> usize {
     visited.sort_unstable();
     visited.dedup();
 
-    // Parrallel iterator
+    // Parallel iterator
     visited
         .par_iter()
         .fold(

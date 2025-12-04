@@ -18,7 +18,7 @@ pub fn day(input: &'static [u8]) -> usize {
     let substrings: Vec<_> = lines.next().unwrap().split(", ").collect();
     let patterns: Vec<_> = lines.skip(1).collect();
 
-    // Parrallelize iterator
+    // Parallelize iterator
     patterns
         .par_iter()
         .fold(

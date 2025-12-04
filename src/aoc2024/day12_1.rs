@@ -57,14 +57,14 @@ fn branch_from_coords(current_pos: (usize, usize), lines: &mut [&mut [(u8, bool)
 
     let mut matches = [false; 8]; // Follows the same directions as `DIRS`
 
-    // Scan all adjcent tiles to see if they exist or match
+    // Scan all adjacent tiles to see if they exist or match
     for (i, dir) in DIRS.iter().enumerate() {
         let new_pos = (
             current_pos.0.wrapping_add_signed(dir.0),
             current_pos.1.wrapping_add_signed(dir.1),
         );
 
-        // Check if the next squre would be outside of the area
+        // Check if the next square would be outside of the area
         if !(0..lines.len()).contains(&new_pos.1) || !(0..lines[0].len()).contains(&new_pos.0) {
             continue;
         }

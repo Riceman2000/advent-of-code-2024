@@ -29,7 +29,7 @@ pub fn day(input: &[u8]) -> usize {
 
     let mut r_pos = disk.len() - 1;
     loop {
-        // Grapical print of disk
+        // Graphical print of disk
         // let disk_graphical = disk.iter().fold(String::new(), |acc, b| {
         //     let used = format!("{}", char::from(b.id as u8 + 48)).repeat(b.used);
         //     let free = ".".repeat(b.free);

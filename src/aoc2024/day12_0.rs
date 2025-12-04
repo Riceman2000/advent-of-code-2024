@@ -43,7 +43,7 @@ fn branch_from_coords(current_pos: (usize, usize), lines: &mut [&mut [(u8, bool)
             current_pos.1.wrapping_add_signed(dir.1),
         );
 
-        // Check if the next squre would be outside of the area
+        // Check if the next square would be outside of the area
         if !(0..lines.len()).contains(&new_pos.1) || !(0..lines[0].len()).contains(&new_pos.0) {
             current_perim += 1; // Count the void
             continue;
