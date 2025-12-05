@@ -14,10 +14,10 @@ pub fn day(input: &'static [u8]) -> usize {
     let mut ranges: Vec<RangeInclusive<usize>> = input
         .split(|c| *c == b'\n')
         .take_while(|l| !l.is_empty())
-        .map(|l| {
+        .map(|l| unsafe {
             let mut l = l.split(|c| *c == b'-');
-            let a = atoi(l.next().unwrap()).unwrap();
-            let b = atoi(l.next().unwrap()).unwrap();
+            let a = atoi(l.next().unwrap_unchecked()).unwrap_unchecked();
+            let b = atoi(l.next().unwrap_unchecked()).unwrap_unchecked();
             a..=b
         })
         .collect();
