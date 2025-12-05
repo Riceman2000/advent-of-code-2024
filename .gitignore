@@ -1,5 +1,6 @@
 # AOC Inputs
-input/
+day*.txt
+!day*-short.txt
 
 # Compilation outputs
 debug/

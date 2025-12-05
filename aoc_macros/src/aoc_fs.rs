@@ -16,11 +16,17 @@ pub static DAY_NUMBER_RE: LazyLock<Regex> =
 pub static DAY_PART_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"day\d\d_(\d)(\.rs)?$").unwrap());
 
+pub fn input_filenames(year: usize, day: usize) -> (String, String) {
+    let path_short = format!("input/{year}/day{day:02}-short.txt");
+    let path_long = format!("input/{year}/day{day:02}.txt");
+    (path_short, path_long)
+}
+
 /// Fetch the long input from aoc API and place an empty file for the short input if they are not present
 /// Does nothing if they are already there
 pub fn fetch_inputs(year: usize, day: usize) {
-    let path_long = PathBuf::from(format!("input/{year}/day{day:02}.txt"));
-    let path_short = PathBuf::from(format!("input/{year}/day{day:02}-short.txt"));
+    let (path_short, path_long) = input_filenames(year, day);
+    let (path_short, path_long) = (PathBuf::from(path_short), PathBuf::from(path_long));
 
     // Create year path if necessary
     let year_dir = path_long.parent().expect("Input dir malformed");

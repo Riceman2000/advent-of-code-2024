@@ -2,7 +2,10 @@ extern crate proc_macro;
 
 mod aoc_fs;
 
-use std::path::PathBuf;
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 use proc_macro::TokenStream;
 use quote::quote;
@@ -34,7 +37,12 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     // Get calling file
     let span = proc_macro::Span::call_site();
     let file = PathBuf::from(span.file());
-    let parent = file.parent().expect("Called from improper file");
+    let Some(parent) = file.parent() else {
+        // If the macro panics it will mess up rust-analyzer and it has a hard time recovering
+        // So just fudge it and do nothing if the file structure is not as anticipated
+        eprintln!("Called from improper file");
+        return quote! {}.into();
+    };
 
     // Things based on file structure
     let year_number: usize = aoc_fs::extract_from_path(parent, &YEAR_NUMBER_RE)
@@ -46,10 +54,11 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     let day_part: usize = aoc_fs::extract_from_path(&file, &DAY_PART_RE)
         .parse()
         .expect("Day part parse failure");
-    aoc_fs::fetch_inputs(year_number, day_number);
-    let input_short = format!("./input/{year_number}/day{day_number:02}-short.txt");
-    let input_long = format!("./input/{year_number}/day{day_number:02}.txt");
     let feature = aoc_fs::extract_from_path(parent, &YEAR_MODULE_RE);
+
+    // Fetch inputs and place blank files
+    aoc_fs::fetch_inputs(year_number, day_number);
+    let (input_short, input_long) = aoc_fs::input_filenames(year_number, day_number);
 
     // Only accept unit structs
     let syn::Data::Struct(syn::DataStruct {
@@ -91,8 +100,13 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     let expected_short = aoc_day_attrs.expected_short.unwrap_or(parse_quote!(None));
     let expected_long = aoc_day_attrs.expected_long.unwrap_or(parse_quote!(None));
 
-    // If an expected value is not given a unit test is not created
-    let unit_tests = unit_tests(&expected_short, &expected_long);
+    // Generate unit tests if user provides expected values and input data exists
+    let unit_tests = unit_tests(
+        &expected_short,
+        &expected_long,
+        &PathBuf::from(input_short.clone()),
+        &PathBuf::from(input_long.clone()),
+    );
 
     quote! {
     pub static INPUT_SHORT: std::sync::LazyLock<Vec<u8>> =
@@ -136,25 +150,43 @@ pub fn derive_aoc_day(item: TokenStream) -> TokenStream {
     }
     .into()
 }
-fn unit_tests(expected_short: &syn::Expr, expected_long: &syn::Expr) -> proc_macro2::TokenStream {
-    // If an expected value is not given a unit test is not created
-    let short_test = if is_expr_none(expected_short) {
+
+fn unit_tests(
+    expected_short: &syn::Expr,
+    expected_long: &syn::Expr,
+    input_short: &Path,
+    input_long: &Path,
+) -> proc_macro2::TokenStream {
+    // If an expected value is not given or the input is missing, a unit test is not created
+    let short_test = if is_expr_none(expected_short)
+        || !input_short.is_file()
+        || fs::metadata(input_short).unwrap().len() == 0
+    {
         quote! {}
     } else {
         quote! {
             #[test]
             fn test_short() {
+                if Day::input_short().is_empty() {
+                    panic!("Short input is empty");
+                }
                 assert!(Day::verify_short(true));
             }
         }
     };
 
-    let long_test = if is_expr_none(expected_long) {
+    let long_test = if is_expr_none(expected_long)
+        || !input_long.is_file()
+        || fs::metadata(input_long).unwrap().len() == 0
+    {
         quote! {}
     } else {
         quote! {
             #[test]
             fn test_long() {
+                if Day::input_long().is_empty() {
+                    panic!("Long input is empty");
+                }
                 assert!(Day::verify_long(true));
             }
         }
