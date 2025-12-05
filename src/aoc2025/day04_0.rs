@@ -13,7 +13,7 @@ pub fn day(input: &'static [u8]) -> usize {
     let grid: Vec<Vec<u8>> = input
         .trim_ascii()
         .split(|c| *c == b'\n')
-        .map(|l| l.iter().map(|c| if *c == b'@' { 1 } else { 0 }).collect())
+        .map(|l| l.iter().map(|c| u8::from(*c == b'@')).collect())
         .collect();
 
     let matrix: Array2<u8> =
